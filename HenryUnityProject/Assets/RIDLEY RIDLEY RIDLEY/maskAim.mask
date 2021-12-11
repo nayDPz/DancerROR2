@@ -1,0 +1,329 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: maskAim
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: body_highShape
+    m_Weight: 0
+  - m_Path: body_lowShape
+    m_Weight: 0
+  - m_Path: GamemodelShape
+    m_Weight: 0
+  - m_Path: model-armature
+    m_Weight: 0
+  - m_Path: model-armature/Trans
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/H_LegL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/H_LegL/H_LegL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/H_LegR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/H_LegR/H_LegR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/H_KneeL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/H_KneeL/H_KneeL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeL/ToeLa
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeL/ToeLa/ToeLa_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeL/ToeLc
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeL/ToeLc/ToeLc_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeLb
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegL/KneeL/FootL/ToeLb/ToeLb_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/H_KneeR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/H_KneeR/H_KneeR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeR/ToeRa
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeR/ToeRa/ToeRa_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeR/ToeRc
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeR/ToeRc/ToeRc_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeRb
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/LegC/LegR/KneeR/FootR/ToeRb/ToeRb_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6/Tail7
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6/Tail7/Tail8
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6/Tail7/Tail8/Tail8_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust
+    m_Weight: 1
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/H_ShoulderL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/H_ShoulderL/H_ShoulderL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/H_WristL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/H_WristL/H_WristL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL11
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL11/FingerL12
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL11/FingerL12/FingerL13
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL11/FingerL12/FingerL13/FingerL13_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL21
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL21/FingerL22
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL21/FingerL22/FingerL23
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL21/FingerL22/FingerL23/FingerL23_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL30
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL30/FingerL31
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL30/FingerL31/FingerL32
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL30/FingerL31/FingerL32/FingerL33
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL20/FingerL30/FingerL31/FingerL32/FingerL33/FingerL33_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL51
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL51/FingerL52
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL51/FingerL52/FingerL53
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/FingerL10/FingerL51/FingerL52/FingerL53/FingerL53_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/HaveL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/ArmL/HandL/HaveL/HaveL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/H_ElbowL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleL/ShoulderL/H_ElbowL/H_ElbowL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/H_ShoulderR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/H_ShoulderR/H_ShoulderR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/H_WristR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/H_WristR/H_WristR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR11
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR11/FingerR12
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR11/FingerR12/FingerR13
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR11/FingerR12/FingerR13/FingerR13_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR21
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR21/FingerR22
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR21/FingerR22/FingerR23
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR21/FingerR22/FingerR23/FingerR23_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR30
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR30/FingerR31
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR30/FingerR31/FingerR32
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR30/FingerR31/FingerR32/FingerR33
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR20/FingerR30/FingerR31/FingerR32/FingerR33/FingerR33_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR51
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR51/FingerR52
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR51/FingerR52/FingerR53
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/FingerR10/FingerR51/FingerR52/FingerR53/FingerR53_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/HaveR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/ArmR/HandR/HaveR/HaveR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/H_ElbowR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/ClavicleC/ClavicleR/ShoulderR/H_ElbowR/H_ElbowR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck
+    m_Weight: 1
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1
+    m_Weight: 1
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Mouth2
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Mouth2/Mouth2_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Tongue1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Tongue1/Tongue2
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Tongue1/Tongue2/Tongue3
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Tongue1/Tongue2/Tongue3/Tongue4
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/Mouth1/Tongue1/Tongue2/Tongue3/Tongue4/Tongue4_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthsideL
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthsideL/MouthsideL_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthsideR
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthsideR/MouthsideR_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthUP1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/Neck/Neck1/Head/MouthUP1/MouthUP1_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL3a
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL3a/WingL3a_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL4a
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL4a/WingL4a_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL4b
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL4b/WingL4b_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL5
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL5/WingL6
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingL1/WingL2/WingL3/WingL4/WingL5/WingL6/WingL6_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR3a
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR3a/WingR3a_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR4a
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR4a/WingR4a_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR4b
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR4b/WingR4b_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR5
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR5/WingR6
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Hip/Waist/Bust/WingR1/WingR2/WingR3/WingR4/WingR5/WingR6/WingR6_end
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Throw
+    m_Weight: 0
+  - m_Path: model-armature/Trans/Rot/Throw/Throw_end
+    m_Weight: 0
+  - m_Path: Ridley_Heavyattack_Eye_VIS_O_OBJShape
+    m_Weight: 0
+  - m_Path: Ridley_Heavyattack_Eyeball_VIS_O_OBJShape
+    m_Weight: 0

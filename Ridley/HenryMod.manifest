@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 275128020
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: survivorassets
+      Dependencies: {}
