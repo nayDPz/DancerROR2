@@ -18,6 +18,7 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = 3.5f;
 			this.stackGainAmount = 7;
+			this.hitStopDuration = .15f;
 			this.isAerial = true;
 			this.swingSoundString = "UpAir";
 			this.hitSoundString = "SwordHit2";

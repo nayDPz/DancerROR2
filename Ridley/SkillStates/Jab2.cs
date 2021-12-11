@@ -18,7 +18,7 @@ namespace Ridley.SkillStates
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
 			this.stackGainAmount = 7;
-			this.hitStopDuration = 0.15f;
+			this.hitStopDuration = 0.06f;
 			this.swingSoundString = "Jab2";
 			this.hitSoundString = "JabHit2";
 			this.swingEffectPrefab = Assets.swordSwingEffect;

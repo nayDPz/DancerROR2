@@ -11,8 +11,8 @@ namespace Ridley.SkillStates
 		public override void OnEnter()
 		{
 			this.baseDuration = 0.75f;
-			this.attackStartTime = 0.2f;
-			this.attackEndTime = 0.6f;
+			this.attackStartTime = 0.15f;
+			this.attackEndTime = 0.56f;
 			this.hitStopDuration = 0.025f;
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;

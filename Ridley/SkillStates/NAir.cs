@@ -18,7 +18,7 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = 3.5f;
 			this.stackGainAmount = 8;
-			this.hitStopDuration = 0.2f;
+			this.hitStopDuration = 0.15f;
 			this.isAerial = true;
 			this.isSus = true;
 			this.isFlinch = true;

@@ -18,7 +18,7 @@ namespace Ridley.SkillStates
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
 			this.stackGainAmount = 7;
-			this.hitStopDuration = 0.75f;
+			this.hitStopDuration = 0.025f;
 			this.bonusForce = Vector3.up * 2200f;
 			this.isFlinch = true;
 			this.swingSoundString = "DownTilt";

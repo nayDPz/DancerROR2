@@ -177,6 +177,8 @@ namespace Ridley.SkillStates
 			bool flag2 = !this.inHitPause;
 			if (flag2)
 			{
+				if(this.isMultiHit)
+					this.attackResetStopwatch += Time.fixedDeltaTime;
 				this.stopwatch += Time.fixedDeltaTime;
 			}
 			else
@@ -210,9 +212,9 @@ namespace Ridley.SkillStates
 			if (flag7)
 			{
 				bool flag8 = base.characterMotor;
-				if (flag8)
+				if (flag8 && !this.inHitPause)
 				{
-					float num = this.dashSpeedCurve.Evaluate(base.fixedAge / this.duration);
+					float num = this.dashSpeedCurve.Evaluate(this.stopwatch / this.duration);
 					float num2 = (!this.hasHopped) ? 1f : 0.4f;
 					base.characterMotor.rootMotion += 0.6f * num2 * (this.slideRotation * (num * this.moveSpeedStat * this.slideVector * Time.fixedDeltaTime));
 					base.characterMotor.velocity.y = 0f;
@@ -224,7 +226,7 @@ namespace Ridley.SkillStates
 				bool flag10 = this.isMultiHit;
 				if (flag10)
 				{
-					this.attackResetStopwatch += Time.fixedDeltaTime;
+					
 					bool flag11 = this.attackResetStopwatch >= this.attackResetInterval;
 					if (flag11)
 					{
@@ -376,7 +378,7 @@ namespace Ridley.SkillStates
 		protected float attackEndTime = 0.4f;
 
 		// Token: 0x04000075 RID: 117
-		protected float hitStopDuration = 0.025f;
+		protected float hitStopDuration = 0.06f;
 
 		// Token: 0x04000076 RID: 118
 		protected float attackRecoil = 2f;

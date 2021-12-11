@@ -196,8 +196,6 @@ namespace Ridley.SkillStates
 								this.dragEffect.transform.position = raycastHit.point;
 							else
 								this.dragEffect.transform.position = raycastHit.point = base.FindModelChild("HandL").position;
-							float bonusDamage = this.velocityDamageCoefficient * base.characterMotor.velocity.magnitude * this.damageStat;
-							this.attack.damage = (this.chargeDamageCoefficient * this.damageStat) + bonusDamage;
 
 							this.dragStopwatch += Time.fixedDeltaTime;
 							bool flag9 = !this.sound;

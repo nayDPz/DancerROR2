@@ -19,7 +19,7 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = 3.8f;
 			this.stackGainAmount = 9;
-			this.hitStopDuration = 0.25f;
+			this.hitStopDuration = 0.15f;
 			this.swingSoundString = "Jab3";
 			this.hitSoundString = "JabHit3";
 			this.swingEffectPrefab = Assets.swordSwingEffect;
