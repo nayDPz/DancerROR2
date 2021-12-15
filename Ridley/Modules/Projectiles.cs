@@ -39,9 +39,11 @@ namespace Ridley.Modules
             p.impactEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
             p.explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
             p.explosionSoundString = "FireballHit";
+            p.falloffModel = BlastAttack.FalloffModel.Linear;
 
             ProjectileExplosion pz = ridleyFireballPrefab.GetComponent<ProjectileExplosion>();
             pz.explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
+            pz.falloffModel = BlastAttack.FalloffModel.Linear;
             ProjectileProximityBeamController bb = ridleyFireballPrefab.GetComponent<ProjectileProximityBeamController>();
             GameObject.Destroy(bb);
 

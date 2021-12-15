@@ -84,8 +84,14 @@ namespace Ridley.SkillStates
 				this.modelTransform.position = this.pivotTransform.position;
 				this.modelTransform.rotation = this.pivotTransform.rotation;
 			}
+			RaycastHit raycastHit;
+			if (Physics.Raycast(new Ray(base.transform.position + Vector3.up * 2f, Vector3.down), out raycastHit, 6f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
+            {
+				this.lastGroundPosition = raycastHit.point;
+            }
 		}
 
+		private Vector3 lastGroundPosition;
 		// Token: 0x0600000C RID: 12 RVA: 0x000025DC File Offset: 0x000007DC
 		public void Launch(Vector3 launchVector)
 		{
@@ -107,23 +113,31 @@ namespace Ridley.SkillStates
 			{
 				this.direction.enabled = true;
 			}
-			bool flag7 = this.modelLocator;
-			if (flag7)
-			{
-				Transform transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/HurtBox");
-				bool flag8 = transform;
-				if (flag8)
+			if(this.body.healthComponent && this.body.healthComponent.alive)
+            {
+				bool flag7 = this.modelLocator;
+				if (flag7)
 				{
-					transform.gameObject.layer = this.extraLayer;
+					Transform transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/HurtBox");
+					bool flag8 = transform;
+					if (flag8)
+					{
+						transform.gameObject.layer = this.extraLayer;
+					}
+					transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/ROOT/Mask/StandableSurfacePosition/StandableSurface");
+					bool flag9 = transform;
+					if (flag9)
+					{
+						transform.gameObject.layer = this.extraLayer2;
+					}
 				}
-				transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/ROOT/Mask/StandableSurfacePosition/StandableSurface");
-				bool flag9 = transform;
-				if (flag9)
-				{
-					transform.gameObject.layer = this.extraLayer2;
-				}
+				base.gameObject.layer = LayerIndex.defaultLayer.intVal;
 			}
-			base.gameObject.layer = LayerIndex.defaultLayer.intVal;
+			RaycastHit raycastHit;
+			if (!Physics.Raycast(new Ray(this.body.footPosition, Vector3.down), out raycastHit, 15f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
+            {
+				base.transform.position = this.lastGroundPosition;
+            }
 			bool flag10 = this.motor;
 			if (flag10)
 			{

@@ -20,7 +20,7 @@ namespace Ridley.SkillStates
 			this.stackGainAmount = 8;
 			this.swingSoundString = "PunchSwing";
 			this.hitSoundString = "JabHit1";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab1HitSoundEvent.index;
 			this.animString = "UpTilt";

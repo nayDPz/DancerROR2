@@ -19,10 +19,12 @@ namespace Ridley.Modules
         internal static GameObject groundDragEffect;
         internal static GameObject vitalPrefab;
         // particle effects
-        internal static GameObject swordSwingEffect;
+        internal static GameObject grabFireEffect;
+        internal static GameObject ridleySwingEffect;
+        internal static GameObject nairSwingEffect;
         internal static GameObject swordHitImpactEffect;
 
-        internal static GameObject punchSwingEffect;
+        internal static GameObject biteEffect;
         internal static GameObject punchImpactEffect;
 
         internal static GameObject fistBarrageEffect;
@@ -71,6 +73,7 @@ namespace Ridley.Modules
 
         // cache these and use to create our own materials
         public static Shader hotpoo = Resources.Load<Shader>("Shaders/Deferred/HGStandard");
+        public static Shader cloud = Resources.Load<Shader>("shaders/fx/hgcloudremap");
         public static Material commandoMat;
 
         internal static void PopulateAssets()
@@ -136,6 +139,19 @@ namespace Ridley.Modules
                 footDragEffect = q;
             }
             */
+
+            grabFireEffect = LoadEffect("GrabHandEffect");
+            grabFireEffect.AddComponent<DetachParticleOnDestroyAndEndEmission>();
+            GameObject f1 = grabFireEffect.transform.Find("Particle System").transform.Find("Fire Outer").gameObject;
+            f1.GetComponent<ParticleSystemRenderer>().material.shader = cloud;
+            Components.MaterialControllerComponents.HGControllerFinder c = f1.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
+            f1.AddComponent<DetachParticleOnDestroyAndEndEmission>().particleSystem = f1.GetComponent<ParticleSystem>();
+
+            GameObject f2 = grabFireEffect.transform.Find("Particle System").transform.Find("Fire Inner").gameObject;
+            f2.GetComponent<ParticleSystemRenderer>().material.shader = cloud;
+            f2.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
+            f2.AddComponent<DetachParticleOnDestroyAndEndEmission>().particleSystem = f2.GetComponent<ParticleSystem>();
+
             dustEffect = LoadEffect("HenryDustEffect");
             bombExplosionEffect = LoadEffect("BombExplosionEffect", "HenryBombExplosion");
             bazookaExplosionEffect = LoadEffect("HenryBazookaExplosionEffect", "HenryBazookaExplosion");
@@ -175,10 +191,11 @@ namespace Ridley.Modules
                 cycleOffset = 0f
             };
 
-            swordSwingEffect = Assets.LoadEffect("HenrySwordSwingEffect", true);
+            ridleySwingEffect = Assets.LoadEffect("RidleySwingEffect", true);
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
+            nairSwingEffect = Assets.LoadEffect("RidleyNairEffect", true);
+            biteEffect = Assets.LoadEffect("RidleyBiteEffect", true);
 
-            punchSwingEffect = Assets.LoadEffect("HenryFistSwingEffect", true);
             //punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
             // on second thought my effect sucks so imma just clone loader's
             punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");

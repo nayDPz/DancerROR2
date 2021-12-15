@@ -10,22 +10,23 @@ namespace Ridley.SkillStates
 		// Token: 0x0600002E RID: 46 RVA: 0x00003ABC File Offset: 0x00001CBC
 		public override void OnEnter()
 		{
-			this.baseDuration = 0.75f;
-			this.attackStartTime = 0.15f;
-			this.attackEndTime = 0.56f;
-			this.hitStopDuration = 0.025f;
+			this.anim = 1.45f;
+			this.baseDuration = 0.7f;
+			this.attackStartTime = 0.225f;
+			this.attackEndTime = 0.65f;
+			this.hitStopDuration = 0.03f;
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = 2.4f;
-			this.attackResetInterval = 0.15f;
-			this.hitStopDuration = 0.1f;
+			this.attackResetInterval = 0.11f;
+			this.hitStopDuration = 0.08f;
 			this.stackGainAmount = 3;
 			this.isMultiHit = true;
 			this.isAerial = true;
 			this.isSus = true;
 			this.swingSoundString = "FAir";
 			this.hitSoundString = "SwordHit";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword1HitSoundEvent.index;
 			this.animString = "FAir";

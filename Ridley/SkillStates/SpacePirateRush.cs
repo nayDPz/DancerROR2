@@ -22,6 +22,8 @@ namespace Ridley.SkillStates
 			this.aimDirection.y = Mathf.Clamp(this.aimDirection.y, -0.5f, 0.5f);
 			this.stopwatch = 0f;
 			this.grabController = new List<GrabController>();
+
+			//this.fireEffect = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.grabFireEffect, base.FindModelChild("HandL2"));
 			base.PlayAnimation("FullBody, Override", "SSpecStart", "Slash.playbackRate", this.grabDuration);
 			Util.PlaySound("GrabEnter", base.gameObject);
 			if (base.characterBody) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
@@ -31,12 +33,6 @@ namespace Ridley.SkillStates
 			if (flag)
 			{
 				hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "NAir");
-			}
-			ChildLocator component = this.animator.GetComponent<ChildLocator>();
-			bool flag2 = component;
-			if (flag2)
-			{
-				this.sphereCheckTransform = component.FindChild("SphereCheck");
 			}
 			this.attack = new OverlapAttack();
 			this.attack.damageType = DamageType.Generic;
@@ -106,13 +102,14 @@ namespace Ridley.SkillStates
 					{
 						this.stopwatch = 0f;
 						bool isGrounded = base.isGrounded;
-						this.subState = SpacePirateRush.SubState.AirGrabbed;
+						this.subState = SpacePirateRush.SubState.AirGrabbed;						
 					}
 					else
 					{
 						bool flag6 = this.stopwatch >= this.grabDuration;
 						if (flag6)
 						{
+							if (this.fireEffect) EntityState.Destroy(this.fireEffect);
 							this.stopwatch = 0f;
 							this.outer.SetNextStateToMain();
 							this.subState = SpacePirateRush.SubState.MissedGrab;
@@ -125,18 +122,22 @@ namespace Ridley.SkillStates
 					if (flag7)
 					{
 						bool isGrounded2 = base.isGrounded;
-						if (isGrounded2 && this.stopwatch >= this.minDropTime)
+						if ((isGrounded2 || base.inputBank.jump.justPressed) && this.stopwatch >= this.minDropTime)
 						{
+							this.targetMoveVector = Vector3.zero;
 							this.dragEffect = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.groundDragEffect, base.FindModelChild("HandL").position, Util.QuaternionSafeLookRotation(Vector3.up));
 							//this.dragEffect.transform.parent = base.FindModelChild("HandL");
-							float c = ((this.stopwatch / this.maxAirTime) + 1) * this.airTimeDamageCoefficient;
-							base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
+							this.finalAirTime = (this.stopwatch / this.maxAirTime);
+							float c = (finalAirTime + 1) * this.airTimeDamageCoefficient;
+							float attackRecoil = this.attackRecoil;
+							base.AddRecoil(-1f * attackRecoil, -2f * attackRecoil, -0.5f * attackRecoil, 0.5f * attackRecoil);
 							EffectManager.SpawnEffect(Resources.Load<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam"), new EffectData
 							{
 								origin = base.transform.position,
 								scale = this.groundSlamRadius * c,
 							}, true);
-							new BlastAttack
+							
+							BlastAttack.Result result = new BlastAttack
 							{
 								attacker = base.gameObject,
 								procChainMask = default(ProcChainMask),
@@ -147,16 +148,15 @@ namespace Ridley.SkillStates
 								procCoefficient = 1f,
 								bonusForce = SpacePirateRush.upForce * Vector3.up,
 								baseForce = SpacePirateRush.launchForce,
-								baseDamage = c * this.groundSlamDamageCoefficient * (this.airTimeDamageCoefficient * this.stopwatch) * this.damageStat,
+								baseDamage = c * this.groundSlamDamageCoefficient * this.damageStat,
 								falloffModel = BlastAttack.FalloffModel.None,
-								radius = this.groundSlamRadius,
+								radius = this.groundSlamRadius * c,
 								position = base.FindModelChild("HandL").position,
 								attackerFiltering = AttackerFiltering.NeverHit,
 								teamIndex = base.GetTeam(),
 								inflictor = base.gameObject,
 								crit = base.RollCrit()
 							}.Fire();
-
 
 							base.modelLocator.normalizeToFloor = true;
 							this.subState = SpacePirateRush.SubState.Dragging;
@@ -173,7 +173,7 @@ namespace Ridley.SkillStates
 						bool flag8 = this.subState == SpacePirateRush.SubState.Dragging;
 						if (flag8)
 						{
-							if (base.characterMotor.lastGroundedTime.timeSince >= 0.125f)
+							if (base.characterMotor.lastGroundedTime.timeSince >= 0.15f)
 							{
 								if(this.dragEffect)
                                 {
@@ -192,7 +192,7 @@ namespace Ridley.SkillStates
 							Vector3 position = base.FindModelChild("HandL").position;
 							position.y += 1f;
 							Debug.DrawRay(position, Vector3.down);
-							if (Physics.Raycast(new Ray(position, Vector3.down), out raycastHit, 4f, LayerIndex.world.mask | LayerIndex.water.mask, QueryTriggerInteraction.Collide))
+							if (Physics.Raycast(new Ray(position, Vector3.down), out raycastHit, 4f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
 								this.dragEffect.transform.position = raycastHit.point;
 							else
 								this.dragEffect.transform.position = raycastHit.point = base.FindModelChild("HandL").position;
@@ -258,10 +258,12 @@ namespace Ridley.SkillStates
 								{
 									EntityState.Destroy(this.dragEffect);
 								}
+								this.exitSpeed = d2;
 								this.subState = SpacePirateRush.SubState.DragLaunch;
 								AkSoundEngine.StopPlayingID(this.soundID);
 								Util.PlaySound("DragLaunch", base.gameObject);
 								Util.PlaySound("DragLaunchVoice", base.gameObject);
+								this.lastSafeFootPosition = base.characterBody.footPosition;
 								base.PlayAnimation("FullBody, Override", "DragEnd", "Slash.playbackRate", this.grabDuration);
 								foreach (GrabController grabController in this.grabController)
 								{
@@ -280,7 +282,8 @@ namespace Ridley.SkillStates
 							bool flag15 = this.subState == SpacePirateRush.SubState.GrabWall;
 							if (flag15)
 							{
-								float bonusDamage = this.velocityDamageCoefficient * base.characterMotor.velocity.magnitude * this.damageStat;
+								float f = Mathf.Max(this.velocityDamageCoefficient * base.characterMotor.velocity.magnitude, (finalAirTime + 1) * this.airTimeDamageCoefficient);
+								float bonusDamage = f * this.damageStat;
 								base.characterMotor.moveDirection = Vector3.zero;
 								Util.PlaySound("JabHit3", base.gameObject);
 								AkSoundEngine.StopPlayingID(this.soundID);
@@ -315,8 +318,16 @@ namespace Ridley.SkillStates
 							}
 							else
 							{
-								base.characterMotor.velocity /= 3f;
+								if (this.subState == SubState.DragLaunch)
+									base.characterMotor.moveDirection = base.characterDirection.forward * this.exitSpeed * Mathf.Lerp(1f, 0f, this.stopwatch / this.exitDuration);
+								else
+                                {
+									base.characterMotor.velocity = Vector3.zero;
+									base.characterMotor.moveDirection = Vector3.zero;
+								}
+								base.characterMotor.velocity = Vector3.zero; ////////delet
 								base.characterMotor.moveDirection = Vector3.zero;
+
 								bool flag16 = this.stopwatch >= this.exitDuration;
 								if (flag16)
 								{
@@ -329,6 +340,7 @@ namespace Ridley.SkillStates
 			}
 		}
 
+		private float exitSpeed;
 		// Token: 0x0600004B RID: 75 RVA: 0x000057B4 File Offset: 0x000039B4
 		private void DamageTargets()
 		{
@@ -368,6 +380,11 @@ namespace Ridley.SkillStates
 			{
 				EntityState.Destroy(this.dragEffect);
 			}
+			if (this.fireEffect) EntityState.Destroy(this.fireEffect);
+
+			RaycastHit raycastHit;
+			if (!Physics.Raycast(new Ray(base.characterBody.footPosition, Vector3.down), out raycastHit, 100f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
+				base.transform.position = this.lastSafeFootPosition + Vector3.up * 5;
 			AkSoundEngine.StopPlayingID(this.soundID);
 			base.modelLocator.normalizeToFloor = false;
 			this.animator.SetBool("dragGround", false);
@@ -408,6 +425,17 @@ namespace Ridley.SkillStates
 				{
 					component.SetPain();
 				}
+				else if(component.canBeStunned)
+                {
+					component.SetStun(1f);					
+                }
+				foreach (EntityStateMachine e in body.gameObject.GetComponents<EntityStateMachine>())
+				{
+					if (e && e.customName.Equals("Weapon"))
+					{
+						e.SetNextStateToMain();
+					}
+				}
 			}
 		}
 
@@ -447,6 +475,7 @@ namespace Ridley.SkillStates
 							}
 							GrabController grabController = hurtBox.healthComponent.body.gameObject.AddComponent<GrabController>();
 							grabController.pivotTransform = base.FindModelChild("HandL");
+							if (this.fireEffect) EntityState.Destroy(this.fireEffect);
 							this.grabController.Add(grabController);
 							this.ForceFlinch(hurtBox.healthComponent.body);
 							bool isGrounded = base.isGrounded;
@@ -466,8 +495,11 @@ namespace Ridley.SkillStates
 			return InterruptPriority.Frozen;
 		}
 
-		private float airTimeDamageCoefficient = 1.5f;
+		private float finalAirTime;
+		private Vector3 lastSafeFootPosition;
+		private float airTimeDamageCoefficient = 2.5f;
 
+		private GameObject fireEffect;
 		private GameObject dragEffect;
 
 		private float minDropTime = 0.35f;
@@ -489,9 +521,9 @@ namespace Ridley.SkillStates
 		// Token: 0x040000A9 RID: 169
 		private Vector3 targetMoveVectorVelocity;
 
-		private float velocityDamageCoefficient = 0.5f;
+		private float velocityDamageCoefficient = 0.75f;
 		// Token: 0x040000AA RID: 170
-		private float wallDamageCoefficient = 12f;
+		private float wallDamageCoefficient = 10f;
 
 		// Token: 0x040000AB RID: 171
 		private float wallBlastRadius = 12f;
@@ -557,7 +589,7 @@ namespace Ridley.SkillStates
 		// Token: 0x040000BF RID: 191
 		protected NetworkSoundEventIndex impactSound;
 
-		private float groundSlamDamageCoefficient = 3.75f;
+		private float groundSlamDamageCoefficient = 3.4f;
 		// Token: 0x040000C0 RID: 192
 		private float chargeDamageCoefficient = 2.5f;
 

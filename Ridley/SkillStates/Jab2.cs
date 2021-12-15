@@ -11,6 +11,7 @@ namespace Ridley.SkillStates
 		// Token: 0x06000032 RID: 50 RVA: 0x00003CD0 File Offset: 0x00001ED0
 		public override void OnEnter()
 		{
+			this.anim = 1.2f;
 			this.baseDuration = 0.4f;
 			this.attackStartTime = 0f;
 			this.attackEndTime = 0.4f;
@@ -19,9 +20,11 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.stackGainAmount = 7;
 			this.hitStopDuration = 0.06f;
+			this.pushForce = 650f;
 			this.swingSoundString = "Jab2";
 			this.hitSoundString = "JabHit2";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.muzzleString = "Jab2";
+			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab2HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]

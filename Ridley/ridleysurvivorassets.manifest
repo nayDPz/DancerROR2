@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4014009089
+CRC: 587394476
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e474748c340b8a28161c7b20d0e3da30
+    Hash: a6970164f7211e5e38c92a331509a9f8
   TypeTreeHash:
     serializedVersion: 2
     Hash: c9559fd5d745e7f38d3b30755cab4b98
@@ -144,6 +144,7 @@ Assets:
 - Assets/RIDLEY RIDLEY RIDLEY/Effects/matHitSpark 2.mat
 - Assets/HenryAssets/Animations/maskAimYaw.mask
 - Assets/HenryAssets/Icons/texDanteAchievement.png
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/GrabHandEffect.prefab
 - Assets/NemryAssets/Animations/Spear/Ascend.anim
 - Assets/HenryAssets/Icons/texSecondaryIcon.png
 - Assets/HenryAssets/Materials/matHenryJedi.mat
@@ -209,6 +210,7 @@ Assets:
 - Assets/NemryAssets/Animations/Spear/DodgeSlash.anim
 - Assets/HenryAssets/Animations/animHenryMenu.controller
 - Assets/HenryAssets/Materials/matHenry.mat
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/Materials/matDust 1.mat
 - Assets/HenryAssets/Icons/texVergilAchievement.png
 - Assets/DancerAssets/VFX/Mesh/donut8Mesh.asset
 - Assets/NemryAssets/Animations/GroundTorrentLoop.anim
@@ -285,6 +287,7 @@ Assets:
 - Assets/HenryAssets/Animations/BazookaFireCharged.anim
 - Assets/RIDLEY RIDLEY RIDLEY/mdlRidley.prefab
 - Assets/NemryAssets/Animations/RunFGun.anim
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/RidleyNairEffect.prefab
 - Assets/DancerAssets/VFX/texCloudOrganic1.png
 - Assets/FBX/SpearSwingEffect.fbx
 - Assets/HenryAssets/Animations/maskLeftArm.mask
@@ -315,6 +318,7 @@ Assets:
 - Assets/RIDLEY RIDLEY RIDLEY/Materials/matRidley.mat
 - Assets/HenryAssets/Animations/SprintF.anim
 - Assets/HenryAssets/Mesh/meshHenrySwordAlt.mesh
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/Materials/matDust 2.mat
 - Assets/HenryAssets/VFX/PunchMesh.mesh
 - Assets/NemryAssets/VFX/Textures/texNemryRipple.png
 - Assets/HenryAssets/Textures/texHenry.png
@@ -390,6 +394,7 @@ Assets:
 - Assets/RIDLEY RIDLEY RIDLEY/Effects/matRipple 1.mat
 - Assets/NemryAssets/Animations/Slash3.anim
 - Assets/HenryAssets/VFX/Textures/texPunchImpact.png
+- Assets/HenryAssets/VFX/Materials/texSlash 1.mat
 - Assets/NemryAssets/Icons/texNemBlinkIcon.png
 - Assets/HenryAssets/Animations/BazookaAimU.anim
 - Assets/NemryAssets/NemryDisplay.prefab
@@ -398,6 +403,7 @@ Assets:
 - Assets/NemryAssets/Icons/texNemSwordIconPreview.png
 - Assets/HenryAssets/mdlHenry.prefab
 - Assets/FBX/HenryGrandMastery.fbx
+- Assets/HenryAssets/VFX/Textures/texSlash 1.png
 - Assets/FBX/Bazooka.fbx
 - Assets/HenryAssets/Mesh/meshRebellion.mesh
 - Assets/RIDLEY RIDLEY RIDLEY/model-armature_AimPitch.anim
@@ -452,9 +458,8 @@ Assets:
 - Assets/HenryAssets/Animations/AimPitchBazooka.anim
 - Assets/HenryAssets/Mesh/meshUzi.mesh
 - Assets/NemryAssets/Animations/Slash2Upper.anim
-- Assets/HenryAssets/VFX/Materials/matSlash.mat
 - Assets/NemryAssets/Animations/maskAimPitch.mask
-- Assets/HenryAssets/VFX/Materials/matDust.mat
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/Materials/matDust.mat
 - Assets/NemryAssets/Animations/Slash2Air.anim
 - Assets/HenryAssets/VFX/Textures/texSmoke.png
 - Assets/DancerAssets/VFX/Mesh/donut4Mesh.asset
@@ -497,6 +502,7 @@ Assets:
 - Assets/NemryAssets/VFX/Textures/texMuzzleFlashEnergy.dds
 - Assets/EffectExamples/FireExplosionEffects/Materials/FlameRoundYellowParticle.mat
 - Assets/NemryAssets/VFX/Materials/matSpearSwing.mat
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/ImpactHenryPunch 1.prefab
 - Assets/EffectExamples/FireExplosionEffects/Textures/FlameRoundParticleSheet.tif
 - Assets/HenryAssets/Animations/AirPunch3.anim
 - Assets/NemryAssets/Animations/IdleIn.anim
@@ -548,6 +554,7 @@ Assets:
 - Assets/MrGreenAssets/Materials/matMrGreen.mat
 - Assets/FBX/PistolAlt.fbx
 - Assets/NemryAssets/Animations/VoidBlast.anim
+- Assets/RIDLEY RIDLEY RIDLEY/Effects/ImpactHenrySlash 1.prefab
 - Assets/NemryAssets/VFX/NemryMuzzleFlashEnergy.prefab
 - Assets/NemryAssets/Animations/AscendGun.anim
 - Assets/NemryAssets/Animations/TorrentAirLoop.anim

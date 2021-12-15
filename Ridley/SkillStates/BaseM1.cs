@@ -19,6 +19,7 @@ namespace Ridley.SkillStates
 			base.characterDirection.forward = base.inputBank.aimDirection;
 			base.characterBody.SetAimTimer(2f);
 			this.duration = this.baseDuration / this.attackSpeedStat;
+			this.attackResetInterval /= this.attackSpeedStat;
 			Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 			HitBoxGroup hitBoxGroup = null;
 			Transform modelTransform = base.GetModelTransform();
@@ -67,10 +68,11 @@ namespace Ridley.SkillStates
 			this.PlayAttackAnimation();
 		}
 
+		protected float anim = 1f;
 		// Token: 0x0600001F RID: 31 RVA: 0x00003062 File Offset: 0x00001262
 		private void PlayAttackAnimation()
 		{
-			base.PlayCrossfade("FullBody, Override", this.animString, "Slash.playbackRate", this.duration, 0.05f);
+			base.PlayCrossfade("FullBody, Override", this.animString, "Slash.playbackRate", this.duration * this.anim, 0.05f);
 		}
 
 		// Token: 0x06000020 RID: 32 RVA: 0x00003088 File Offset: 0x00001288

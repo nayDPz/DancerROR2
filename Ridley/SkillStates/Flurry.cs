@@ -18,7 +18,7 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.swingSoundString = "Jab2";
 			this.hitSoundString = "JabHit2";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.isCombo = true;
 			this.isDash = true;

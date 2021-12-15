@@ -48,6 +48,7 @@ namespace Ridley.SkillStates
 				{
 					Ray aimRay = base.GetAimRay();
 					this.pullPoint = aimRay.GetPoint(3f);
+					this.pullPoint.y = base.transform.position.y + 1f;
 					Vector3 direction = aimRay.direction;
 					//direction.y = Mathf.Clamp(aimRay.direction.y, -0.25f, 0.25f);
 					aimRay.direction = direction;
@@ -116,7 +117,7 @@ namespace Ridley.SkillStates
 		private void OnHitEnemyAuthority()
 		{
 			base.characterMotor.velocity = Vector3.zero;
-			base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
+			base.AddRecoil(-1f * this.attackRecoil / 2, -2f * this.attackRecoil / 2, -0.5f * this.attackRecoil / 2, 0.5f * this.attackRecoil / 2);
 			this.hasHit = true;
 		}
 
@@ -254,6 +255,7 @@ namespace Ridley.SkillStates
 												body2.gameObject.GetComponent<KinematicCharacterMotor>().ForceUnground();
 											}
 											body2.characterMotor.rootMotion += normalized * num2 * Time.fixedDeltaTime;
+											body2.characterMotor.velocity.y = 0f;
 										}
 										else
 										{
@@ -263,6 +265,7 @@ namespace Ridley.SkillStates
 								}
 							}
 						}
+						base.characterMotor.velocity.y = 0f;
 						bool flag17 = this.stopwatch >= this.pullTime + this.skewerExitTime;
 						if (flag17)
 						{

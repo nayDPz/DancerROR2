@@ -138,7 +138,7 @@ namespace Ridley.SkillStates
 
 		// Token: 0x0400004C RID: 76
 		[SerializeField]
-		public float baseDuration = 1.5f;
+		public float baseDuration = 1f;
 
 		// Token: 0x0400004D RID: 77
 		[SerializeField]

@@ -1,7 +1,7 @@
 ﻿using System;
 using EntityStates.Merc;
 using Ridley.Modules;
-
+using UnityEngine;
 namespace Ridley.SkillStates
 {
 	// Token: 0x02000011 RID: 17
@@ -10,7 +10,8 @@ namespace Ridley.SkillStates
 		// Token: 0x06000038 RID: 56 RVA: 0x00003FF4 File Offset: 0x000021F4
 		public override void OnEnter()
 		{
-			this.baseDuration = 0.6f;
+			this.anim = 1.65f;
+			this.baseDuration = 0.65f;
 			this.attackStartTime = 0.2f;
 			this.attackEndTime = 1f;
 			this.hitStopDuration = 0.025f;
@@ -19,12 +20,13 @@ namespace Ridley.SkillStates
 			this.damageCoefficient = 3.5f;
 			this.stackGainAmount = 8;
 			this.hitStopDuration = 0.15f;
+			this.bonusForce = Vector3.up * 2100f;
 			this.isAerial = true;
-			this.isSus = true;
 			this.isFlinch = true;
 			this.swingSoundString = "NAir";
 			this.hitSoundString = "SwordHit2";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.swingEffectPrefab = Assets.nairSwingEffect;
+			//this.muzzleString = "Nair";
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword2HitSoundEvent.index;
 			this.animString = "Nair";

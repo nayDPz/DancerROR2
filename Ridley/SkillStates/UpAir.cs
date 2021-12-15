@@ -22,7 +22,7 @@ namespace Ridley.SkillStates
 			this.isAerial = true;
 			this.swingSoundString = "UpAir";
 			this.hitSoundString = "SwordHit2";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
+			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword2HitSoundEvent.index;
 			this.animString = "UpAir";

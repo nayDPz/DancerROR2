@@ -1,21 +1,64 @@
-## Ridley
-- Adds Henry, a stickman who fights with a mix of sword and gun(at least he will when his skills are implemented)
-- Designed to use as a base for creating your own custom characters, codebase is modular and easy to understand while easily supporting multiple characters and even enemies eventually- in other words, Example Survivor 2
-- Currently uses Commando's skills, custom skills will be added in later
+## Ridley Beta
 
-[![](https://cdn.discordapp.com/attachments/567832879879553037/807468835057565696/unknown.png)]()
 
-[![](https://cdn.discordapp.com/attachments/469291841859092488/807476979061489664/texHenryIcon.png)]()
 
-feel free to ping/dm me with any questions or complaints on the modding discord- @rob#2365
+`1.6.10`
+- added hitstop to most moves
+- damage increase all around
+- added effects to Space Pirate Rush (SPR)
+- SPR damage when colliding with bosses increased bigly and scales with movespeed
+- SPR damage when hitting the ground increased and scales with time spent in the air
+- SPR stops dragging when not grounded, meaning falling off a cliff during the drag will cause another impact when hitting the ground
+- temp vfx for skewer
+
+adds ridley as a survivor (beta)
+
+missing a lot of visuals. for now i highly recommend using TimeSweeper's hitboxviewer mod to get familiar with hitboxes and Harb's DebugToolkit because its because .
+
+i strongly encourage you to find me in the ROR2 modding discord, my username is orbeezeater22#0704
+let me know how gameplay feels since that is the focus of the beta!
+
+[![](https://cdn.discordapp.com/attachments/753003166559240257/918607281095069716/unknown.png)]()
+
+## Wicked Claws Moveset
+| Skill      | Input | Description |
+| ---------- | -----| ----- |
+| Jab | on ground, aim forward| small dash. third jab interrupts enemies|
+| Dash Attack | on ground, sprinting | dash. interrupts enemies. procs bands|
+| Down Tilt | on ground, aim down | hits low. interrupts enemies and knocks them upwards
+| Up Tilt | on ground, aim up | hits upwards
+| Neutral Air | in air, aim down OR no movement | large hitbox. interrupts enemies
+| Forward Air | in air, aim forward AND move | highest dps attack
+| Up Air | in air, aim up | hits upwards
 
 ## To-Do
-- Item displays
-- Skills
-- Skin mesh replacements
-- Better documentation/more comments
-- Emotes?
+everything
+
+## Thanks to Rob for making HenryMod and to everyone in the modding discord for answering my questions. and the enforcer people for the grabbies =)
 
 ## Changelog
-`0.0.1`
-- Initial release
+`1.6.10`
+- added hitstop to most moves
+- damage increase all around
+- added effects to Space Pirate Rush (SPR)
+- SPR damage when colliding with bosses increased bigly and scales with movespeed
+- SPR damage when hitting the ground increased and scales with time spent in the air
+- SPR stops dragging when not grounded, meaning falling off a cliff during the drag will cause another impact when hitting the ground
+- temp vfx for skewer
+
+`1.6.9`
+- changed some timing on Space Pirate Rush and Skewer
+- capped passive dmg reduction
+- made some stuff louder
+
+`1.2.3`
+- added most(if not all) missing sounds
+- fixed jank with flying enemies on skewer and grab
+- fireballs are faster now
+- skewer now stuns enemies
+- new passive
+
+`1.0.0`
+
+- Brand spankin' new =)
+

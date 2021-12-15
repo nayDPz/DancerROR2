@@ -21,7 +21,7 @@ namespace Ridley.Modules.Survivors
 			{
 				Ridley.characterPrefab = Prefabs.CreatePrefab("NdpRidleyBody", "mdlRidley", new BodyInfo
 				{
-					armor = 10f,
+					armor = 14f,
 					armorGrowth = 1.5f,
 					bodyName = "NdpRidleyBody",
 					bodyNameToken = "NDP_RIDLEY_BODY_NAME",
@@ -185,7 +185,7 @@ namespace Ridley.Modules.Survivors
 				fullRestockOnAssign = true,
 				interruptPriority = InterruptPriority.PrioritySkill,
 				resetCooldownTimerOnUse = false,
-				isCombatSkill = false,
+				isCombatSkill = true,
 				mustKeyPress = false,
 				cancelSprintingOnActivation = true,
 				rechargeStock = 1,

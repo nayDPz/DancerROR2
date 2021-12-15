@@ -120,13 +120,22 @@ namespace Ridley
                     if((damageInfo.damageType & DamageType.DoT) != DamageType.DoT)
                     {
                         float num = Mathf.Min(self.body.armor, (self.body.baseArmor + self.body.levelArmor * self.body.level) * 2f);
-                        damageInfo.damage -= num;
-                        bool flag3 = damageInfo.damage < 0f;
-                        if (flag3)
+                        
+                        if(self.combinedHealthFraction < 0.5f)
                         {
-                            self.Heal(Mathf.Abs(damageInfo.damage / 2), default(RoR2.ProcChainMask), true);
-                            damageInfo.damage = 0f;
+                            damageInfo.damage -= num;
+                            bool flag3 = damageInfo.damage < 0f;
+                            if (flag3)
+                            {
+                                self.Heal(Mathf.Abs(damageInfo.damage), default(RoR2.ProcChainMask), true);
+                                damageInfo.damage = 0f;
+                            }
                         }
+                        else
+                        {
+                            damageInfo.damage = Mathf.Max(1f, damageInfo.damage - num);
+                        }
+                        
                     }
                     
 

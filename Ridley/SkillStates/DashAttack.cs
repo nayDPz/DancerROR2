@@ -22,8 +22,9 @@ namespace Ridley.SkillStates
 			this.stackGainAmount = 12;
 			this.swingSoundString = "DashAttack";
 			this.hitSoundString = "Jab3Hit";
-			this.swingEffectPrefab = Assets.swordSwingEffect;
-			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
+			this.muzzleString = "Mouth";
+			this.swingEffectPrefab = Assets.biteEffect;
+			this.hitEffectPrefab = Assets.biteEffect;
 			this.impactSound = Assets.jab3HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
 			{
