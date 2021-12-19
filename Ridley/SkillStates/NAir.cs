@@ -5,10 +5,8 @@ using RoR2;
 using UnityEngine;
 namespace Ridley.SkillStates
 {
-	// Token: 0x02000011 RID: 17
 	public class NAir : BaseM1
 	{
-		// Token: 0x06000038 RID: 56 RVA: 0x00003FF4 File Offset: 0x000021F4
 		public override void OnEnter()
 		{
 			this.anim = 1.65f;

@@ -6,10 +6,8 @@ using RoR2;
 using System.Collections.Generic;
 namespace Ridley.SkillStates
 {
-	// Token: 0x0200000A RID: 10
 	public class DashAttack : BaseM1
 	{
-		// Token: 0x0600002A RID: 42 RVA: 0x000038B4 File Offset: 0x00001AB4
 		public override void OnEnter()
 		{
 			this.baseDuration = 0.875f;
@@ -65,8 +63,7 @@ namespace Ridley.SkillStates
 			Vector3 direction = base.characterDirection.forward * 15f + Vector3.up * 7.5f;
 			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
 			launchVector = launchVector.normalized;
-			bool flag16 = hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
-			if (flag16)
+			if (hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
 			{
 				hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
 			}

@@ -8,10 +8,41 @@ using UnityEngine;
 
 namespace Ridley.SkillStates
 {
-	// Token: 0x02000015 RID: 21
 	public class Skewer : BaseSkillState
 	{
-		// Token: 0x06000041 RID: 65 RVA: 0x000045F4 File Offset: 0x000027F4
+		public static float damageCoefficient = 5f;
+		public static float procCoefficient = 1f;
+		public static float baseDuration = 1.5f;
+		public static float force = 0f;
+		public static float recoil = 1f;
+		public static float range = 43f;
+		public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerHuntressSnipe");
+		public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
+		public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
+		private float exitTime = 0.15f;
+		private float skewerExitTime = 0.15f;
+		private float pullTime = 0.25f;
+		private float skewerTime = 0.375f;
+		private float stopwatch;
+		private Vector3 pullPoint;
+		private float duration;
+		private float fireTime;
+		private bool hasFired;
+		private float hitTime;
+		private Animator animator;
+		private string muzzleString;
+		private static float antigravityStrength;
+		private List<HurtBox> hitHurtBoxes;
+		private Skewer.SubState subState;
+		private bool a;
+		private enum SubState
+		{
+			Skewer,
+			SkewerHit,
+			Pull,
+			Exit
+		}
+
 		private Ray aimRay;
 		private float attackRecoil = 7f;
 		private List<Transform> tailTransforms;
@@ -35,23 +66,19 @@ namespace Ridley.SkillStates
 			Util.PlaySound("DSpecialStart", base.gameObject);
 		}
 
-		// Token: 0x06000042 RID: 66 RVA: 0x000046AD File Offset: 0x000028AD
 		public override void OnExit()
 		{
 			base.OnExit();
 		}
 
-		// Token: 0x06000043 RID: 67 RVA: 0x000046B8 File Offset: 0x000028B8
 		private void Fire()
 		{
-			bool flag = !this.hasFired;
-			if (flag)
+			if (!this.hasFired)
 			{
 				this.hasFired = true;
 				base.characterBody.AddSpreadBloom(1.5f);
 				EffectManager.SimpleMuzzleFlash(Skewer.muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
-				bool isAuthority = base.isAuthority;
-				if (isAuthority)
+				if (base.isAuthority)
 				{
 					this.aimRay = base.GetAimRay();
 					this.pullPoint = aimRay.GetPoint(3f);
@@ -96,12 +123,10 @@ namespace Ridley.SkillStates
 						if(hitInfo.hitHurtBox && result)
                         {
 							this.hitHurtBoxes.Add(hitInfo.hitHurtBox);
-							bool flag2 = hitInfo.hitHurtBox.healthComponent && hitInfo.hitHurtBox.healthComponent.body;
-							if (flag2)
+							if (hitInfo.hitHurtBox.healthComponent && hitInfo.hitHurtBox.healthComponent.body)
 							{
 								EntityStateMachine component = hitInfo.hitHurtBox.healthComponent.body.GetComponent<EntityStateMachine>();
-								bool flag3 = hitInfo.hitHurtBox.healthComponent.body.GetComponent<SetStateOnHurt>().canBeFrozen && component;
-								if (flag3)
+								if (hitInfo.hitHurtBox.healthComponent.body.GetComponent<SetStateOnHurt>().canBeFrozen && component)
 								{
 									SkeweredState newNextState = new SkeweredState
 									{
@@ -124,7 +149,6 @@ namespace Ridley.SkillStates
 		{
 			base.characterMotor.velocity = Vector3.zero;
 			base.AddRecoil(-1f * this.attackRecoil / 2, -2f * this.attackRecoil / 2, -0.5f * this.attackRecoil / 2, 0.5f * this.attackRecoil / 2);
-			this.hasHit = true;
 		}
 
 
@@ -167,24 +191,20 @@ namespace Ridley.SkillStates
 					tailTransforms[i].position = this.aimRay.GetPoint(distanceBetweenBones * (i + 1));
             }
 		}
-		// Token: 0x06000045 RID: 69 RVA: 0x00004910 File Offset: 0x00002B10
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			this.stopwatch += Time.fixedDeltaTime;
-			bool flag = this.subState == Skewer.SubState.Skewer;
-			if (flag)
+			if (this.subState == Skewer.SubState.Skewer)
 			{
-				bool flag2 = this.stopwatch >= this.fireTime;
-				if (flag2)
+				if (this.stopwatch >= this.fireTime)
 				{
 					this.Fire();
 				}
-				bool flag3 = this.hasFired;
-				if (flag3)
+				if (this.hasFired)
 				{
-					bool flag4 = this.hitHurtBoxes.Count > 0;
-					if (flag4)
+					if (this.hitHurtBoxes.Count > 0)
 					{
 						base.PlayAnimation("FullBody, Override", "DownSpecialHit", "Slash.playbackrate", this.duration * 0.5f);
 						Util.PlaySound("DSpecialHit", base.gameObject);
@@ -193,8 +213,7 @@ namespace Ridley.SkillStates
 					}
 					else
 					{
-						bool flag5 = !this.a;
-						if (flag5)
+						if (!this.a)
 						{
 							Util.PlaySound("DSpecialSwing", base.gameObject);
 						}
@@ -206,56 +225,27 @@ namespace Ridley.SkillStates
 			}
 			else
 			{
-				bool flag6 = this.subState == Skewer.SubState.SkewerHit;
-				if (flag6)
+				if (this.subState == Skewer.SubState.SkewerHit)
 				{
 					base.GetModelAnimator().SetFloat("Slash.playbackRate", 0f);
 					base.characterMotor.velocity.y = 0f;
 					foreach (HurtBox hurtBox in this.hitHurtBoxes)
 					{
-						bool flag7 = hurtBox;
-						if (flag7)
+						if (hurtBox)
 						{
 							HealthComponent healthComponent = hurtBox.healthComponent;
-							bool flag8 = healthComponent && healthComponent.body;
-							if (flag8)
+							if (healthComponent && healthComponent.body)
 							{
 								CharacterBody body = healthComponent.body;
-								bool flag9 = body.characterMotor;
-								if (flag9)
+								if (body.characterMotor)
 								{
 									body.characterMotor.velocity = Vector3.zero;
 								}
 							}
 						}
 					}
-					bool flag10 = this.stopwatch >= this.skewerTime;
-					if (flag10)
+					if (this.stopwatch >= this.skewerTime)
 					{
-						/*
-						bool crit = base.RollCrit();
-						foreach(HurtBox hurtBox in this.hitHurtBoxes)
-                        {
-							if(hurtBox.healthComponent && hurtBox.healthComponent.body && hurtBox.healthComponent.alive)
-                            {
-								DamageInfo damageInfo = new DamageInfo
-								{
-									position = hurtBox.healthComponent.body.transform.position,
-									attacker = base.gameObject,
-									inflictor = base.gameObject,
-									damage = Skewer.damageCoefficient * this.damageStat,
-									damageColorIndex = DamageColorIndex.Default,
-									damageType = DamageType.Stun1s,
-									crit = crit,
-									force = Vector3.zero,
-									procChainMask = default(ProcChainMask),
-									procCoefficient = 1f
-								};
-								hurtBox.healthComponent.TakeDamage(damageInfo);
-							}
-							
-						}							
-						*/
 						base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
 						base.GetModelAnimator().SetFloat("Slash.playbackRate", 1f);
 						Util.PlaySound("DSpecialPull", base.gameObject);
@@ -265,63 +255,54 @@ namespace Ridley.SkillStates
 				}
 				else
 				{
-					bool flag11 = this.subState == Skewer.SubState.Pull;
-					if (flag11)
+					if (this.subState == Skewer.SubState.Pull)
 					{
-						foreach (HurtBox hurtBox2 in this.hitHurtBoxes)
+						foreach (HurtBox hurtBox in this.hitHurtBoxes)
 						{
-							bool flag12 = hurtBox2;
-							if (flag12)
+							if (hurtBox)
 							{
-								HealthComponent healthComponent2 = hurtBox2.healthComponent;
-								bool flag13 = healthComponent2 && healthComponent2.body;
-								if (flag13)
+								HealthComponent healthComponent2 = hurtBox.healthComponent;
+								if (healthComponent2 && healthComponent2.body)
 								{
-									bool flag14 = this.stopwatch < this.pullTime;
-									if (flag14)
+									if (this.stopwatch < this.pullTime)
 									{
-										CharacterBody body2 = healthComponent2.body;
+										CharacterBody body = healthComponent2.body;
 										float num = this.pullTime - this.stopwatch;
-										Vector3 vector = this.pullPoint - body2.coreTransform.position;
+										Vector3 vector = this.pullPoint - body.coreTransform.position;
 										float num2 = vector.magnitude / num;
 										Vector3 normalized = vector.normalized;
 										float num3 = Mathf.Lerp(2f, 0f, this.stopwatch / this.pullTime);
-										bool isChampion = body2.isChampion;
-										if (isChampion)
+										if (body.isChampion)
 										{
 											num3 /= 2f;
 										}
 										num2 *= num3;
-										bool flag15 = body2.characterMotor;
-										if (flag15)
+										if (body.characterMotor)
 										{
-											bool flag16 = body2.gameObject.GetComponent<KinematicCharacterMotor>();
-											if (flag16)
+											if (body.gameObject.GetComponent<KinematicCharacterMotor>())
 											{
-												body2.gameObject.GetComponent<KinematicCharacterMotor>().ForceUnground();
+												body.gameObject.GetComponent<KinematicCharacterMotor>().ForceUnground();
 											}
-											body2.characterMotor.rootMotion += normalized * num2 * Time.fixedDeltaTime;
-											body2.characterMotor.velocity.y = 0f;
+											body.characterMotor.rootMotion += normalized * num2 * Time.fixedDeltaTime;
+											body.characterMotor.velocity.y = 0f;
 										}
 										else
 										{
-											body2.transform.position += normalized * num2 * Time.fixedDeltaTime;
+											body.transform.position += normalized * num2 * Time.fixedDeltaTime;
 										}
 									}
 								}
 							}
 						}
 						base.characterMotor.velocity.y = 0f;
-						bool flag17 = this.stopwatch >= this.pullTime + this.skewerExitTime;
-						if (flag17)
+						if (this.stopwatch >= this.pullTime + this.skewerExitTime)
 						{
 							this.outer.SetNextStateToMain();
 						}
 					}
 					else
 					{
-						bool flag18 = this.stopwatch >= this.exitTime;
-						if (flag18)
+						if (this.stopwatch >= this.exitTime)
 						{
 							this.outer.SetNextStateToMain();
 						}
@@ -329,100 +310,10 @@ namespace Ridley.SkillStates
 				}
 			}
 		}
-
-		// Token: 0x06000046 RID: 70 RVA: 0x00004D94 File Offset: 0x00002F94
 		public override InterruptPriority GetMinimumInterruptPriority()
 		{
 			return InterruptPriority.Skill;
 		}
-
-		// Token: 0x0400008C RID: 140
-		public static float damageCoefficient = 5f;
-
-		// Token: 0x0400008D RID: 141
-		public static float procCoefficient = 1f;
-
-		// Token: 0x0400008E RID: 142
-		public static float baseDuration = 1.5f;
-
-		// Token: 0x0400008F RID: 143
-		public static float force = 0f;
-
-		// Token: 0x04000090 RID: 144
-		public static float recoil = 1f;
-
-		// Token: 0x04000091 RID: 145
-		public static float range = 43f;
-
-		// Token: 0x04000092 RID: 146
-		public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerHuntressSnipe");
-
-		// Token: 0x04000093 RID: 147
-		public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
-
-		// Token: 0x04000094 RID: 148
-		public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
-
-		// Token: 0x04000095 RID: 149
-		private float exitTime = 0.15f;
-		private float skewerExitTime = 0.15f;
 		
-		// Token: 0x04000096 RID: 150
-		private float pullTime = 0.25f;
-
-		// Token: 0x04000097 RID: 151
-		private float skewerTime = 0.375f;
-
-		// Token: 0x04000098 RID: 152
-		private float stopwatch;
-
-		// Token: 0x04000099 RID: 153
-		private Vector3 pullPoint;
-
-		// Token: 0x0400009A RID: 154
-		private float duration;
-
-		// Token: 0x0400009B RID: 155
-		private float fireTime;
-
-		// Token: 0x0400009C RID: 156
-		private bool hasFired;
-
-		// Token: 0x0400009D RID: 157
-		private bool hasHit;
-
-		// Token: 0x0400009E RID: 158
-		private float hitTime;
-
-		// Token: 0x0400009F RID: 159
-		private Animator animator;
-
-		// Token: 0x040000A0 RID: 160
-		private string muzzleString;
-
-		// Token: 0x040000A1 RID: 161
-		private static float antigravityStrength;
-
-		// Token: 0x040000A2 RID: 162
-		private List<HurtBox> hitHurtBoxes;
-
-		// Token: 0x040000A3 RID: 163
-		private Skewer.SubState subState;
-
-		// Token: 0x040000A4 RID: 164
-		private bool a;
-
-		// Token: 0x0200002B RID: 43
-		private enum SubState
-		{
-			// Token: 0x04000158 RID: 344
-			Skewer,
-			// Token: 0x04000159 RID: 345
-			SkewerHit,
-			// Token: 0x0400015A RID: 346
-			Pull,
-			// Token: 0x0400015B RID: 347
-			Exit
-		}
 	}
 }

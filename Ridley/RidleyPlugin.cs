@@ -28,20 +28,13 @@ namespace Ridley
 
     public class RidleyPlugin : BaseUnityPlugin
     {
-        // if you don't change these you're giving permission to deprecate the mod-
-        //  please change the names to your own stuff, thanks
-        //   this shouldn't even have to be said
         public const string MODUID = "com.ndp.RidleyBeta";
         public const string MODNAME = "RidleyBeta";
         public const string MODVERSION = "0.0.1";
 
-        // a prefix for name tokens to prevent conflicts
         public const string developerPrefix = "NDP";
 
-        // soft dependency stuff
-        public static bool starstormInstalled = false;
         public static bool scepterInstalled = false;
-        public static bool scrollableLobbyInstalled = false;
 
 
         public static RidleyPlugin instance;
@@ -50,10 +43,7 @@ namespace Ridley
         {
             instance = this;
 
-            // check for soft dependencies
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.TeamMoonstorm.Starstorm2")) starstormInstalled = true;
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.KingEnderBrine.ScrollableLobbyUI")) scrollableLobbyInstalled = true;
 
             // load assets and read config
             Modules.Assets.PopulateAssets();
@@ -77,39 +67,9 @@ namespace Ridley
 
         private void Hook()
         {
-            // run hooks here, disabling one is as simple as commenting out the line
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
-            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
 
-
-        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
-        {
-            orig(self);
-
-            // a simple stat hook, adds armor after stats are recalculated
-            if (self)
-            {
-                if (self.HasBuff(Modules.Buffs.armorBuff))
-                {
-                    //self.armor += 300f;
-                }
-                if(self.GetBuffCount(Modules.Buffs.invulChargeStacks) >= 100)
-                {
-                    self.SetBuffCount(Modules.Buffs.invulChargeStacks.buffIndex, self.GetBuffCount(Modules.Buffs.invulChargeStacks) - 100);
-                    self.AddBuff(Modules.Buffs.invulCharge);
-                }
-            }
-            if (self)
-            {
-                if (self.HasBuff(Modules.Buffs.speedBuff))
-                {
-                    self.moveSpeed *= 1.3f;
-                    self.attackSpeed *= 1.3f;
-                }
-            }
-
-        }
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             bool addInvuln = false;
@@ -124,8 +84,7 @@ namespace Ridley
                         if(self.combinedHealthFraction < 0.5f && (damageInfo.damageType & DamageType.DoT) != DamageType.DoT)
                         {
                             damageInfo.damage -= num;
-                            bool flag3 = damageInfo.damage < 0f;
-                            if (flag3)
+                            if (damageInfo.damage < 0f)
                             {
                                 self.Heal(Mathf.Abs(damageInfo.damage), default(RoR2.ProcChainMask), true);
                                 damageInfo.damage = 0f;

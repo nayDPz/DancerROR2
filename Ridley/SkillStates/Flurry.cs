@@ -4,10 +4,8 @@ using Ridley.Modules;
 
 namespace Ridley.SkillStates
 {
-	// Token: 0x02000010 RID: 16
 	public class Flurry : BaseM1
 	{
-		// Token: 0x06000036 RID: 54 RVA: 0x00003F44 File Offset: 0x00002144
 		public override void OnEnter()
 		{
 			this.baseDuration = 0.3f;

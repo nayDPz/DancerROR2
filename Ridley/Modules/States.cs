@@ -28,7 +28,6 @@ namespace Ridley.Modules
             set_stateTypeHook = new Hook(type.GetMethod("set_stateType", allFlags), new set_stateTypeDelegate(SetStateTypeHook), cfg);
             set_typeNameHook = new Hook(type.GetMethod("set_typeName", allFlags), new set_typeNameDelegate(SetTypeName), cfg);
 
-            entityStates.Add(typeof(BaseMeleeAttack));
 
         }
 

@@ -121,24 +121,6 @@ namespace Ridley.Modules
                 effect.positionAtReferencedTransform = true;
                 groundDragEffect = b;
             }
-            /*
-            GameObject q = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectileghosts/sunderghost"), "RidleyFootDrag");
-            if (q)
-            {
-                q.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-                GameObject.Destroy(q.GetComponent<GameObject>());
-                GameObject.Destroy(q.GetComponent<ShakeEmitter>());
-                GameObject.Destroy(q.GetComponent<ProjectileGhostController>());
-                foreach (AkEvent a in q.GetComponents<AkEvent>())
-                    GameObject.Destroy(a);
-                var effect = q.AddComponent<EffectComponent>();
-                effect.applyScale = true;
-                effect.effectIndex = EffectIndex.Invalid;
-                effect.parentToReferencedTransform = true;
-                effect.positionAtReferencedTransform = true;
-                footDragEffect = q;
-            }
-            */
 
             grabFireEffect = LoadEffect("GrabHandEffect");
             grabFireEffect.AddComponent<DetachParticleOnDestroyAndEndEmission>();
@@ -153,123 +135,11 @@ namespace Ridley.Modules
             f2.AddComponent<DetachParticleOnDestroyAndEndEmission>().particleSystem = f2.GetComponent<ParticleSystem>();
 
             dustEffect = LoadEffect("HenryDustEffect");
-            bombExplosionEffect = LoadEffect("BombExplosionEffect", "HenryBombExplosion");
-            bazookaExplosionEffect = LoadEffect("HenryBazookaExplosionEffect", "HenryBazookaExplosion");
-            bazookaMuzzleFlash = LoadEffect("HenryBazookaMuzzleFlash");
-
-            muzzleFlashEnergy = LoadEffect("NemryMuzzleFlashEnergy", true);
-            minibossEffect = mainAssetBundle.LoadAsset<GameObject>("NemryMinibossIndicator");
-
-            swordChargeFinishEffect = LoadEffect("SwordChargeFinishEffect");
-            swordChargeEffect = mainAssetBundle.LoadAsset<GameObject>("SwordChargeEffect");
-            swordChargeEffect.AddComponent<ScaleParticleSystemDuration>().particleSystems = swordChargeEffect.GetComponentsInChildren<ParticleSystem>();
-            swordChargeEffect.GetComponent<ScaleParticleSystemDuration>().initialDuration = 1.5f;
-
-            ShakeEmitter shakeEmitter = bombExplosionEffect.AddComponent<ShakeEmitter>();
-            shakeEmitter.amplitudeTimeDecay = true;
-            shakeEmitter.duration = 0.5f;
-            shakeEmitter.radius = 200f;
-            shakeEmitter.scaleShakeRadiusWithLocalScale = false;
-
-            shakeEmitter.wave = new Wave
-            {
-                amplitude = 1f,
-                frequency = 40f,
-                cycleOffset = 0f
-            };
-
-            shakeEmitter = bazookaExplosionEffect.AddComponent<ShakeEmitter>();
-            shakeEmitter.amplitudeTimeDecay = true;
-            shakeEmitter.duration = 0.4f;
-            shakeEmitter.radius = 100f;
-            shakeEmitter.scaleShakeRadiusWithLocalScale = false;
-
-            shakeEmitter.wave = new Wave
-            {
-                amplitude = 1f,
-                frequency = 30f,
-                cycleOffset = 0f
-            };
 
             ridleySwingEffect = Assets.LoadEffect("RidleySwingEffect", true);
             swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
             nairSwingEffect = Assets.LoadEffect("RidleyNairEffect", true);
             biteEffect = Assets.LoadEffect("RidleyBiteEffect", true);
-
-            //punchImpactEffect = Assets.LoadEffect("ImpactHenryPunch");
-            // on second thought my effect sucks so imma just clone loader's
-            punchImpactEffect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/OmniEffect/OmniImpactVFXLoader"), "ImpactHenryPunch");
-            punchImpactEffect.AddComponent<NetworkIdentity>();
-
-            AddNewEffectDef(punchImpactEffect);
-            //EffectAPI.AddEffect(punchImpactEffect);
-
-            fistBarrageEffect = Assets.LoadEffect("FistBarrageEffect", true);
-            fistBarrageEffect.GetComponent<ParticleSystemRenderer>().material.shader = hotpoo;
-
-            bazookaCrosshair = PrefabAPI.InstantiateClone(LoadCrosshair("ToolbotGrenadeLauncher"), "HenryBazookaCrosshair", false);
-            CrosshairController crosshair = bazookaCrosshair.GetComponent<CrosshairController>();
-            crosshair.skillStockSpriteDisplays = new CrosshairController.SkillStockSpriteDisplay[0];
-            bazookaCrosshair.transform.Find("StockCountHolder").gameObject.SetActive(false);
-            bazookaCrosshair.transform.Find("Image, Arrow (1)").gameObject.SetActive(true);
-            crosshair.spriteSpreadPositions[0].zeroPosition = new Vector3(32f, 34f, 0f);
-            crosshair.spriteSpreadPositions[2].zeroPosition = new Vector3(-32f, 34f, 0f);
-            bazookaCrosshair.transform.GetChild(1).gameObject.SetActive(false);
-
-            trackerPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/HuntressTrackingIndicator"), "HenryTrackerPrefab", false);
-            trackerPrefab.transform.Find("Core Pip").gameObject.GetComponent<SpriteRenderer>().color = Color.white;
-            trackerPrefab.transform.Find("Core Pip").localScale = new Vector3(0.15f, 0.15f, 0.15f);
-
-            trackerPrefab.transform.Find("Core, Dark").gameObject.GetComponent<SpriteRenderer>().color = Color.black;
-            trackerPrefab.transform.Find("Core, Dark").localScale = new Vector3(0.1f, 0.1f, 0.1f);
-
-            exposeTrackerPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/TemporaryVisualEffects/MercExposeEffect"), "ExposeEffectPrefab", false);
-
-            foreach (SpriteRenderer i in trackerPrefab.transform.Find("Holder").gameObject.GetComponentsInChildren<SpriteRenderer>())
-            {
-                if (i)
-                {
-                    i.gameObject.transform.localScale = new Vector3(0.2f, 0.2f, 1f);
-                    i.color = Color.white;
-                }
-            }
-
-            shotgunTracer = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCommandoShotgun").InstantiateClone("HenryBulletTracer", true);
-
-            if (!shotgunTracer.GetComponent<EffectComponent>()) shotgunTracer.AddComponent<EffectComponent>();
-            if (!shotgunTracer.GetComponent<VFXAttributes>()) shotgunTracer.AddComponent<VFXAttributes>();
-            if (!shotgunTracer.GetComponent<NetworkIdentity>()) shotgunTracer.AddComponent<NetworkIdentity>();
-
-            foreach (LineRenderer i in shotgunTracer.GetComponentsInChildren<LineRenderer>())
-            {
-                if (i)
-                {
-                    Material bulletMat = UnityEngine.Object.Instantiate<Material>(i.material);
-                    bulletMat.SetColor("_TintColor", new Color(0.68f, 0.58f, 0.05f));
-                    i.material = bulletMat;
-                    i.startColor = new Color(0.68f, 0.58f, 0.05f);
-                    i.endColor = new Color(0.68f, 0.58f, 0.05f);
-                }
-            }
-
-            AddNewEffectDef(shotgunTracer);
-            //EffectAPI.AddEffect(shotgunTracer);
-
-            spearSwingEffect = Assets.LoadEffect("NemrySpearSwingEffect");
-
-            nemSwordSwingEffect = Assets.LoadEffect("NemrySwordSwingEffect", true);
-            nemSwordHeavySwingEffect = Assets.LoadEffect("NemryHeavySwordSwingEffect", true);
-            nemSwordHitImpactEffect = Assets.LoadEffect("ImpactNemrySlash");
-
-            energyTracer = CreateTracer("TracerHuntressSnipe", "NemryEnergyTracer");
-
-            LineRenderer line = energyTracer.transform.Find("TracerHead").GetComponent<LineRenderer>();
-            Material tracerMat = UnityEngine.Object.Instantiate<Material>(line.material);
-            line.startWidth *= 0.25f;
-            line.endWidth *= 0.25f;
-            // this did not work.
-            //tracerMat.SetColor("_TintColor", new Color(78f / 255f, 80f / 255f, 111f / 255f));
-            line.material = tracerMat;
         }
 
         private static GameObject CreateTracer(string originalTracerName, string newTracerName)

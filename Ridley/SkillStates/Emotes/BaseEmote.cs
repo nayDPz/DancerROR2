@@ -30,6 +30,7 @@ namespace Ridley.SkillStates.Emotes
             if (base.GetAimAnimator()) base.GetAimAnimator().enabled = false;
             this.animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 0);
             this.animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 0);
+
            
             base.PlayAnimation("FullBody, Override", this.animString, "Emote.playbackRate", this.animDuration);
 

@@ -5,12 +5,8 @@ using UnityEngine;
 
 namespace Ridley.Modules
 {
-    // module for creating body prefabs and whatnot
-    // recommended to simply avoid touching this unless you REALLY need to
-
     internal static class Prefabs
     {
-        // cache this just to give our ragdolls the same physic material as vanilla stuff
         private static PhysicMaterial ragdollMaterial;
 
         internal static List<SurvivorDef> survivorDefinitions = new List<SurvivorDef>();
@@ -371,7 +367,6 @@ namespace Ridley.Modules
     }
 }
 
-// for simplifying characterbody creation
 internal class BodyInfo
 {
     internal string bodyName = "";
@@ -388,7 +383,7 @@ internal class BodyInfo
 
     internal float healthRegen = 0f;
 
-    internal float shield = 0f;// base shield is a thing apparently. neat
+    internal float shield = 0f;
     internal float shieldGrowth = 0f;
 
     internal float moveSpeed = 7f;
@@ -397,7 +392,7 @@ internal class BodyInfo
     internal float acceleration = 80f;
 
     internal float jumpPower = 15f;
-    internal float jumpPowerGrowth = 0f;// jump power per level exists for some reason
+    internal float jumpPowerGrowth = 0f;
 
     internal float damage = 12f;
 
@@ -415,7 +410,6 @@ internal class BodyInfo
     internal Color bodyColor = Color.grey;
 }
 
-// for simplifying rendererinfo creation
 internal class CustomRendererInfo
 {
     internal string childName;

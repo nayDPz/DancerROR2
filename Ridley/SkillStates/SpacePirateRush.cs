@@ -10,10 +10,75 @@ using UnityEngine.Networking;
 
 namespace Ridley.SkillStates
 {
-	// Token: 0x02000016 RID: 22
 	public class SpacePirateRush : BaseSkillState
 	{
-		// Token: 0x06000049 RID: 73 RVA: 0x00004E4C File Offset: 0x0000304C
+		private float finalAirTime;
+		private Vector3 lastSafeFootPosition;
+		private float airTimeDamageCoefficient = 2.5f;
+		private GameObject fireEffect;
+		private GameObject dragEffect;
+		private float minDropTime = 0.35f;
+		private float attackRecoil = 7f;
+		protected AnimationCurve dashSpeedCurve;
+		protected AnimationCurve dragSpeedCurve;
+		protected AnimationCurve dropSpeedCurve;
+		private float grabDuration = 0.4f;
+		private Vector3 targetMoveVector;
+		private Vector3 targetMoveVectorVelocity;
+		private float velocityDamageCoefficient = 0.7f;
+		private float wallDamageCoefficient = 9f;
+		private float wallBlastRadius = 12f;
+		private Vector3 wallHitPoint;
+		public static float upForce = 2000f;
+		public static float launchForce = 1750f;
+		public static float turnSmoothTime = 0.01f;
+		public static float turnSpeed = 20f;
+		public static float dragMaxSpeedCoefficient = 5f;
+		private float dragDamageCoefficient = 0.75f;
+		private float dragDamageInterval = 0.1f;
+		private float dragDamageStopwatch;
+		private float dragStopwatch;
+		private float dragDuration = 2f;
+		private float dragMaxSpeedTime = 0.8f;
+		private Transform sphereCheckTransform;
+		private float maxAirTime = 0.67f;
+		private float airStopwatch;
+		private float smallHopVelocity = 12f;
+		private float windupDuration = 0.3f;
+		private float exitDuration = 0.5f;
+		protected GameObject swingEffectPrefab;
+		protected GameObject hitEffectPrefab;
+		protected NetworkSoundEventIndex impactSound;
+		private float groundSlamDamageCoefficient = 2.9f;
+		private float chargeDamageCoefficient = 2.2f;
+		private float chargeImpactForce = 2000f;
+		private Vector3 bonusForce = Vector3.up * 2000f;
+		private Vector3 aimDirection;
+		private List<GrabController> grabController;
+		private float stopwatch;
+		private Animator animator;
+		private bool hasGrabbed;
+		private OverlapAttack attack;
+		private float grabRadius = 8f;
+		private float groundSlamRadius = 4f;
+		private bool playedGrabSound = false;
+		private SpacePirateRush.SubState subState;
+		public static float dodgeFOV = DodgeState.dodgeFOV;
+		private bool sound;
+		private uint soundID;
+		private bool s;
+
+		private enum SubState
+		{
+			Windup,
+			DashGrab,
+			MissedGrab,
+			AirGrabbed,
+			Dragging,
+			GrabWall,
+			DragLaunch,
+			Exit
+		}
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -29,8 +94,7 @@ namespace Ridley.SkillStates
 			if (base.characterBody) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
 			Transform modelTransform = base.GetModelTransform();
 			HitBoxGroup hitBoxGroup = null;
-			bool flag = modelTransform;
-			if (flag)
+			if (modelTransform)
 			{
 				hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "NAir");
 			}
@@ -69,16 +133,13 @@ namespace Ridley.SkillStates
 			this.subState = SpacePirateRush.SubState.Windup;
 		}
 
-		// Token: 0x0600004A RID: 74 RVA: 0x000050EC File Offset: 0x000032EC
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 			this.stopwatch += Time.fixedDeltaTime;
-			bool flag = this.subState == SpacePirateRush.SubState.Windup;
-			if (flag)
+			if (this.subState == SpacePirateRush.SubState.Windup)
 			{
-				bool flag2 = this.stopwatch >= this.windupDuration;
-				if (flag2)
+				if (this.stopwatch >= this.windupDuration)
 				{
 					this.stopwatch = 0f;
 					this.subState = SpacePirateRush.SubState.DashGrab;
@@ -86,28 +147,23 @@ namespace Ridley.SkillStates
 			}
 			else
 			{
-				bool flag3 = this.subState == SpacePirateRush.SubState.DashGrab;
-				if (flag3)
+				if (this.subState == SpacePirateRush.SubState.DashGrab)
 				{
 					float num = this.dashSpeedCurve.Evaluate(this.stopwatch / this.grabDuration);
 					base.characterMotor.rootMotion += this.aimDirection * (num * this.moveSpeedStat * Time.fixedDeltaTime);
 					base.characterMotor.velocity.y = 0f;
-					bool flag4 = !this.hasGrabbed;
-					if (flag4)
+					if (!this.hasGrabbed)
 					{
 						this.AttemptGrab(this.grabRadius);
 					}
-					bool flag5 = this.hasGrabbed;
-					if (flag5)
+					if (this.hasGrabbed)
 					{
 						this.stopwatch = 0f;
-						bool isGrounded = base.isGrounded;
 						this.subState = SpacePirateRush.SubState.AirGrabbed;						
 					}
 					else
 					{
-						bool flag6 = this.stopwatch >= this.grabDuration;
-						if (flag6)
+						if (this.stopwatch >= this.grabDuration)
 						{
 							if (this.fireEffect) EntityState.Destroy(this.fireEffect);
 							this.stopwatch = 0f;
@@ -118,11 +174,9 @@ namespace Ridley.SkillStates
 				}
 				else
 				{
-					bool flag7 = this.subState == SpacePirateRush.SubState.AirGrabbed;
-					if (flag7)
+					if (this.subState == SpacePirateRush.SubState.AirGrabbed)
 					{
-						bool isGrounded2 = base.isGrounded;
-						if ((isGrounded2 || base.inputBank.jump.justPressed) && this.stopwatch >= this.minDropTime)
+						if ((base.isGrounded || base.inputBank.jump.justPressed) && this.stopwatch >= this.minDropTime)
 						{
 							this.targetMoveVector = Vector3.zero;
 							this.dragEffect = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.groundDragEffect, base.FindModelChild("HandL").position, Util.QuaternionSafeLookRotation(Vector3.up));
@@ -175,8 +229,7 @@ namespace Ridley.SkillStates
 					}
 					else
 					{
-						bool flag8 = this.subState == SpacePirateRush.SubState.Dragging;
-						if (flag8)
+						if (this.subState == SpacePirateRush.SubState.Dragging)
 						{
 							if (base.characterMotor.lastGroundedTime.timeSince >= 0.15f)
 							{
@@ -207,8 +260,7 @@ namespace Ridley.SkillStates
 							this.dragStopwatch += Time.fixedDeltaTime;						
 							
 							this.dragDamageStopwatch += Time.fixedDeltaTime;
-							bool flag10 = this.dragDamageStopwatch >= this.dragDamageInterval;
-							if (flag10)
+							if (this.dragDamageStopwatch >= this.dragDamageInterval)
 							{
 								this.DamageTargets();
 								this.dragDamageStopwatch = 0f;
@@ -231,13 +283,12 @@ namespace Ridley.SkillStates
 								}
 								
                             }
-							bool flag11 = this.attack.Fire(list);
-							if (flag11)
+
+							if (this.attack.Fire(list))
 							{
 								foreach (HurtBox hurtBox in list)
 								{
-									bool flag12 = (hurtBox.healthComponent && hurtBox.healthComponent.body && hurtBox.healthComponent.body.isChampion) || hurtBox.healthComponent.body.isBoss;
-									if (flag12)
+									if ((hurtBox.healthComponent && hurtBox.healthComponent.body && hurtBox.healthComponent.body.isChampion) || hurtBox.healthComponent.body.isBoss)
 									{
 										if (this.dragEffect)
 										{
@@ -249,8 +300,8 @@ namespace Ridley.SkillStates
 									}
 								}
 							}
-							bool flag13 = this.dragStopwatch >= this.dragDuration || base.inputBank.jump.justPressed;
-							if (flag13)
+
+							if (this.dragStopwatch >= this.dragDuration || base.inputBank.jump.justPressed)
 							{
 								if (this.dragEffect)
 								{
@@ -265,8 +316,7 @@ namespace Ridley.SkillStates
 								base.PlayAnimation("FullBody, Override", "DragEnd", "Slash.playbackRate", this.grabDuration);
 								foreach (GrabController grabController in this.grabController)
 								{
-									bool flag14 = grabController;
-									if (flag14)
+									if (grabController)
 									{
 										grabController.Launch(base.characterMotor.moveDirection.normalized * SpacePirateRush.launchForce + Vector3.up * SpacePirateRush.upForce);
 										base.modelLocator.normalizeToFloor = true;
@@ -277,8 +327,7 @@ namespace Ridley.SkillStates
 						}
 						else
 						{
-							bool flag15 = this.subState == SpacePirateRush.SubState.GrabWall;
-							if (flag15)
+							if (this.subState == SpacePirateRush.SubState.GrabWall)
 							{
 								float f = Mathf.Max(this.velocityDamageCoefficient * base.characterMotor.velocity.magnitude, (finalAirTime + 1) * this.airTimeDamageCoefficient);
 								float bonusDamage = f * this.damageStat;
@@ -326,8 +375,7 @@ namespace Ridley.SkillStates
 								base.characterMotor.velocity = Vector3.zero; ////////delet
 								base.characterMotor.moveDirection = Vector3.zero;
 
-								bool flag16 = this.stopwatch >= this.exitDuration;
-								if (flag16)
+								if (this.stopwatch >= this.exitDuration)
 								{
 									this.outer.SetNextStateToMain();
 								}
@@ -339,13 +387,11 @@ namespace Ridley.SkillStates
 		}
 
 		private float exitSpeed;
-		// Token: 0x0600004B RID: 75 RVA: 0x000057B4 File Offset: 0x000039B4
 		private void DamageTargets()
 		{
 			foreach (GrabController grabController in this.grabController)
 			{
-				bool flag = grabController;
-				if (flag)
+				if (grabController)
 				{
 					DamageInfo damageInfo = new DamageInfo
 					{
@@ -360,8 +406,7 @@ namespace Ridley.SkillStates
 						procChainMask = default(ProcChainMask),
 						procCoefficient = 0f
 					};
-					bool flag2 = grabController.body && grabController.body.healthComponent;
-					if (flag2)
+					if (grabController.body && grabController.body.healthComponent)
 					{
 						grabController.body.healthComponent.TakeDamage(damageInfo);
 						this.ForceFlinch(grabController.body);
@@ -370,7 +415,6 @@ namespace Ridley.SkillStates
 			}
 		}
 
-		// Token: 0x0600004C RID: 76 RVA: 0x000058E4 File Offset: 0x00003AE4
 		public override void OnExit()
 		{
 			base.OnExit();
@@ -386,40 +430,31 @@ namespace Ridley.SkillStates
 			AkSoundEngine.StopPlayingID(this.soundID);
 			base.modelLocator.normalizeToFloor = false;
 			this.animator.SetBool("dragGround", false);
-			bool flag = base.cameraTargetParams;
-			if (flag)
+			if (base.cameraTargetParams)
 			{
 				base.cameraTargetParams.fovOverride = -1f;
 			}
-			bool flag2 = this.grabController.Count > 0;
-			if (flag2)
+			if (this.grabController.Count > 0)
 			{
 				foreach (GrabController grabController in this.grabController)
 				{
-					bool flag3 = grabController;
-					if (flag3)
+					if (grabController)
 					{
 						grabController.Release();
 					}
 				}
 			}
-			bool active = NetworkServer.active;
-			bool flag4 = active;
-			if (flag4)
+			if (NetworkServer.active)
 			{
 				base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
 			}
 		}
-
-		// Token: 0x0600004D RID: 77 RVA: 0x000059B8 File Offset: 0x00003BB8
 		protected virtual void ForceFlinch(CharacterBody body)
 		{
 			SetStateOnHurt component = body.healthComponent.GetComponent<SetStateOnHurt>();
-			bool flag = component == null;
-			if (!flag)
+			if (component)
 			{
-				bool canBeHitStunned = component.canBeHitStunned;
-				if (canBeHitStunned)
+				if (component.canBeHitStunned)
 				{
 					component.SetPain();
 				}
@@ -436,8 +471,6 @@ namespace Ridley.SkillStates
 				}
 			}
 		}
-
-		// Token: 0x0600004E RID: 78 RVA: 0x000059F4 File Offset: 0x00003BF4
 		public void AttemptGrab(float grabRadius)
 		{
 			Ray aimRay = base.GetAimRay();
@@ -456,17 +489,13 @@ namespace Ridley.SkillStates
 			List<HurtBox> list = bullseyeSearch.GetResults().ToList<HurtBox>();
 			foreach (HurtBox hurtBox in list)
 			{
-				bool flag = hurtBox;
-				if (flag)
+				if (hurtBox)
 				{
-					bool flag2 = hurtBox.healthComponent && hurtBox.healthComponent.body;
-					if (flag2)
+					if (hurtBox.healthComponent && hurtBox.healthComponent.body)
 					{
-						bool flag3 = !hurtBox.healthComponent.body.isChampion;
 						if (!hurtBox.healthComponent.body.isChampion || (hurtBox.healthComponent.gameObject.name.Contains("Brother") && hurtBox.healthComponent.gameObject.name.Contains("Body")))
 						{
-							bool flag4 = !this.playedGrabSound;
-							if (flag4)
+							if (this.playedGrabSound)
 							{
 								Util.PlaySound("HenrySwordSwing", base.gameObject);
 								this.playedGrabSound = true;
@@ -490,174 +519,11 @@ namespace Ridley.SkillStates
 			}
 		}
 
-		// Token: 0x0600004F RID: 79 RVA: 0x00005C14 File Offset: 0x00003E14
 		public override InterruptPriority GetMinimumInterruptPriority()
 		{
 			return InterruptPriority.Frozen;
 		}
 
-		private float finalAirTime;
-		private Vector3 lastSafeFootPosition;
-		private float airTimeDamageCoefficient = 2.5f;
-
-		private GameObject fireEffect;
-		private GameObject dragEffect;
-
-		private float minDropTime = 0.35f;
-
-		private float attackRecoil = 7f;
-		// Token: 0x040000A5 RID: 165
-		protected AnimationCurve dashSpeedCurve;
-
-		protected AnimationCurve dragSpeedCurve;
-		// Token: 0x040000A6 RID: 166
-		protected AnimationCurve dropSpeedCurve;
-
-		// Token: 0x040000A7 RID: 167
-		private float grabDuration = 0.4f;
-
-		// Token: 0x040000A8 RID: 168
-		private Vector3 targetMoveVector;
-
-		// Token: 0x040000A9 RID: 169
-		private Vector3 targetMoveVectorVelocity;
-
-		private float velocityDamageCoefficient = 0.7f;
-		// Token: 0x040000AA RID: 170
-		private float wallDamageCoefficient = 9f;
-
-		// Token: 0x040000AB RID: 171
-		private float wallBlastRadius = 12f;
-
-		// Token: 0x040000AC RID: 172
-		private Vector3 wallHitPoint;
-
-		// Token: 0x040000AD RID: 173
-		public static float upForce = 2000f;
-
-		// Token: 0x040000AE RID: 174
-		public static float launchForce = 1750f;
-
-		// Token: 0x040000AF RID: 175
-		public static float turnSmoothTime = 0.01f;
-
-		// Token: 0x040000B0 RID: 176
-		public static float turnSpeed = 20f;
-
-		// Token: 0x040000B1 RID: 177
-		public static float dragMaxSpeedCoefficient = 5f;
-
-		// Token: 0x040000B2 RID: 178
-		private float dragDamageCoefficient = 0.75f;
-
-		// Token: 0x040000B3 RID: 179
-		private float dragDamageInterval = 0.1f;
-
-		// Token: 0x040000B4 RID: 180
-		private float dragDamageStopwatch;
-
-		private float dragStopwatch;
-		// Token: 0x040000B5 RID: 181
-		private float dragDuration = 2f;
-
-		// Token: 0x040000B6 RID: 182
-		private float dragMaxSpeedTime = 0.8f;
-
-		// Token: 0x040000B7 RID: 183
-		private Transform sphereCheckTransform;
-
-		// Token: 0x040000B8 RID: 184
-		private float maxAirTime = 0.67f;
-
-		// Token: 0x040000B9 RID: 185
-		private float airStopwatch;
-
-		// Token: 0x040000BA RID: 186
-		private float smallHopVelocity = 12f;
-
-		// Token: 0x040000BB RID: 187
-		private float windupDuration = 0.3f;
-
-		// Token: 0x040000BC RID: 188
-		private float exitDuration = 0.5f;
-
-		// Token: 0x040000BD RID: 189
-		protected GameObject swingEffectPrefab;
-
-		// Token: 0x040000BE RID: 190
-		protected GameObject hitEffectPrefab;
-
-		// Token: 0x040000BF RID: 191
-		protected NetworkSoundEventIndex impactSound;
-
-		private float groundSlamDamageCoefficient = 2.9f;
-		// Token: 0x040000C0 RID: 192
-		private float chargeDamageCoefficient = 2.2f;
-
-		// Token: 0x040000C1 RID: 193
-		private float chargeImpactForce = 2000f;
-
-		// Token: 0x040000C2 RID: 194
-		private Vector3 bonusForce = Vector3.up * 2000f;
-
-		// Token: 0x040000C3 RID: 195
-		private Vector3 aimDirection;
-
-		// Token: 0x040000C4 RID: 196
-		private List<GrabController> grabController;
-
-		// Token: 0x040000C5 RID: 197
-		private float stopwatch;
-
-		// Token: 0x040000C6 RID: 198
-		private Animator animator;
-
-		// Token: 0x040000C7 RID: 199
-		private bool hasGrabbed;
-
-		// Token: 0x040000C8 RID: 200
-		private OverlapAttack attack;
-
-		// Token: 0x040000C9 RID: 201
-		private float grabRadius = 8f;
-		private float groundSlamRadius = 4f;
-		// Token: 0x040000CA RID: 202
-		private bool playedGrabSound = false;
-
-		// Token: 0x040000CB RID: 203
-		private SpacePirateRush.SubState subState;
-
-		// Token: 0x040000CC RID: 204
-		public static float dodgeFOV = DodgeState.dodgeFOV;
-
-		// Token: 0x040000CD RID: 205
-		private bool sound;
-
-		// Token: 0x040000CE RID: 206
-		private uint soundID;
-
-		// Token: 0x040000CF RID: 207
-		private bool s;
-
-		// Token: 0x0200002D RID: 45
-		private enum SubState
-		{
-			// Token: 0x0400015F RID: 351
-			Windup,
-			// Token: 0x04000160 RID: 352
-			DashGrab,
-			// Token: 0x04000161 RID: 353
-			MissedGrab,
-			// Token: 0x04000162 RID: 354
-			AirGrabbed,
-			// Token: 0x04000163 RID: 355
-			Dragging,
-			// Token: 0x04000164 RID: 356
-			GrabWall,
-			// Token: 0x04000165 RID: 357
-			DragLaunch,
-			// Token: 0x04000166 RID: 358
-			Exit
-		}
+		
 	}
 }

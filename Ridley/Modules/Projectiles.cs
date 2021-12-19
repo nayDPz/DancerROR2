@@ -12,13 +12,9 @@ namespace Ridley.Modules
 {
     internal static class Projectiles
     {
-        internal static GameObject ribbonProjectilePrefab;
         internal static GameObject ridleyFireballPrefab;
         internal static void RegisterProjectiles()
         {
-            CreateRibbon();
-            Modules.Prefabs.projectilePrefabs.Add(ribbonProjectilePrefab);
-
             ridleyFireballPrefab = CloneProjectilePrefab("MageLightningBombProjectile", "RidleyFireball");
 
             ProjectileSimple s = ridleyFireballPrefab.GetComponent<ProjectileSimple>();
@@ -61,16 +57,6 @@ namespace Ridley.Modules
             Modules.Prefabs.projectilePrefabs.Add(ridleyFireballPrefab);
         }
 
-        private static void CreateRibbon()
-        {
-            ribbonProjectilePrefab = CloneProjectilePrefab("Fireball", "RidleyRibbon");
-
-            ProjectileSimple s = ribbonProjectilePrefab.GetComponent<ProjectileSimple>();
-            s.desiredForwardSpeed = 80f;
-
-            ProjectileDamage ss = ribbonProjectilePrefab.GetComponent<ProjectileDamage>();
-            ss.damageType = DamageType.GiveSkullOnKill;
-        }
 
         private static void InitializeImpactExplosion(RidleyFireballBouncer projectileImpactExplosion)
         {

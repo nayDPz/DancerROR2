@@ -4,53 +4,53 @@ using UnityEngine;
 
 namespace Ridley.SkillStates
 {
-	// Token: 0x02000006 RID: 6
 	public class GrabController : MonoBehaviour
 	{
-		// Token: 0x0600000A RID: 10 RVA: 0x0000236C File Offset: 0x0000056C
+		private GameObject extraCollider;
+		private GameObject extraCollider2;
+		private int extraLayer;
+		private int extraLayer2;
+		private bool modelLocatorStartedDisabled;
+		public Transform pivotTransform;
+		public CharacterBody body;
+		public CharacterMotor motor;
+		private CharacterDirection direction;
+		private ModelLocator modelLocator;
+		private Transform modelTransform;
+		private Quaternion originalRotation;
 		private void Awake()
 		{
 			this.body = base.GetComponent<CharacterBody>();
 			this.motor = base.GetComponent<CharacterMotor>();
 			this.direction = base.GetComponent<CharacterDirection>();
 			this.modelLocator = base.GetComponent<ModelLocator>();
-			bool flag = this.modelLocator;
-			if (flag)
+			if (this.modelLocator)
 			{
 				Transform transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/HurtBox");
-				bool flag2 = transform;
-				if (flag2)
+				if (transform)
 				{
 					this.extraLayer = transform.gameObject.layer;
 					transform.gameObject.layer = LayerIndex.noCollision.intVal;
 				}
 				transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/ROOT/Mask/StandableSurfacePosition/StandableSurface");
-				bool flag3 = transform;
-				if (flag3)
+				if (transform)
 				{
 					this.extraLayer2 = transform.gameObject.layer;
 					transform.gameObject.layer = LayerIndex.noCollision.intVal;
 				}
 			}
 			base.gameObject.layer = LayerIndex.noCollision.intVal;
-			bool flag4 = this.direction;
-			bool flag5 = flag4;
-			if (flag5)
+			if (this.direction)
 			{
 				this.direction.enabled = false;
 			}
-			bool flag6 = this.modelLocator;
-			bool flag7 = flag6;
-			if (flag7)
+			if (this.modelLocator)
 			{
-				bool flag8 = !this.modelLocator.enabled;
-				if (flag8)
+				if (!this.modelLocator.enabled)
 				{
 					this.modelLocatorStartedDisabled = true;
 				}
-				bool flag9 = this.modelLocator.modelTransform;
-				bool flag10 = flag9;
-				if (flag10)
+				if (this.modelLocator.modelTransform)
 				{
 					this.modelTransform = this.modelLocator.modelTransform;
 					this.originalRotation = this.modelTransform.rotation;
@@ -59,27 +59,20 @@ namespace Ridley.SkillStates
 			}
 		}
 
-		// Token: 0x0600000B RID: 11 RVA: 0x00002500 File Offset: 0x00000700
 		private void FixedUpdate()
 		{
-			bool flag = this.motor;
-			bool flag2 = flag;
-			if (flag2)
+			if (this.motor)
 			{
 				this.motor.disableAirControlUntilCollision = true;
 				this.motor.velocity = Vector3.zero;
 				this.motor.rootMotion = Vector3.zero;
 				this.motor.Motor.SetPosition(this.pivotTransform.position, true);
 			}
-			bool flag3 = this.pivotTransform;
-			bool flag4 = flag3;
-			if (flag4)
+			if (this.pivotTransform)
 			{
 				base.transform.position = this.pivotTransform.position;
 			}
-			bool flag5 = this.modelTransform;
-			bool flag6 = flag5;
-			if (flag6)
+			if (this.modelTransform)
 			{
 				this.modelTransform.position = this.pivotTransform.position;
 				this.modelTransform.rotation = this.pivotTransform.rotation;
@@ -92,41 +85,31 @@ namespace Ridley.SkillStates
 		}
 
 		private Vector3 lastGroundPosition;
-		// Token: 0x0600000C RID: 12 RVA: 0x000025DC File Offset: 0x000007DC
 		public void Launch(Vector3 launchVector)
 		{
-			bool flag = this.modelLocator;
-			bool flag2 = flag && !this.modelLocatorStartedDisabled;
-			if (flag2)
+			if (this.modelLocator && !this.modelLocatorStartedDisabled)
 			{
 				this.modelLocator.enabled = true;
 			}
-			bool flag3 = this.modelTransform;
-			bool flag4 = flag3;
-			if (flag4)
+			if (this.modelTransform)
 			{
 				this.modelTransform.rotation = this.originalRotation;
 			}
-			bool flag5 = this.direction;
-			bool flag6 = flag5;
-			if (flag6)
+			if (this.direction)
 			{
 				this.direction.enabled = true;
 			}
 			if(this.body.healthComponent && this.body.healthComponent.alive)
             {
-				bool flag7 = this.modelLocator;
-				if (flag7)
+				if (this.modelLocator)
 				{
 					Transform transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/HurtBox");
-					bool flag8 = transform;
-					if (flag8)
+					if (transform)
 					{
 						transform.gameObject.layer = this.extraLayer;
 					}
 					transform = base.transform.Find("Model Base/mdlGreaterWisp/GreaterWispArmature/ROOT/Mask/StandableSurfacePosition/StandableSurface");
-					bool flag9 = transform;
-					if (flag9)
+					if (transform)
 					{
 						transform.gameObject.layer = this.extraLayer2;
 					}
@@ -138,15 +121,11 @@ namespace Ridley.SkillStates
             {
 				base.transform.position = this.lastGroundPosition;
             }
-			bool flag10 = this.motor;
-			if (flag10)
+			if (this.motor)
 			{
 				float force = 0.25f;
-				if (motor)
-				{
-					float f = Mathf.Max(140f, motor.mass);
-					force = f / 140f;
-				}
+				float f = Mathf.Max(140f, motor.mass);
+				force = f / 140f;
 				launchVector *= force;
 				this.motor.ApplyForce(launchVector, false, false);
 			}
@@ -177,34 +156,25 @@ namespace Ridley.SkillStates
 			GameObject.Destroy(this);
 		}
 
-		// Token: 0x0600000D RID: 13 RVA: 0x000027A0 File Offset: 0x000009A0
 		public void Release()
 		{
-			bool flag = this.modelLocator;
-			bool flag2 = flag && !this.modelLocatorStartedDisabled;
-			if (flag2)
+			if (this.modelLocator && !this.modelLocatorStartedDisabled)
 			{
 				this.modelLocator.enabled = true;
 			}
-			bool flag3 = this.modelTransform;
-			bool flag4 = flag3;
-			if (flag4)
+			if (this.modelTransform)
 			{
 				this.modelTransform.rotation = this.originalRotation;
 			}
-			bool flag5 = this.direction;
-			bool flag6 = flag5;
-			if (flag6)
+			if (this.direction)
 			{
 				this.direction.enabled = true;
 			}
-			bool flag7 = this.extraCollider;
-			if (flag7)
+			if (this.extraCollider)
 			{
 				this.extraCollider.layer = this.extraLayer;
 			}
-			bool flag8 = this.extraCollider2;
-			if (flag8)
+			if (this.extraCollider2)
 			{
 				this.extraCollider2.layer = this.extraLayer2;
 			}
@@ -212,40 +182,6 @@ namespace Ridley.SkillStates
 			GameObject.Destroy(this);
 		}
 
-		// Token: 0x0400003A RID: 58
-		private GameObject extraCollider;
-
-		// Token: 0x0400003B RID: 59
-		private GameObject extraCollider2;
-
-		// Token: 0x0400003C RID: 60
-		private int extraLayer;
-
-		// Token: 0x0400003D RID: 61
-		private int extraLayer2;
-
-		// Token: 0x0400003E RID: 62
-		private bool modelLocatorStartedDisabled;
-
-		// Token: 0x0400003F RID: 63
-		public Transform pivotTransform;
-
-		// Token: 0x04000040 RID: 64
-		public CharacterBody body;
-
-		// Token: 0x04000041 RID: 65
-		public CharacterMotor motor;
-
-		// Token: 0x04000042 RID: 66
-		private CharacterDirection direction;
-
-		// Token: 0x04000043 RID: 67
-		private ModelLocator modelLocator;
-
-		// Token: 0x04000044 RID: 68
-		private Transform modelTransform;
-
-		// Token: 0x04000045 RID: 69
-		private Quaternion originalRotation;
+		
 	}
 }

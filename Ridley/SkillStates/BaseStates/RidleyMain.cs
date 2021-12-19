@@ -17,6 +17,9 @@ namespace Ridley.SkillStates
 		public LocalUser localUser;
 		private bool bufferJump = true;
 		private float landingTime = 0.2f;
+		private uint sprintSoundID;
+
+		private bool sprintSoundOn;
 		public override void OnEnter()
         {
 			this.localUser = LocalUserManager.readOnlyLocalUsersList[0];
@@ -29,8 +32,7 @@ namespace Ridley.SkillStates
         public override void FixedUpdate()
 		{
 			base.FixedUpdate();
-			bool flag = base.characterBody.isSprinting && !this.sprintSoundOn && base.isGrounded;
-			if (flag)
+			if (base.characterBody.isSprinting && !this.sprintSoundOn && base.isGrounded)
 			{
 				//this.sprintEffect1 = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.footDragEffect, footL.position, Util.QuaternionSafeLookRotation(Vector3.up));
 				//this.sprintEffect2 = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.footDragEffect, footR.position, Util.QuaternionSafeLookRotation(Vector3.up));
@@ -43,16 +45,10 @@ namespace Ridley.SkillStates
 			//	this.sprintEffect1.transform.position = footL.position;
 			//if(this.sprintEffect2)
 			//	this.sprintEffect2.transform.position = footR.position;
-			bool flag2 = !base.characterBody.isSprinting || !base.isGrounded;
-			if (flag2)
+			if (!base.characterBody.isSprinting || !base.isGrounded)
 			{
-				bool flag3 = this.sprintSoundOn;
-				if (flag3)
+				if (this.sprintSoundOn)
 				{
-					//if (this.sprintEffect1)
-					//	EntityState.Destroy(this.sprintEffect1);
-					//if (this.sprintEffect2)
-					//	EntityState.Destroy(this.sprintEffect2);
 					base.characterBody.acceleration = this.baseAcceleration;
 					this.sprintSoundOn = false;
 					AkSoundEngine.StopPlayingID(this.sprintSoundID);
@@ -91,22 +87,18 @@ namespace Ridley.SkillStates
 			base.OnExit();
         }
 
-        // Token: 0x0600003F RID: 63 RVA: 0x000042F4 File Offset: 0x000024F4
         public override void ProcessJump()
 		{
-			bool hasCharacterMotor = this.hasCharacterMotor;
-			if (hasCharacterMotor)
+			if (this.hasCharacterMotor)
 			{
-				bool flag = false;
-				bool flag2 = false;
-				bool flag3 = this.jumpInputReceived && base.characterBody && base.characterMotor.jumpCount < base.characterBody.maxJumpCount;
-				if (flag3)
+				if (this.jumpInputReceived && base.characterBody && base.characterMotor.jumpCount < base.characterBody.maxJumpCount)
 				{
+					bool flag = false;
+					bool flag2 = false;
 					int itemCount = base.characterBody.inventory.GetItemCount(RoR2Content.Items.JumpBoost);
 					float horizontalBonus = 1f;
 					float verticalBonus = 1f;
-					bool flag4 = base.characterMotor.jumpCount >= base.characterBody.baseJumpCount;
-					if (flag4)
+					if (base.characterMotor.jumpCount >= base.characterBody.baseJumpCount)
 					{
 						flag = true;
 						horizontalBonus = 1.5f;
@@ -114,12 +106,10 @@ namespace Ridley.SkillStates
 					}
 					else
 					{
-						bool flag5 = (float)itemCount > 0f && base.characterBody.isSprinting;
-						if (flag5)
+						if ((float)itemCount > 0f && base.characterBody.isSprinting)
 						{
 							float num = base.characterBody.acceleration * base.characterMotor.airControl;
-							bool flag6 = base.characterBody.moveSpeed > 0f && num > 0f;
-							if (flag6)
+							if (base.characterBody.moveSpeed > 0f && num > 0f)
 							{
 								flag2 = true;
 								float num2 = Mathf.Sqrt(10f * (float)itemCount / num);
@@ -133,11 +123,9 @@ namespace Ridley.SkillStates
 					if (hasModelAnimator)
 					{
 						int layerIndex = base.modelAnimator.GetLayerIndex("Body");
-						bool flag7 = layerIndex >= 0;
-						if (flag7)
+						if (layerIndex >= 0)
 						{
-							bool flag8 = base.characterMotor.jumpCount == 0 || base.characterBody.baseJumpCount == 1;
-							if (flag8)
+							if (base.characterMotor.jumpCount == 0 || base.characterBody.baseJumpCount == 1)
 							{
 								base.modelAnimator.CrossFadeInFixedTime("Jump", this.smoothingParameters.intoJumpTransitionTime, layerIndex);
 								Util.PlaySound("RidleyJump", base.gameObject);
@@ -149,8 +137,7 @@ namespace Ridley.SkillStates
 							}
 						}
 					}
-					bool flag9 = flag;
-					if (flag9)
+					if (flag)
 					{
 						EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/FeatherEffect"), new EffectData
 						{
@@ -159,8 +146,7 @@ namespace Ridley.SkillStates
 					}
 					else
 					{
-						bool flag10 = base.characterMotor.jumpCount > 0;
-						if (flag10)
+						if (base.characterMotor.jumpCount > 0)
 						{
 							EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/ImpactEffects/CharacterLandImpact"), new EffectData
 							{
@@ -169,8 +155,7 @@ namespace Ridley.SkillStates
 							}, true);
 						}
 					}
-					bool flag11 = flag2;
-					if (flag11)
+					if (flag2)
 					{
 						EffectManager.SpawnEffect(Resources.Load<GameObject>("Prefabs/Effects/BoostJumpEffect"), new EffectData
 						{
@@ -182,11 +167,6 @@ namespace Ridley.SkillStates
 				}
 			}
 		}
-
-		// Token: 0x0400008A RID: 138
-		private uint sprintSoundID;
-
-		// Token: 0x0400008B RID: 139
-		private bool sprintSoundOn;
+		
 	}
 }

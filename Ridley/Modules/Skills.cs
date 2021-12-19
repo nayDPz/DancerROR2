@@ -61,8 +61,6 @@ namespace Ridley.Modules
             component.passiveSkill.skillDescriptionToken = "NDP_RIDLEY_BODY_PASSIVE_DESCRIPTION";
             component.passiveSkill.icon = Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaOutIcon");
         }
-
-        // this could all be a lot cleaner but at least it's simple and easy to work with
         internal static void AddPrimarySkill(GameObject targetPrefab, SkillDef skillDef)
         {
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();

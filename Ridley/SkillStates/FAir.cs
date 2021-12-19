@@ -5,10 +5,8 @@ using UnityEngine;
 using RoR2;
 namespace Ridley.SkillStates
 {
-	// Token: 0x0200000C RID: 12
 	public class FAir : BaseM1
 	{
-		// Token: 0x0600002E RID: 46 RVA: 0x00003ABC File Offset: 0x00001CBC
 		public override void OnEnter()
 		{
 			this.anim = 1.45f;
@@ -42,8 +40,7 @@ namespace Ridley.SkillStates
 			Vector3 direction = base.characterDirection.forward * 2f + Vector3.up;
 			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
 			launchVector = launchVector.normalized;
-			bool flag16 = hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
-			if (flag16)
+			if (hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
 			{
 				hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
 			}

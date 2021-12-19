@@ -22,9 +22,7 @@ namespace Ridley.Modules.Components
 			this.stopwatch += Time.fixedDeltaTime;
 			if (NetworkServer.active || this.projectileController.isPrediction)
 			{
-				bool flag = this.stopwatch >= this.lifetime;
-				bool flag3 = this.projectileHealthComponent && !this.projectileHealthComponent.alive;
-				if (flag || flag3)
+				if (this.stopwatch >= this.lifetime || this.projectileHealthComponent && !this.projectileHealthComponent.alive)
 				{
 					this.alive = false;
 				}

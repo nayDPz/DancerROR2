@@ -8,21 +8,19 @@ using UnityEngine;
 
 namespace Ridley.Modules.Survivors
 {
-    // Token: 0x02000027 RID: 39
     public static class Ridley
 	{
-		// Token: 0x060000BF RID: 191 RVA: 0x00009248 File Offset: 0x00007448
 		internal static void CreateCharacter()
 		{
 			Ridley.characterEnabled = Config.CharacterEnableConfig("Ridley");
 			bool value = Ridley.characterEnabled.Value;
 			if (value)
 			{
-				Ridley.characterPrefab = Prefabs.CreatePrefab("NdpRidleyBody", "mdlRidley", new BodyInfo
+				Ridley.characterPrefab = Prefabs.CreatePrefab("RidleyBody", "mdlRidley", new BodyInfo
 				{
 					armor = 15f,
 					armorGrowth = 1.5f,
-					bodyName = "NdpRidleyBody",
+					bodyName = "RidleyBody",
 					bodyNameToken = "NDP_RIDLEY_BODY_NAME",
 					bodyColor = Color.grey,
 					characterPortrait = Assets.LoadCharacterIcon("Ridley"),
@@ -87,13 +85,11 @@ namespace Ridley.Modules.Survivors
 			}
 		}
 
-		// Token: 0x060000C0 RID: 192 RVA: 0x00009537 File Offset: 0x00007737
 		private static void CreateDoppelganger()
 		{
 			Prefabs.CreateGenericDoppelganger(Ridley.characterPrefab, "RidleyMonsterMaster", "Merc");
 		}
 
-		// Token: 0x060000C1 RID: 193 RVA: 0x00009550 File Offset: 0x00007750
 		private static void CreateHitboxes()
 		{
 			ChildLocator componentInChildren = Ridley.characterPrefab.GetComponentInChildren<ChildLocator>();
@@ -108,7 +104,6 @@ namespace Ridley.Modules.Survivors
 			Prefabs.SetupHitbox(gameObject, hitboxTransform, "NAir");
 		}
 
-		// Token: 0x060000C2 RID: 194 RVA: 0x000095D4 File Offset: 0x000077D4
 		private static void CreateSkills()
 		{
 			Skills.CreateSkillFamilies(Ridley.characterPrefab);
@@ -225,7 +220,6 @@ namespace Ridley.Modules.Survivors
 			});
 		}
 
-		// Token: 0x060000C3 RID: 195 RVA: 0x00009A24 File Offset: 0x00007C24
 		private static void CreateSkins()
         {
             GameObject model = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
@@ -865,7 +859,6 @@ namespace Ridley.Modules.Survivors
 			skinController.skins = skins.ToArray();
         }
 
-		// Token: 0x060000C4 RID: 196 RVA: 0x00009AB8 File Offset: 0x00007CB8
 		private static void InitializeItemDisplays()
 		{
 			CharacterModel componentInChildren = Ridley.characterPrefab.GetComponentInChildren<CharacterModel>();
@@ -873,8 +866,6 @@ namespace Ridley.Modules.Survivors
 			Ridley.itemDisplayRuleSet.name = "idrsHenry";
 			componentInChildren.itemDisplayRuleSet = Ridley.itemDisplayRuleSet;
 		}
-
-		// Token: 0x060000C5 RID: 197 RVA: 0x00009AF8 File Offset: 0x00007CF8
 		internal static void SetItemDisplays()
 		{
 			Ridley.itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
@@ -3372,7 +3363,6 @@ namespace Ridley.Modules.Survivors
 			Ridley.itemDisplayRuleSet.GenerateRuntimeValues();
 		}
 
-		// Token: 0x060000C6 RID: 198 RVA: 0x0000FF04 File Offset: 0x0000E104
 		private static CharacterModel.RendererInfo[] SkinRendererInfos(CharacterModel.RendererInfo[] defaultRenderers, Material[] materials)
 		{
 			CharacterModel.RendererInfo[] array = new CharacterModel.RendererInfo[defaultRenderers.Length];
@@ -3384,61 +3374,18 @@ namespace Ridley.Modules.Survivors
 			return array;
 		}
 
-		// Token: 0x04000134 RID: 308
 		internal static GameObject characterPrefab;
 
-		// Token: 0x04000135 RID: 309
 		internal static GameObject displayPrefab;
 
-		// Token: 0x04000136 RID: 310
 		internal static ConfigEntry<bool> characterEnabled;
 
-		// Token: 0x04000137 RID: 311
 		public const string bodyName = "NdpRidleyBody";
 
-		// Token: 0x04000138 RID: 312
 		public static int bodyRendererIndex;
 
-		// Token: 0x04000139 RID: 313
 		internal static ItemDisplayRuleSet itemDisplayRuleSet;
 
-		// Token: 0x0400013A RID: 314
 		internal static List<ItemDisplayRuleSet.KeyAssetRuleGroup> itemDisplayRules;
-
-		// Token: 0x0400013B RID: 315
-		internal static SkillDef bazookaFireSkillDef;
-
-		// Token: 0x0400013C RID: 316
-		internal static SkillDef bazookaCancelSkillDef;
-
-		// Token: 0x0400013D RID: 317
-		internal static SkillDef bazookaFireSkillDefScepter;
-
-		// Token: 0x0400013E RID: 318
-		internal static SkillDef bazookaCancelSkillDefScepter;
-
-		// Token: 0x0400013F RID: 319
-		internal static SkillDef lockOnSkillDef;
-
-		// Token: 0x04000140 RID: 320
-		internal static SkillDef deathSpinCancelSkillDef;
-
-		// Token: 0x04000141 RID: 321
-		internal static SkillDef primaryDoNothingSkillDef;
-
-		// Token: 0x04000142 RID: 322
-		internal static UnlockableDef characterUnlockableDef;
-
-		// Token: 0x04000143 RID: 323
-		internal static UnlockableDef masterySkinUnlockableDef;
-
-		// Token: 0x04000144 RID: 324
-		private static UnlockableDef grandMasterySkinUnlockableDef;
-
-		// Token: 0x04000145 RID: 325
-		private static UnlockableDef danteSkinUnlockableDef;
-
-		// Token: 0x04000146 RID: 326
-		private static UnlockableDef vergilSkinUnlockableDef;
 	}
 }

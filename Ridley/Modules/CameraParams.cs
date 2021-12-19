@@ -6,12 +6,10 @@ namespace Ridley.Modules
     internal static class CameraParams // from PaladinMod
     {
         internal static CharacterCameraParams defaultCameraParams;
-        internal static CharacterCameraParams emoteCameraParams;
 
         internal static void InitializeParams()
         {
             defaultCameraParams = NewCameraParams("ccpRidley", 70f, 1.37f, new Vector3(0, 0.0f, -12.5f));
-            emoteCameraParams = NewCameraParams("ccpRidleyEmote", 70f, 1.37f, new Vector3(0f, -1.1f, -6.5f));
         }
 
         private static CharacterCameraParams NewCameraParams(string name, float pitch, float pivotVerticalOffset, Vector3 standardPosition)

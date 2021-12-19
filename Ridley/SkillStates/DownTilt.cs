@@ -5,10 +5,8 @@ using UnityEngine;
 using RoR2;	
 namespace Ridley.SkillStates
 {
-	// Token: 0x0200000B RID: 11
 	public class DownTilt : BaseM1
 	{
-		// Token: 0x0600002C RID: 44 RVA: 0x000039DC File Offset: 0x00001BDC
 		public override void OnEnter()
 		{
 			this.anim = 1.65f;
