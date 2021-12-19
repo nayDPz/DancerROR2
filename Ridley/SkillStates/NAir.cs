@@ -28,6 +28,7 @@ namespace Ridley.SkillStates
 			this.isFlinch = true;
 			this.swingSoundString = "NAir";
 			this.hitSoundString = "SwordHit2";
+			this.critHitSoundString = "SwordHit3";
 			this.swingEffectPrefab = Assets.nairSwingEffect;
 			//this.muzzleString = "Nair";
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;

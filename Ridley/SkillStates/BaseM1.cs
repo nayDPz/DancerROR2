@@ -15,7 +15,8 @@ namespace Ridley.SkillStates
 		public bool launchVectorOverride;
 		public bool cancelledFromSprinting;
 		public bool earlyExitJump;
-
+		public string critHitSoundString;
+		private bool crit;
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -80,6 +81,7 @@ namespace Ridley.SkillStates
 					this.slideVector.y = 0f;
 				}
 			}
+			
 			this.PlayAttackAnimation();
 		}
 
@@ -91,9 +93,9 @@ namespace Ridley.SkillStates
 		}
 
 		// Token: 0x06000020 RID: 32 RVA: 0x00003088 File Offset: 0x00001288
-		private void OnHitEnemyAuthority()
+		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
 		{
-			Util.PlaySound(this.hitSoundString, base.gameObject);
+			PlayHitSound();
 			bool flag = !this.hasHopped;
 			if (flag)
 			{
@@ -118,6 +120,14 @@ namespace Ridley.SkillStates
 		private void PlaySwingEffect()
 		{
 			EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.muzzleString, true);
+		}
+
+		public virtual void PlayHitSound()
+        {
+			if (this.attack.isCrit && this.critHitSoundString != "")
+				Util.PlaySound(this.critHitSoundString, base.gameObject);
+			else
+				Util.PlaySound(this.hitSoundString, base.gameObject);
 		}
 
 		// Token: 0x06000022 RID: 34 RVA: 0x00003184 File Offset: 0x00001384
@@ -168,7 +178,7 @@ namespace Ridley.SkillStates
 							
 						}
 					}
-					this.OnHitEnemyAuthority();
+					this.OnHitEnemyAuthority(list);
 				}
 			}
 		}

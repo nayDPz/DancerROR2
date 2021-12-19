@@ -25,6 +25,7 @@ namespace Ridley.SkillStates
 			this.launchVectorOverride = true;
 			this.swingSoundString = "Jab1";
 			this.hitSoundString = "JabHit1";
+			this.critHitSoundString = "JabHit2"; 
 			this.muzzleString = "Jab1";
 			this.cancelledFromSprinting = true;
 			this.earlyExitJump = true;

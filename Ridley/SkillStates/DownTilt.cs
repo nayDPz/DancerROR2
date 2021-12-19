@@ -27,6 +27,7 @@ namespace Ridley.SkillStates
 			this.earlyExitJump = true;
 			this.swingSoundString = "DownTilt";
 			this.hitSoundString = "SwordHit";
+			this.critHitSoundString = "SwordHit2";
 			this.muzzleString = "DTilt";
 			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;

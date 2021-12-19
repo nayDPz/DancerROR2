@@ -3,6 +3,8 @@ using EntityStates.Merc;
 using Ridley.Modules;
 using UnityEngine;
 using RoR2;
+using System.Collections.Generic;
+
 namespace Ridley.SkillStates
 {
 	// Token: 0x02000012 RID: 18
@@ -27,6 +29,7 @@ namespace Ridley.SkillStates
 			this.isAerial = true;
 			this.swingSoundString = "UpAir";
 			this.hitSoundString = "SwordHit2";
+			this.critHitSoundString = "SwordHit3";
 			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword2HitSoundEvent.index;
@@ -35,7 +38,21 @@ namespace Ridley.SkillStates
 			base.OnEnter();
 		}
 
-		public override void LaunchEnemy(HurtBox hurtBox)
+        public override void OnHitEnemyAuthority(List<HurtBox> list)
+        {
+			foreach (HurtBox hurtBox in list)
+			{
+				HealthComponent h = hurtBox.healthComponent;
+				if (h && h.combinedHealthFraction < 0.45f)
+				{
+					this.hitSoundString = "SwordHit3";
+					break;
+				}
+
+			}
+			base.OnHitEnemyAuthority(list);
+        }
+        public override void LaunchEnemy(HurtBox hurtBox)
 		{
 			//Vector3 launchVector = (Vector3.up * 15f + base.transform.position) - hurtBox.healthComponent.body.footPosition;
 			//launchVector = launchVector.normalized;

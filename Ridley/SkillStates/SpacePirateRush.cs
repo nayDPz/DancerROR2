@@ -157,10 +157,15 @@ namespace Ridley.SkillStates
 								inflictor = base.gameObject,
 								crit = base.RollCrit()
 							}.Fire();
-
 							base.modelLocator.normalizeToFloor = true;
 							this.subState = SpacePirateRush.SubState.Dragging;
 							this.stopwatch = 0f;
+
+							base.PlayAnimation("FullBody, Override", "SSpecGrab", "Slash.playbackRate", this.grabDuration);
+							this.sound = true;
+							Util.PlaySound("GrabHitGround", base.gameObject);
+							this.soundID = Util.PlaySound("DragLoop", base.gameObject);
+							this.animator.SetBool("dragGround", true);
 						}
 						else
 						{
@@ -198,19 +203,8 @@ namespace Ridley.SkillStates
 									this.dragEffect.transform.position = raycastHit.point;
 								else
 									this.dragEffect.transform.position = raycastHit.point = base.FindModelChild("HandL").position;
-							}
-							
-
-							this.dragStopwatch += Time.fixedDeltaTime;
-							bool flag9 = !this.sound;
-							if (flag9)
-							{
-								base.PlayAnimation("FullBody, Override", "SSpecGrab", "Slash.playbackRate", this.grabDuration);
-								this.sound = true;
-								Util.PlaySound("GrabHitGround", base.gameObject);
-								this.soundID = Util.PlaySound("DragLoop", base.gameObject);
-							}
-							this.animator.SetBool("dragGround", true);
+							}							
+							this.dragStopwatch += Time.fixedDeltaTime;						
 							
 							this.dragDamageStopwatch += Time.fixedDeltaTime;
 							bool flag10 = this.dragDamageStopwatch >= this.dragDamageInterval;

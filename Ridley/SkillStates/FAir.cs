@@ -28,6 +28,7 @@ namespace Ridley.SkillStates
 			//this.launchVectorOverride = true;
 			this.swingSoundString = "FAir";
 			this.hitSoundString = "SwordHit";
+			this.critHitSoundString = "SwordHit2";
 			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword1HitSoundEvent.index;

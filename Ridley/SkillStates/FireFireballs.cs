@@ -17,6 +17,7 @@ namespace Ridley.SkillStates
 			base.OnEnter();
 			this.duration /= this.attackSpeedStat;
 			this.numFireballs = (int)(this.charge / 0.33f) + 1;
+			this.fireInterval /= this.attackSpeedStat;
 			base.StartAimMode(this.fireInterval, false);
 			base.GetModelAnimator();
 			this.aimRay = base.GetAimRay();
