@@ -152,7 +152,7 @@ namespace Ridley.Modules
 
             GameObject cameraPivot = new GameObject("CameraPivot");
             cameraPivot.transform.parent = modelBase.transform;
-            cameraPivot.transform.localPosition = new Vector3(0f, 1.9f, 0f);
+            cameraPivot.transform.localPosition = new Vector3(0f, 2.5f, 0f);
             cameraPivot.transform.localRotation = Quaternion.identity;
             cameraPivot.transform.localScale = Vector3.one;
 

@@ -11,15 +11,21 @@ namespace Ridley.SkillStates
 	public class BaseM1 : BaseSkillState
 	{
 		// Token: 0x0600001E RID: 30 RVA: 0x00002E38 File Offset: 0x00001038
+		public Vector3 launchTarget;
+		public bool launchVectorOverride;
+		public bool cancelledFromSprinting;
+		public bool earlyExitJump;
+
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			this.animator = base.GetModelAnimator();
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.characterBody.SetAimTimer(2f);
+			
 			this.duration = this.baseDuration / this.attackSpeedStat;
 			this.attackResetInterval /= this.attackSpeedStat;
+			base.characterBody.SetAimTimer(this.duration);
 			Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 			HitBoxGroup hitBoxGroup = null;
 			Transform modelTransform = base.GetModelTransform();
@@ -36,8 +42,16 @@ namespace Ridley.SkillStates
 			this.attack.damage = this.damageCoefficient * this.damageStat;
 			this.attack.procCoefficient = this.procCoefficient;
 			this.attack.hitEffectPrefab = this.hitEffectPrefab;
-			this.attack.forceVector = this.bonusForce;
-			this.attack.pushAwayForce = this.pushForce;
+			if(this.launchVectorOverride)
+            {
+				this.attack.forceVector = Vector3.zero;
+				this.attack.pushAwayForce = 0f;
+			}
+			else
+            {
+				this.attack.forceVector = this.bonusForce;
+				this.attack.pushAwayForce = this.pushForce;
+			}		
 			this.attack.hitBoxGroup = hitBoxGroup;
 			this.attack.isCrit = base.RollCrit();
 			this.attack.impactSound = this.impactSound;
@@ -63,6 +77,7 @@ namespace Ridley.SkillStates
 				{
 					base.characterMotor.velocity *= 0.2f;
 					this.slideVector = base.inputBank.aimDirection;
+					this.slideVector.y = 0f;
 				}
 			}
 			this.PlayAttackAnimation();
@@ -127,21 +142,30 @@ namespace Ridley.SkillStates
 				bool flag2 = this.attack.Fire(list);
 				if (flag2)
 				{
-					bool flag3 = this.isSus || this.isFlinch;
+					bool flag3 = this.isSus || this.isFlinch || this.launchVectorOverride;
 					if (flag3)
 					{
 						foreach (HurtBox hurtBox in list)
 						{
-							bool flag4 = this.isSus && hurtBox.healthComponent && hurtBox.healthComponent.body && hurtBox.healthComponent.body.characterMotor;
-							if (flag4)
-							{
-								hurtBox.healthComponent.body.characterMotor.velocity.y = 0f;
+							HealthComponent h = hurtBox.healthComponent;
+							if(h)
+                            {
+								bool flag4 = this.isSus && h.body && h.body.characterMotor;
+								if (flag4)
+								{
+									h.body.characterMotor.velocity.y = 0f;
+								}
+								bool flag5 = this.isFlinch && h.body;
+								if (flag5)
+								{
+									this.ForceFlinch(h.body);
+								}
+								if (launchVectorOverride && !h.body.isChampion || (h.gameObject.name.Contains("Brother") && h.gameObject.name.Contains("Body")))
+								{
+									LaunchEnemy(hurtBox);
+								}
 							}
-							bool flag5 = this.isFlinch && hurtBox.healthComponent && hurtBox.healthComponent.body;
-							if (flag5)
-							{
-								this.ForceFlinch(hurtBox.healthComponent.body);
-							}
+							
 						}
 					}
 					this.OnHitEnemyAuthority();
@@ -149,6 +173,11 @@ namespace Ridley.SkillStates
 			}
 		}
 
+
+		public virtual void LaunchEnemy(HurtBox hurtBox)
+        {
+
+        }
 		// Token: 0x06000023 RID: 35 RVA: 0x0000334C File Offset: 0x0000154C
 		protected virtual void ForceFlinch(CharacterBody body)
 		{
@@ -168,6 +197,19 @@ namespace Ridley.SkillStates
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+
+			if(this.cancelledFromSprinting && (base.characterBody.isSprinting || base.inputBank.sprint.justPressed))
+            {
+				this.outer.SetNextStateToMain();
+				this.cancelled = true;
+				return;
+            }
+			if (this.earlyExitJump && (base.inputBank.jump.justPressed) && this.stopwatch >= this.duration * this.attackEndTime)
+			{
+				this.outer.SetNextStateToMain();
+				this.cancelled = true;
+				return;
+			}
 			this.hitPauseTimer -= Time.fixedDeltaTime;
 			bool flag = this.hitPauseTimer <= 0f && this.inHitPause;
 			if (flag)
@@ -250,17 +292,22 @@ namespace Ridley.SkillStates
 				bool flag13 = this.stopwatch >= this.duration - this.earlyExitTime && base.isAuthority && this.isCombo;
 				if (flag13)
 				{
-					bool flag14 = base.inputBank.skill1.down && this.swingIndex != 2;
-					if (flag14)
-					{
-						bool flag15 = !this.hasFired;
-						if (flag15)
+					EntityStateMachine e = base.GetComponent<EntityStateMachine>();
+					if(e && e.state is RidleyMain)
+                    {
+						bool flag14 = base.inputBank.skill1.down && this.swingIndex != 2;
+						if (flag14)
 						{
-							this.FireAttack();
+							bool flag15 = !this.hasFired;
+							if (flag15)
+							{
+								this.FireAttack();
+							}
+							this.SetNextState();
+							return;
 						}
-						this.SetNextState();
-						return;
 					}
+					
 				}
 				bool flag16 = this.stopwatch >= this.duration && base.isAuthority;
 				if (flag16)
@@ -306,6 +353,9 @@ namespace Ridley.SkillStates
 		// Token: 0x06000027 RID: 39 RVA: 0x0000377B File Offset: 0x0000197B
 		public override void OnExit()
 		{
+			if(this.cancelled)
+			if (this.cancelled)
+				PlayAnimation("FullBody, Override", "BufferEmpty");
 			this.animator.SetFloat("Slash.playbackRate", 1f);
 			base.OnExit();
 		}

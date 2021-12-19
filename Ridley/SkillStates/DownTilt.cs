@@ -2,7 +2,7 @@
 using EntityStates.Merc;
 using Ridley.Modules;
 using UnityEngine;
-
+using RoR2;	
 namespace Ridley.SkillStates
 {
 	// Token: 0x0200000B RID: 11
@@ -20,8 +20,11 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.stackGainAmount = 7;
 			this.hitStopDuration = 0.025f;
-			this.bonusForce = Vector3.up * 1700f;
+			this.bonusForce = Vector3.up * 1800f;
+			this.pushForce = 1800f;
+			this.launchVectorOverride = true;
 			this.isFlinch = true;
+			this.earlyExitJump = true;
 			this.swingSoundString = "DownTilt";
 			this.hitSoundString = "SwordHit";
 			this.muzzleString = "DTilt";
@@ -32,6 +35,38 @@ namespace Ridley.SkillStates
 			this.hitboxName = "DownTilt";
 			this.hitHopVelocity = 11f;
 			base.OnEnter();
+		}
+
+		public override void LaunchEnemy(HurtBox hurtBox)
+		{
+			//Vector3 launchVector = (Vector3.up * 15f + base.transform.position) - hurtBox.healthComponent.body.footPosition;
+			//launchVector = launchVector.normalized;
+
+			Vector3 direction = base.characterDirection.forward * 4f + Vector3.up * 10f;
+			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
+			launchVector = launchVector.normalized;
+			CharacterMotor m = hurtBox.healthComponent.body.characterMotor;
+			float force = 0.25f;
+			if (m)
+			{
+				float f = Mathf.Max(165f, m.mass);
+				force = f / 165f;
+			}
+			float fz = this.pushForce * force;
+			DamageInfo damageInfo = new DamageInfo
+			{
+				position = hurtBox.healthComponent.body.transform.position,
+				attacker = null,
+				inflictor = null,
+				damage = 0f,
+				damageColorIndex = DamageColorIndex.Default,
+				damageType = DamageType.Generic,
+				crit = false,
+				force = launchVector * fz,
+				procChainMask = default(ProcChainMask),
+				procCoefficient = 0f
+			};
+			hurtBox.healthComponent.TakeDamageForce(damageInfo, false, false);
 		}
 	}
 }

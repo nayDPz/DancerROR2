@@ -12,13 +12,20 @@ namespace Ridley.SkillStates
 	public class Skewer : BaseSkillState
 	{
 		// Token: 0x06000041 RID: 65 RVA: 0x000045F4 File Offset: 0x000027F4
+		private Ray aimRay;
 		private float attackRecoil = 7f;
+		private List<Transform> tailTransforms;
 		public override void OnEnter()
 		{
 			base.OnEnter();
+			this.tailTransforms = new List<Transform>();
 			this.skewerTime /= this.attackSpeedStat;
 			this.duration = Skewer.baseDuration / this.attackSpeedStat;
 			this.fireTime = 0.4f * this.duration;
+			if(base.modelLocator)
+            {
+				//GetTailTransforms();
+            }
 			base.characterBody.SetAimTimer(2f);
 			base.characterDirection.forward = base.GetAimRay().direction;
 			this.hitHurtBoxes = new List<HurtBox>();
@@ -46,7 +53,7 @@ namespace Ridley.SkillStates
 				bool isAuthority = base.isAuthority;
 				if (isAuthority)
 				{
-					Ray aimRay = base.GetAimRay();
+					this.aimRay = base.GetAimRay();
 					this.pullPoint = aimRay.GetPoint(3f);
 					this.pullPoint.y = base.transform.position.y + 1f;
 					Vector3 direction = aimRay.direction;
@@ -113,7 +120,6 @@ namespace Ridley.SkillStates
 			}
 		}
 
-		// Token: 0x06000044 RID: 68 RVA: 0x000048F3 File Offset: 0x00002AF3
 		private void OnHitEnemyAuthority()
 		{
 			base.characterMotor.velocity = Vector3.zero;
@@ -121,6 +127,46 @@ namespace Ridley.SkillStates
 			this.hasHit = true;
 		}
 
+
+		private void GetTailTransforms()
+        {
+			if (base.modelLocator)
+			{
+				Transform modelTransform = modelLocator.modelTransform;
+				if (modelTransform) // lol
+				{
+					//Transform tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/");
+					//if(tail) tailTransforms.Add(tail);
+					Transform tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4");
+					if (tail) tailTransforms.Add(tail);
+					tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5");
+					if (tail) tailTransforms.Add(tail);
+					tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6");
+					if (tail) tailTransforms.Add(tail);
+					tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6/Tail7");
+					if (tail) tailTransforms.Add(tail);
+					tail = modelTransform.Find("model-armature/Trans/Rot/Hip/Tail/Tail1/Tail2/Tail3/Tail4/Tail5/Tail6/Tail7/Tail8");
+					if (tail) tailTransforms.Add(tail);
+
+				}
+			}
+		}
+        public override void Update()
+        {
+            base.Update();
+			//if (this.subState == Skewer.SubState.SkewerHit)
+				//SetTailPosition();
+        }
+        private void SetTailPosition()
+        {
+			Vector3 vector = this.aimRay.direction * Skewer.range;
+			float distanceBetweenBones = vector.magnitude / tailTransforms.Count;
+			for(int i = 0; i < tailTransforms.Count; i++)
+            {
+				if(tailTransforms[i])
+					tailTransforms[i].position = this.aimRay.GetPoint(distanceBetweenBones * (i + 1));
+            }
+		}
 		// Token: 0x06000045 RID: 69 RVA: 0x00004910 File Offset: 0x00002B10
 		public override void FixedUpdate()
 		{
@@ -318,14 +364,14 @@ namespace Ridley.SkillStates
 		public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
 		// Token: 0x04000095 RID: 149
-		private float exitTime = 0.25f;
-		private float skewerExitTime = 0.3f;
+		private float exitTime = 0.15f;
+		private float skewerExitTime = 0.15f;
 		
 		// Token: 0x04000096 RID: 150
 		private float pullTime = 0.25f;
 
 		// Token: 0x04000097 RID: 151
-		private float skewerTime = 0.5f;
+		private float skewerTime = 0.375f;
 
 		// Token: 0x04000098 RID: 152
 		private float stopwatch;

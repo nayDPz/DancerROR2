@@ -45,6 +45,7 @@ namespace Ridley.SkillStates
 			bool isAuthority = base.isAuthority;
 			if (isAuthority)
 			{
+				Projectiles.ridleyFireballPrefab.GetComponent<ProjectileExplosion>().explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
 				ProjectileManager.instance.FireProjectile(Projectiles.ridleyFireballPrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * FireFireballs.damageCoefficient, FireFireballs.force, base.RollCrit(), DamageColorIndex.Default, null, -1f);
 			}
 		}
@@ -83,7 +84,7 @@ namespace Ridley.SkillStates
 		public float charge;
 
 		// Token: 0x04000054 RID: 84
-		public static float damageCoefficient = 2.6f;
+		public static float damageCoefficient = 3f;
 
 		// Token: 0x04000055 RID: 85
 		public static float force = 200f;

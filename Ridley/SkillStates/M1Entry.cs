@@ -18,7 +18,7 @@ namespace Ridley.SkillStates
 				bool isGrounded = base.characterMotor.isGrounded;
 				if (isGrounded)
 				{
-					this.outer.SetNextState(new UpTilt());
+					this.outer.SetNextState(new Jab1());
 				}
 				else
 				{
@@ -27,7 +27,7 @@ namespace Ridley.SkillStates
 			}
 			else
 			{
-				bool flag2 = y < -0.7f;
+				bool flag2 = y < -0.575f;
 				if (flag2)
 				{
 					bool isGrounded2 = base.characterMotor.isGrounded;

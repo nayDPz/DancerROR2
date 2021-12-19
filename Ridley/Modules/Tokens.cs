@@ -31,6 +31,14 @@ namespace Ridley.Modules
 			LanguageAPI.Add(str + "SPECIAL_BOMB_NAME", "Skewer");
 			LanguageAPI.Add(str + "SPECIAL_BOMB_DESCRIPTION", string.Format("Stab in a line, dealing <style=cIsDamage>{0}% damage</style> to all enemies and pulling them to you.", 100f * Skewer.damageCoefficient));
 			LanguageAPI.Add(str + "DEFAULT_SKIN_NAME", "Default");
+			LanguageAPI.Add(str + "META_SKIN_NAME", "Meta");
+			LanguageAPI.Add(str + "MECHA_SKIN_NAME", "Mecha");
+			LanguageAPI.Add(str + "PURPLE_SKIN_NAME", "Purple");
+			LanguageAPI.Add(str + "YELLOW_SKIN_NAME", "Yellow");
+			LanguageAPI.Add(str + "RED_SKIN_NAME", "Red");
+			LanguageAPI.Add(str + "GREEN_SKIN_NAME", "Green");
+			LanguageAPI.Add(str + "BLUE_SKIN_NAME", "Blue");
+
 		}
 	}
 }

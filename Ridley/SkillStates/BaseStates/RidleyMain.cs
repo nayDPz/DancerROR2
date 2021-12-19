@@ -11,10 +11,19 @@ namespace Ridley.SkillStates
 		private GameObject sprintEffect2;
 		private Transform footL;
 		private Transform footR;
-        public override void OnEnter()
+		private EntityStateMachine weapon;
+		private float baseAcceleration;
+		private float sprintAcceleration = 300f;
+		public LocalUser localUser;
+		private bool bufferJump = true;
+		private float landingTime = 0.2f;
+		public override void OnEnter()
         {
+			this.localUser = LocalUserManager.readOnlyLocalUsersList[0];
 			this.footL = base.FindModelChild("SprintFootL");
 			this.footR = base.FindModelChild("SprintFootR");
+			this.baseAcceleration = base.characterBody.acceleration;
+			this.weapon = base.gameObject.GetComponents<EntityStateMachine>()[1];
 			base.OnEnter();
         }
         public override void FixedUpdate()
@@ -26,6 +35,7 @@ namespace Ridley.SkillStates
 				//this.sprintEffect1 = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.footDragEffect, footL.position, Util.QuaternionSafeLookRotation(Vector3.up));
 				//this.sprintEffect2 = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.footDragEffect, footR.position, Util.QuaternionSafeLookRotation(Vector3.up));
 				this.sprintSoundOn = true;
+				base.characterBody.acceleration = this.sprintAcceleration;
 				AkSoundEngine.StopPlayingID(this.sprintSoundID);
 				this.sprintSoundID = Util.PlaySound("RidleySprintStart", base.gameObject);
 			}
@@ -43,8 +53,29 @@ namespace Ridley.SkillStates
 					//	EntityState.Destroy(this.sprintEffect1);
 					//if (this.sprintEffect2)
 					//	EntityState.Destroy(this.sprintEffect2);
+					base.characterBody.acceleration = this.baseAcceleration;
 					this.sprintSoundOn = false;
 					AkSoundEngine.StopPlayingID(this.sprintSoundID);
+				}
+			}
+
+
+			if (base.isAuthority && base.characterMotor.isGrounded && !this.localUser.isUIFocused)
+			{
+				if (Input.GetKeyDown(Modules.Config.emote1Keybind.Value))
+				{
+					this.outer.SetInterruptState(new Emotes.Emote1(), InterruptPriority.Any);
+					return;
+				}
+				else if (Input.GetKeyDown(Modules.Config.emote2Keybind.Value))
+				{
+					this.outer.SetInterruptState(new Emotes.Emote2(), InterruptPriority.Any);
+					return;
+				}
+				else if (Input.GetKeyDown(Modules.Config.standKeybind.Value))
+				{
+					this.outer.SetInterruptState(new Emotes.Stand(), InterruptPriority.Any);
+					return;
 				}
 			}
 		}
@@ -55,6 +86,7 @@ namespace Ridley.SkillStates
 			//	EntityState.Destroy(this.sprintEffect1);
 			//if (this.sprintEffect2)
 			//	EntityState.Destroy(this.sprintEffect2);
+			base.characterBody.acceleration = this.baseAcceleration;
 			AkSoundEngine.StopPlayingID(this.sprintSoundID);
 			base.OnExit();
         }

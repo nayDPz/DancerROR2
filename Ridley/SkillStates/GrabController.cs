@@ -141,10 +141,24 @@ namespace Ridley.SkillStates
 			bool flag10 = this.motor;
 			if (flag10)
 			{
+				float force = 0.25f;
+				if (motor)
+				{
+					float f = Mathf.Max(140f, motor.mass);
+					force = f / 140f;
+				}
+				launchVector *= force;
 				this.motor.ApplyForce(launchVector, false, false);
 			}
 			else
 			{
+				float force = 0.25f;
+				if(body.rigidbody)
+                {
+					float f = Mathf.Max(200f, body.rigidbody.mass);
+					force = f / 200f;
+				}
+				launchVector *= force;
 				DamageInfo damageInfo = new DamageInfo
 				{
 					position = this.body.transform.position,

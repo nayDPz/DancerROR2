@@ -149,7 +149,7 @@ namespace Ridley.SkillStates
 								bonusForce = SpacePirateRush.upForce * Vector3.up,
 								baseForce = SpacePirateRush.launchForce,
 								baseDamage = c * this.groundSlamDamageCoefficient * this.damageStat,
-								falloffModel = BlastAttack.FalloffModel.None,
+								falloffModel = BlastAttack.FalloffModel.SweetSpot,
 								radius = this.groundSlamRadius * c,
 								position = base.FindModelChild("HandL").position,
 								attackerFiltering = AttackerFiltering.NeverHit,
@@ -192,10 +192,14 @@ namespace Ridley.SkillStates
 							Vector3 position = base.FindModelChild("HandL").position;
 							position.y += 1f;
 							Debug.DrawRay(position, Vector3.down);
-							if (Physics.Raycast(new Ray(position, Vector3.down), out raycastHit, 4f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
-								this.dragEffect.transform.position = raycastHit.point;
-							else
-								this.dragEffect.transform.position = raycastHit.point = base.FindModelChild("HandL").position;
+							if(this.dragEffect)
+                            {
+								if (Physics.Raycast(new Ray(position, Vector3.down), out raycastHit, 4f, LayerIndex.world.mask, QueryTriggerInteraction.Collide))
+									this.dragEffect.transform.position = raycastHit.point;
+								else
+									this.dragEffect.transform.position = raycastHit.point = base.FindModelChild("HandL").position;
+							}
+							
 
 							this.dragStopwatch += Time.fixedDeltaTime;
 							bool flag9 = !this.sound;
@@ -465,7 +469,7 @@ namespace Ridley.SkillStates
 					if (flag2)
 					{
 						bool flag3 = !hurtBox.healthComponent.body.isChampion;
-						if (flag3)
+						if (!hurtBox.healthComponent.body.isChampion || (hurtBox.healthComponent.gameObject.name.Contains("Brother") && hurtBox.healthComponent.gameObject.name.Contains("Body")))
 						{
 							bool flag4 = !this.playedGrabSound;
 							if (flag4)
@@ -473,12 +477,15 @@ namespace Ridley.SkillStates
 								Util.PlaySound("HenrySwordSwing", base.gameObject);
 								this.playedGrabSound = true;
 							}
+							Vector3 between = hurtBox.healthComponent.transform.position - base.transform.position;
+							Vector3 v = between / 4f;
+							v.y = Math.Max(v.y, between.y);
+							base.characterMotor.AddDisplacement(v);
 							GrabController grabController = hurtBox.healthComponent.body.gameObject.AddComponent<GrabController>();
 							grabController.pivotTransform = base.FindModelChild("HandL");
 							if (this.fireEffect) EntityState.Destroy(this.fireEffect);
 							this.grabController.Add(grabController);
 							this.ForceFlinch(hurtBox.healthComponent.body);
-							bool isGrounded = base.isGrounded;
 							base.PlayAnimation("FullBody, Override", "SSpecGrabAir", "Slash.playbackRate", this.grabDuration);
 							this.hasGrabbed = true;
 							Util.PlaySound("GrabHit", base.gameObject);
@@ -521,9 +528,9 @@ namespace Ridley.SkillStates
 		// Token: 0x040000A9 RID: 169
 		private Vector3 targetMoveVectorVelocity;
 
-		private float velocityDamageCoefficient = 0.75f;
+		private float velocityDamageCoefficient = 0.7f;
 		// Token: 0x040000AA RID: 170
-		private float wallDamageCoefficient = 10f;
+		private float wallDamageCoefficient = 9f;
 
 		// Token: 0x040000AB RID: 171
 		private float wallBlastRadius = 12f;
@@ -532,7 +539,7 @@ namespace Ridley.SkillStates
 		private Vector3 wallHitPoint;
 
 		// Token: 0x040000AD RID: 173
-		public static float upForce = 3000f;
+		public static float upForce = 2000f;
 
 		// Token: 0x040000AE RID: 174
 		public static float launchForce = 1750f;
@@ -557,7 +564,7 @@ namespace Ridley.SkillStates
 
 		private float dragStopwatch;
 		// Token: 0x040000B5 RID: 181
-		private float dragDuration = 1.5f;
+		private float dragDuration = 2f;
 
 		// Token: 0x040000B6 RID: 182
 		private float dragMaxSpeedTime = 0.8f;
@@ -589,9 +596,9 @@ namespace Ridley.SkillStates
 		// Token: 0x040000BF RID: 191
 		protected NetworkSoundEventIndex impactSound;
 
-		private float groundSlamDamageCoefficient = 3.4f;
+		private float groundSlamDamageCoefficient = 2.9f;
 		// Token: 0x040000C0 RID: 192
-		private float chargeDamageCoefficient = 2.5f;
+		private float chargeDamageCoefficient = 2.2f;
 
 		// Token: 0x040000C1 RID: 193
 		private float chargeImpactForce = 2000f;

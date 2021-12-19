@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using BepInEx.Configuration;
+﻿using BepInEx.Configuration;
 using EntityStates;
 using Ridley.SkillStates;
 using RoR2;
 using RoR2.Skills;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ridley.Modules.Survivors
 {
-	// Token: 0x02000027 RID: 39
-	public static class Ridley
+    // Token: 0x02000027 RID: 39
+    public static class Ridley
 	{
 		// Token: 0x060000BF RID: 191 RVA: 0x00009248 File Offset: 0x00007448
 		internal static void CreateCharacter()
@@ -21,7 +20,7 @@ namespace Ridley.Modules.Survivors
 			{
 				Ridley.characterPrefab = Prefabs.CreatePrefab("NdpRidleyBody", "mdlRidley", new BodyInfo
 				{
-					armor = 14f,
+					armor = 15f,
 					armorGrowth = 1.5f,
 					bodyName = "NdpRidleyBody",
 					bodyNameToken = "NDP_RIDLEY_BODY_NAME",
@@ -37,17 +36,18 @@ namespace Ridley.Modules.Survivors
 					moveSpeed = 7f,
 					maxHealth = 200f,
 					subtitleNameToken = "NDP_RIDLEY_BODY_SUBTITLE",
-					podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
+					podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 				});
 				Ridley.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_acrid_step_sprint";
 				Ridley.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericLargeFootstepDust");
 				Ridley.characterPrefab.GetComponent<SfxLocator>().fallDamageSound = "RidleyLandFallDamage";
 				Ridley.characterPrefab.GetComponent<SfxLocator>().landingSound = "RidleyLand";
-				Ridley.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 4.5f;
+				Ridley.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 5.5f;
 				Ridley.characterPrefab.GetComponent<CharacterMotor>().mass = 300f;
+				Ridley.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
 				Ridley.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(RidleyMain));
 				Material material = Assets.CreateMaterial("matRidley");
-				Material material2 = Assets.CreateMaterial("matRidleyEye", .0004f, Color.yellow);
+				Material material2 = Assets.CreateMaterial("matRidleyEye", .25f, Color.yellow);
 				Ridley.bodyRendererIndex = 0;
 				Prefabs.SetupCharacterModel(Ridley.characterPrefab, new CustomRendererInfo[]
 				{
@@ -178,7 +178,7 @@ namespace Ridley.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(SpacePirateRush)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
-				baseRechargeInterval = 7f,
+				baseRechargeInterval = 8f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
@@ -227,19 +227,643 @@ namespace Ridley.Modules.Survivors
 
 		// Token: 0x060000C3 RID: 195 RVA: 0x00009A24 File Offset: 0x00007C24
 		private static void CreateSkins()
-		{
-			GameObject gameObject = Ridley.characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
-			CharacterModel component = gameObject.GetComponent<CharacterModel>();
-			ModelSkinController modelSkinController = gameObject.AddComponent<ModelSkinController>();
-			ChildLocator component2 = gameObject.GetComponent<ChildLocator>();
-			SkinnedMeshRenderer mainSkinnedMeshRenderer = component.mainSkinnedMeshRenderer;
-			CharacterModel.RendererInfo[] baseRendererInfos = component.baseRendererInfos;
-			List<SkinDef> list = new List<SkinDef>();
-			SkinDef skinDef = Skins.CreateSkinDef("NDP_RIDLEY_BODY_DEFAULT_SKIN_NAME", Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"), baseRendererInfos, mainSkinnedMeshRenderer, gameObject);
-			skinDef.meshReplacements = new SkinDef.MeshReplacement[0];
-			list.Add(skinDef);
-			modelSkinController.skins = list.ToArray();
-		}
+        {
+            GameObject model = characterPrefab.GetComponentInChildren<ModelLocator>().modelTransform.gameObject;
+            CharacterModel characterModel = model.GetComponent<CharacterModel>();
+
+            ModelSkinController skinController = model.AddComponent<ModelSkinController>();
+            ChildLocator childLocator = model.GetComponent<ChildLocator>();
+
+            SkinnedMeshRenderer mainRenderer = characterModel.mainSkinnedMeshRenderer;
+
+            CharacterModel.RendererInfo[] defaultRenderers = characterModel.baseRendererInfos;
+
+            List<SkinDef> skins = new List<SkinDef>();
+            #region DefaultSkin
+            SkinDef defaultSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_DEFAULT_SKIN_NAME",
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
+                defaultRenderers,
+                mainRenderer,
+                model);
+
+			defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+
+			skins.Add(defaultSkin);
+            #endregion
+
+            #region MetaSkin
+            Material metaMat = Modules.Assets.CreateMaterial("matMetaRidley");
+			Material metaMetalMat = Modules.Assets.CreateMaterial("matMetaRidleyMetal", 2f, Color.white);
+
+			CharacterModel.RendererInfo[] rendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+                    defaultMaterial = metaMat,
+                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+                    ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = metaMetalMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = metaMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+            SkinDef metaSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_META_SKIN_NAME",
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texMetaSkin"),
+                rendererInfos,
+                mainRenderer,
+                model);
+
+            metaSkin.meshReplacements = new SkinDef.MeshReplacement[]
+            {
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidley"),
+                    renderer = defaultRenderers[0].renderer
+                },
+                new SkinDef.MeshReplacement
+                {
+                    mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyMetal"),
+                    renderer = defaultRenderers[1].renderer
+                },
+				new SkinDef.MeshReplacement
+				{
+					mesh = null,
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+            skins.Add(metaSkin);
+			#endregion
+
+			#region MechaSkin
+			Material mechaMat = Modules.Assets.CreateMaterial("matMechaRidley");
+			Material mechaMetalMat = Modules.Assets.CreateMaterial("matMechaRidleyMetal", 2f, Color.white);
+
+			CharacterModel.RendererInfo[] mechaRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = mechaMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = mechaMetalMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = mechaMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			SkinDef mechaSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_MECHA_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texMechaSkin"),
+				mechaRendererInfos,
+				mainRenderer,
+				model);
+
+			mechaSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidley"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyMetal"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = null,
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshMetaRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(mechaSkin);
+            #endregion
+
+            #region PurpleSkin
+            Material purpleMat = Modules.Assets.CreateMaterial("matRidleyPurple");
+			CharacterModel.RendererInfo[] purpleRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = purpleMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = purpleMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = purpleMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = purpleMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+            SkinDef purpleSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_PURPLE_SKIN_NAME",
+                Assets.mainAssetBundle.LoadAsset<Sprite>("texPurpleSkin"),
+                purpleRendererInfos,
+                mainRenderer,
+                model);
+
+			purpleSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(purpleSkin);
+			#endregion
+
+			#region PissSkin
+			Material pissMat = Modules.Assets.CreateMaterial("matRidleyYellow");
+			CharacterModel.RendererInfo[] PissRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = pissMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = pissMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = pissMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = pissMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			SkinDef yellowSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_YELLOW_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texYellowSkin"),
+				PissRendererInfos,
+				mainRenderer,
+				model);
+
+			yellowSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(yellowSkin);
+			#endregion
+
+			#region WatermelonSkin
+			Material watermelonMat = Modules.Assets.CreateMaterial("matRidleyGreen");
+			CharacterModel.RendererInfo[] watermelonRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = watermelonMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = watermelonMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = watermelonMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = watermelonMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			SkinDef greenSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_GREEN_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texPurpleSkin"),
+				watermelonRendererInfos,
+				mainRenderer,
+				model);
+
+			greenSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(greenSkin);
+			#endregion
+
+			#region RedSkin
+			Material redMat = Modules.Assets.CreateMaterial("matRidleyRed");
+			CharacterModel.RendererInfo[] redRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = redMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = redMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = redMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = redMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			SkinDef redSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_RED_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texRedSkin"),
+				redRendererInfos,
+				mainRenderer,
+				model);
+
+			redSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(redSkin);
+			#endregion
+
+			#region BlueSkin
+			Material blueMat = Modules.Assets.CreateMaterial("matRidleyBlue");
+			CharacterModel.RendererInfo[] blueRendererInfos = new CharacterModel.RendererInfo[]
+			{
+                //To add another material replacement simply copy past this block right after and add `,` after the first one.
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = blueMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = blueMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = blueMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = blueMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[3].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = defaultRenderers[4].defaultMaterial,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			SkinDef blueSkin = Modules.Skins.CreateSkinDef(RidleyPlugin.developerPrefix + "_RIDLEY_BODY_BLUE_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texBlueSkin"),
+				blueRendererInfos,
+				mainRenderer,
+				model);
+
+			blueSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody1"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody2"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyBody3"),
+					renderer = defaultRenderers[2].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshRidleyEyeBase"),
+					renderer = defaultRenderers[3].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("MeshRidleyEyes"),
+					renderer = defaultRenderers[4].renderer
+				},
+			};
+
+			skins.Add(blueSkin);
+			#endregion
+
+			skinController.skins = skins.ToArray();
+        }
 
 		// Token: 0x060000C4 RID: 196 RVA: 0x00009AB8 File Offset: 0x00007CB8
 		private static void InitializeItemDisplays()

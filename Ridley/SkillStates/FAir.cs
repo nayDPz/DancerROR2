@@ -1,7 +1,8 @@
 ﻿using System;
 using EntityStates.Merc;
 using Ridley.Modules;
-
+using UnityEngine;
+using RoR2;
 namespace Ridley.SkillStates
 {
 	// Token: 0x0200000C RID: 12
@@ -24,6 +25,7 @@ namespace Ridley.SkillStates
 			this.isMultiHit = true;
 			this.isAerial = true;
 			this.isSus = true;
+			//this.launchVectorOverride = true;
 			this.swingSoundString = "FAir";
 			this.hitSoundString = "SwordHit";
 			this.swingEffectPrefab = Assets.ridleySwingEffect;
@@ -32,6 +34,33 @@ namespace Ridley.SkillStates
 			this.animString = "FAir";
 			this.hitboxName = "Jab";
 			base.OnEnter();
+		}
+
+		public override void LaunchEnemy(HurtBox hurtBox)
+		{
+			Vector3 direction = base.characterDirection.forward * 2f + Vector3.up;
+			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
+			launchVector = launchVector.normalized;
+			bool flag16 = hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
+			if (flag16)
+			{
+				hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
+			}
+			if(hurtBox.healthComponent && hurtBox.healthComponent.body && !hurtBox.healthComponent.body.isChampion)
+            {
+				if(hurtBox.healthComponent.body.characterMotor)
+                {
+					hurtBox.healthComponent.body.characterMotor.AddDisplacement(launchVector);
+					hurtBox.healthComponent.body.characterMotor.velocity.y = 0;
+				}
+				else if(hurtBox.healthComponent.body.rigidbody)
+                {
+					hurtBox.healthComponent.body.rigidbody.MovePosition(launchVector);
+					Vector3 v = hurtBox.healthComponent.body.rigidbody.velocity;
+					v.y = 0;
+					hurtBox.healthComponent.body.rigidbody.velocity = v;
+				}
+            }
 		}
 	}
 }

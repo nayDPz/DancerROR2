@@ -63,7 +63,7 @@ namespace Ridley
             Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
             Modules.Tokens.AddTokens(); // register name tokens
             Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
-
+            Modules.CameraParams.InitializeParams();
             Modules.Survivors.Ridley.CreateCharacter();
             new Modules.ContentPacks().Initialize();
 
@@ -117,11 +117,11 @@ namespace Ridley
             {
                 if (self.GetComponent<CharacterBody>().baseNameToken == "NDP_RIDLEY_BODY_NAME")
                 {
-                    if((damageInfo.damageType & DamageType.DoT) != DamageType.DoT)
+                    if(true)//(damageInfo.damageType & DamageType.DoT) != DamageType.DoT)
                     {
-                        float num = Mathf.Min(self.body.armor, (self.body.baseArmor + self.body.levelArmor * self.body.level) * 2f);
-                        
-                        if(self.combinedHealthFraction < 0.5f)
+                        //float num = Mathf.Min(self.body.armor, (self.body.baseArmor + self.body.levelArmor * self.body.level) * 2f);
+                        float num = self.body.armor;
+                        if(self.combinedHealthFraction < 0.5f && (damageInfo.damageType & DamageType.DoT) != DamageType.DoT)
                         {
                             damageInfo.damage -= num;
                             bool flag3 = damageInfo.damage < 0f;

@@ -2,6 +2,7 @@
 using EntityStates.Merc;
 using Ridley.Modules;
 using UnityEngine;
+using RoR2;
 
 namespace Ridley.SkillStates
 {
@@ -20,10 +21,13 @@ namespace Ridley.SkillStates
 			this.hitHopVelocity = 2f;
 			this.stackGainAmount = 7;
 			this.hitStopDuration = 0.06f;
-			this.pushForce = 650f;
+			this.pushForce = 1300f;
+			this.launchVectorOverride = true;
 			this.swingSoundString = "Jab2";
 			this.hitSoundString = "JabHit2";
 			this.muzzleString = "Jab2";
+			this.cancelledFromSprinting = true;
+			this.earlyExitJump = true;
 			this.swingEffectPrefab = Assets.ridleySwingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab2HitSoundEvent.index;
@@ -39,6 +43,40 @@ namespace Ridley.SkillStates
 			this.animString = "Jab2";
 			this.hitboxName = "Jab";
 			base.OnEnter();
+		}
+
+		public override void LaunchEnemy(HurtBox hurtBox)
+		{
+			Vector3 direction = base.characterDirection.forward * 10f;
+			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
+			launchVector = launchVector.normalized;
+			bool flag16 = hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>();
+			if (flag16)
+			{
+				hurtBox.healthComponent.gameObject.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
+			}
+			CharacterMotor m = hurtBox.healthComponent.body.characterMotor;
+			float force = 0.25f;
+			if (m)
+			{
+				float f = Mathf.Max(100f, m.mass);
+				force = f / 100f;
+			}
+			float fz = this.pushForce * force;
+			DamageInfo damageInfo = new DamageInfo
+			{
+				position = hurtBox.healthComponent.body.transform.position,
+				attacker = null,
+				inflictor = null,
+				damage = 0f,
+				damageColorIndex = DamageColorIndex.Default,
+				damageType = DamageType.Generic,
+				crit = false,
+				force = launchVector * fz,
+				procChainMask = default(ProcChainMask),
+				procCoefficient = 0f
+			};
+			hurtBox.healthComponent.TakeDamageForce(damageInfo, false, false);
 		}
 	}
 }

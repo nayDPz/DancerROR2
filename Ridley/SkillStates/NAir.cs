@@ -1,6 +1,7 @@
 ﻿using System;
 using EntityStates.Merc;
 using Ridley.Modules;
+using RoR2;
 using UnityEngine;
 namespace Ridley.SkillStates
 {
@@ -20,7 +21,9 @@ namespace Ridley.SkillStates
 			this.damageCoefficient = 3.5f;
 			this.stackGainAmount = 8;
 			this.hitStopDuration = 0.15f;
-			this.bonusForce = Vector3.up * 2100f;
+			//this.bonusForce = Vector3.up * 2100f;
+			this.pushForce = 2500f;
+			this.launchVectorOverride = true;
 			this.isAerial = true;
 			this.isFlinch = true;
 			this.swingSoundString = "NAir";
@@ -33,5 +36,37 @@ namespace Ridley.SkillStates
 			this.hitboxName = "NAir";
 			base.OnEnter();
 		}
-	}
+
+        public override void LaunchEnemy(HurtBox hurtBox)
+        {
+			//Vector3 launchVector = (Vector3.up * 15f + base.transform.position) - hurtBox.healthComponent.body.footPosition;
+			//launchVector = launchVector.normalized;
+
+			Vector3 direction = base.characterDirection.forward * 4f + Vector3.up * 10f;
+			Vector3 launchVector = (direction + base.transform.position) - hurtBox.healthComponent.body.transform.position;
+			launchVector = launchVector.normalized;
+			CharacterMotor m = hurtBox.healthComponent.body.characterMotor;
+			float force = 0.25f;
+			if (m)
+			{
+				float f = Mathf.Max(140f, m.mass);
+				force = f / 140f;
+			}
+			float fz = this.pushForce * force;
+			DamageInfo damageInfo = new DamageInfo	
+			{
+				position = hurtBox.healthComponent.body.transform.position,
+				attacker = null,
+				inflictor = null,
+				damage = 0f,
+				damageColorIndex = DamageColorIndex.Default,
+				damageType = DamageType.Generic,
+				crit = false,
+				force = launchVector * fz,
+				procChainMask = default(ProcChainMask),
+				procCoefficient = 0f
+			};
+			hurtBox.healthComponent.TakeDamageForce(damageInfo, false, false);
+		}
+    }
 }
