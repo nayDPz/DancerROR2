@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS1566: Error reading resource 'Dancer.DancerBank.bnk' -- 'Could not find file 'C:\Users\natep\source\repos\Dancer\Dancer\DancerBank.bnk'.'
+dotnet_diagnostic.CS1566.severity = none

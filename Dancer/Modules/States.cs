@@ -1,0 +1,85 @@
+﻿using R2API;
+using Dancer.SkillStates;
+using Dancer.SkillStates.Emotes;
+using Dancer.SkillStates;
+using System;
+using MonoMod.RuntimeDetour;
+using EntityStates;
+using System.Collections.Generic;
+using RoR2;
+using System.Reflection;
+
+namespace Dancer.Modules
+{
+    public static class States
+    {
+        internal static List<Type> entityStates = new List<Type>();
+
+        private static Hook set_stateTypeHook;
+        private static Hook set_typeNameHook;
+        private static readonly BindingFlags allFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
+        private delegate void set_stateTypeDelegate(ref SerializableEntityStateType self, Type value);
+        private delegate void set_typeNameDelegate(ref SerializableEntityStateType self, String value);
+
+        internal static void AddSkill(Type t)
+        {
+            entityStates.Add(t);
+        }
+
+        internal static void RegisterStates()
+        {
+            Type type = typeof(SerializableEntityStateType);
+            HookConfig cfg = default;
+            cfg.Priority = Int32.MinValue;
+            set_stateTypeHook = new Hook(type.GetMethod("set_stateType", allFlags), new set_stateTypeDelegate(SetStateTypeHook), cfg);
+            set_typeNameHook = new Hook(type.GetMethod("set_typeName", allFlags), new set_typeNameDelegate(SetTypeName), cfg);
+
+            AddSkill(typeof(DancerMain));
+            
+            AddSkill(typeof(ChargeFireballs));
+            AddSkill(typeof(FireFireballs));
+
+            AddSkill(typeof(SpacePirateRush));
+            AddSkill(typeof(DragLaunch));
+
+            AddSkill(typeof(Skewer));
+            AddSkill(typeof(SuspendedState));
+
+            AddSkill(typeof(BaseM1));
+            AddSkill(typeof(M1Entry));
+            AddSkill(typeof(Jab1));
+            AddSkill(typeof(Jab2));
+            AddSkill(typeof(Jab3));
+            AddSkill(typeof(DashAttack));
+            AddSkill(typeof(DownTilt));
+            AddSkill(typeof(FAir));
+            AddSkill(typeof(NAir));
+            AddSkill(typeof(UpAir));
+
+            AddSkill(typeof(BaseEmote));
+            AddSkill(typeof(Emote1));
+            AddSkill(typeof(Emote2));
+            AddSkill(typeof(Stand));
+        }
+
+        private static void SetStateTypeHook(ref this SerializableEntityStateType self, Type value)
+        {
+            self._typeName = value.AssemblyQualifiedName;
+        }
+
+        private static void SetTypeName(ref this SerializableEntityStateType self, String value)
+        {
+            Type t = GetTypeFromName(value);
+            if (t != null)
+            {
+                self.SetStateTypeHook(t);
+            }
+        }
+
+        private static Type GetTypeFromName(String name)
+        {
+            Type[] types = EntityStateCatalog.stateIndexToType;
+            return Type.GetType(name);
+        }
+    }
+}

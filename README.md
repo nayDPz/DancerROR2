@@ -1,4 +1,4 @@
-## Ridley Beta
+## Dancer Beta
 
 `1.11.113`
 - fixed plasma breath issue with attack speed
@@ -58,7 +58,7 @@ minor adjustments to most abilities, should flow together nicer overall. not all
 - plasma breath charges faster and no longer has intense falloff, but damage lowered
 - added vertical launch to nair
 - skewering enemies from above or below should move them in front of you better. functions better while midair
-- passive can now only heal if Ridley is below half HP, otherwise dmg is reduced to 1.
+- passive can now only heal if Dancer is below half HP, otherwise dmg is reduced to 1.
 - started work on vfx. only on some abilities for now
 
 `1.6.10`
