@@ -43,7 +43,7 @@ namespace Dancer.Modules
             LanguageAPI.Add(prefix + "UTILITY_PULL_DESCRIPTION", $"Extend your lance in a target direction, dealing <style=cIsDamage>{375}% damage to all enemies hit, </style> <style=cIsUtility>pulling them and yourself to the tip.</style>");
 
             LanguageAPI.Add(prefix + "UTILITY_PULL2_NAME", "UtilityForMultiplayerBecauseIHateNetworking");
-            LanguageAPI.Add(prefix + "UTILITY_PULL_DESCRIPTION", $"Extend your lance in a target direction, dealing <style=cIsDamage>{500}% damage to an enemy, </style> <style=cIsUtility>pulling yourself to them.</style> (ideal in multiplayer if you arent the host)");
+            LanguageAPI.Add(prefix + "UTILITY_PULL2_DESCRIPTION", $"Extend your lance in a target direction, dealing <style=cIsDamage>{500}% damage to an enemy, </style> <style=cIsUtility>pulling yourself to them.</style> (ideal in multiplayer if you arent the host)");
 
             #endregion
 
