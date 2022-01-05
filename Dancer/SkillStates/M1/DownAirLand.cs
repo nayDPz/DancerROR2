@@ -92,14 +92,19 @@ namespace Dancer.SkillStates
 			this.attack.hitBoxGroup = hitBoxGroup;
 			this.attack.isCrit = base.RollCrit();
 			this.attack.impactSound = this.impactSound;
+
+
+			this.swingEffectPrefab = Modules.Assets.downAirEndEffect;
+			this.muzzleString = "eDAirEnd";
+			this.swingSoundString = "PunchSwing";
 		}
 		private void StartAttack()
 		{
 			base.characterBody.SetAimTimer(this.duration);
-			//Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+			Util.PlayAttackSpeedSound("DancerDownTilt", base.gameObject, this.attackSpeedStat);
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.5f, 0.05f);
+			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.5f, 0.01f);
 		}
 		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
 		{

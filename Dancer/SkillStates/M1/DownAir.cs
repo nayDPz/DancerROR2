@@ -25,7 +25,7 @@ namespace Dancer.SkillStates
 		protected float damageCoefficient = 1.5f;
 		protected float procCoefficient = 0.5f;
 		protected float pushForce = 500f;
-		protected float baseDuration = 1.5f;
+		protected float baseDuration = 1.3f;
 		protected float attackStartTime = 0.0f;
 		protected float attackEndTime = .9f;
 		protected float hitStopDuration = 0.12f;
@@ -35,9 +35,13 @@ namespace Dancer.SkillStates
 		protected string swingSoundString = "";
 		protected string hitSoundString = "";
 		private float fallSpeed = 3.75f;
+		private bool hitGround;
 
-		protected string muzzleString = "SwingCenter";
+		protected string muzzleString = "eDAir";
+		private Transform muzzleTransform;
+
 		protected GameObject swingEffectPrefab;
+		private GameObject swingEffect;
 
 		protected GameObject hitEffectPrefab;
 
@@ -66,6 +70,15 @@ namespace Dancer.SkillStates
 			base.OnEnter();
 
 			this.animator = base.GetModelAnimator();
+
+			if (base.modelLocator)
+			{
+				ChildLocator component = base.modelLocator.modelTransform.GetComponent<ChildLocator>();
+				if (component)
+				{
+					this.muzzleTransform = component.FindChild("eDAir");
+				}
+			}
 
 			base.characterMotor.velocity.y = 0f;
 
@@ -99,12 +112,15 @@ namespace Dancer.SkillStates
 			this.attack.pushAwayForce = 0f;
 			this.attack.hitBoxGroup = hitBoxGroup;
 			this.attack.isCrit = base.RollCrit();
-			this.attack.impactSound = this.impactSound;
+			this.attack.impactSound = Modules.Assets.sword1HitSoundEvent.index;
+
+			this.swingEffectPrefab = Modules.Assets.downAirEffect;
+			this.muzzleString = "eDAir";
 		}
 		private void StartAttack()
 		{
 			base.characterBody.SetAimTimer(this.duration);
-			//Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+			Util.PlayAttackSpeedSound("DancerSwing1", base.gameObject, this.attackSpeedStat);
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
 			base.PlayAnimation("FullBody, Override", "DAir", "Slash.playbackRate", 0.75f);
@@ -127,7 +143,7 @@ namespace Dancer.SkillStates
 
 		public virtual void PlayHitSound()
 		{
-			Util.PlaySound("SwordHit2", base.gameObject);
+			Util.PlaySound("SwordHit", base.gameObject);
 		}
 
 		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
@@ -152,7 +168,7 @@ namespace Dancer.SkillStates
 
 		private void PlaySwingEffect()
 		{
-			EffectManager.SimpleMuzzleFlash(this.swingEffectPrefab, base.gameObject, this.muzzleString, true);
+			this.swingEffect = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, this.muzzleTransform);
 		}
 
 		
@@ -229,14 +245,15 @@ namespace Dancer.SkillStates
 					this.FireAttack(); //this.FireAttack()
 				}
 				if (base.characterMotor.isGrounded)
-				{					
+				{
+					this.hitGround = true;
 					this.outer.SetNextState(new DownAirLand());
 				}
 				else
 				{
 					if (this.stopwatch >= this.duration)
 					{
-						base.PlayCrossfade("FullBody, Override", "BufferEmpty", "Slash.playbackRate", this.duration * this.anim, 0.05f);
+						base.PlayCrossfade("FullBody, Override", "BufferEmpty", "Slash.playbackRate", this.duration * this.anim, 0.01f);
 						this.outer.SetNextStateToMain();
 					}
 				}
@@ -264,10 +281,9 @@ namespace Dancer.SkillStates
 
 		public override void OnExit()
 		{
-			if (this.cancelled)
-				if (this.cancelled)
-					PlayAnimation("FullBody, Override", "BufferEmpty");
-
+			if (this.swingEffect) GameObject.Destroy(this.swingEffect);
+			if(!this.hitGround)
+				PlayAnimation("FullBody, Override", "BufferEmpty");
 			base.GetAimAnimator().enabled = true;
 			this.animator.SetFloat("Slash.playbackRate", 1f);
 			base.OnExit();

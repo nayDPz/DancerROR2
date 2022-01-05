@@ -2,7 +2,7 @@
 using RoR2;
 using UnityEngine;
 using Dancer.Modules.Components;
-
+using UnityEngine.Networking;
 namespace Dancer.SkillStates
 {
     public class Pull : BaseSkillState
@@ -34,6 +34,8 @@ namespace Dancer.SkillStates
         {
             base.OnEnter();
 
+            if (base.characterBody && NetworkServer.active) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+
             this.animator = base.GetModelAnimator();
             this.weaponAnimator = base.GetComponent<WeaponAnimator>();
 
@@ -49,18 +51,19 @@ namespace Dancer.SkillStates
                 base.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
             }
 
-            float distance = (this.point - base.transform.position).magnitude;
-            Vector3 direction = (this.point - base.transform.position).normalized;
-            Vector3 point = (distance + 2) * direction + base.transform.position;
+            Vector3 direction = point - base.transform.position;
+            this.weaponAnimator.RotationOverride(direction.normalized * 500f + base.transform.position);
 
-            this.weaponAnimator.RotationOverride(point);
-
-            base.PlayCrossfade("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1.125f, 0.05f);
+            EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
+            base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1f);
         }
 
         public override void OnExit()
         {
-            
+            if (NetworkServer.active)
+            {
+                base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
+            }
             this.weaponAnimator.StopRotationOverride();
             base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             base.OnExit();
@@ -75,6 +78,7 @@ namespace Dancer.SkillStates
             base.characterMotor.velocity = this.direction * this.speed;
             if (base.fixedAge >= duration)
             {
+                base.characterMotor.velocity = Vector3.zero;
                 if(base.inputBank.jump.justPressed)
                 {
                     base.PlayAnimation("Body", "Jump");

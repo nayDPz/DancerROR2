@@ -23,13 +23,13 @@ namespace Dancer.SkillStates
 			this.hitStopDuration = 0.06f;
 			this.pushForce = 1400f;
 			this.launchVectorOverride = true;
-			this.swingSoundString = "Jab2";
+			this.swingSoundString = "SwordSwing2";
 			this.hitSoundString = "JabHit2";
 			this.critHitSoundString = "JabHit3";
-			this.muzzleString = "Jab1";
+			this.muzzleString = "eJab2";
 			this.cancelledFromSprinting = true;
 			this.earlyExitJump = true;
-			this.swingEffectPrefab = Assets.ridleySwingEffect;
+			this.swingEffectPrefab = Assets.swingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab2HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]

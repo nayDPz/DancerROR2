@@ -16,7 +16,7 @@ namespace Dancer.SkillStates
 			this.hitHopVelocity = 2f;
 			this.swingSoundString = "Jab2";
 			this.hitSoundString = "JabHit2";
-			this.swingEffectPrefab = Assets.ridleySwingEffect;
+			this.swingEffectPrefab = Assets.swingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.isCombo = true;
 			this.isDash = true;

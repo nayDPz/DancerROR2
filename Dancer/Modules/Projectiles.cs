@@ -12,72 +12,26 @@ namespace Dancer.Modules
 {
     internal static class Projectiles
     {
-        internal static GameObject ridleyFireballPrefab;
+        internal static GameObject dancerRibbonProjectile;
+        
         internal static void RegisterProjectiles()
         {
-            ridleyFireballPrefab = CloneProjectilePrefab("MageLightningBombProjectile", "DancerFireball");
+            dancerRibbonProjectile = CloneProjectilePrefab("Fireball", "DancerRibbons");
 
-            ProjectileSimple s = ridleyFireballPrefab.GetComponent<ProjectileSimple>();
-            s.desiredForwardSpeed = 60f;
+            SphereCollider zs = dancerRibbonProjectile.GetComponent<SphereCollider>();
+            zs.radius = 1.25f;
 
-            AntiGravityForce a = ridleyFireballPrefab.GetComponent<AntiGravityForce>();
-            a.antiGravityCoefficient = 0.1f;
+            ProjectileSimple s = dancerRibbonProjectile.GetComponent<ProjectileSimple>();
+            s.desiredForwardSpeed = 150f;
 
-            GameObject g = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectileghosts/FireballGhost"), "DancerFireballGhost");
-            g.transform.localScale *= 2.5f;
-            ProjectileController ss = ridleyFireballPrefab.GetComponent<ProjectileController>();
-            ss.ghostPrefab = g;
+            ProjectileDamage d = dancerRibbonProjectile.GetComponent<ProjectileDamage>();
+            d.damageType = DamageType.FruitOnHit;
 
-            ProjectileImpactExplosion p = ridleyFireballPrefab.GetComponent<ProjectileImpactExplosion>();
-            p.lifetime = 5f;
-            p.blastProcCoefficient = 0.5f;
-            p.blastDamageCoefficient = 1f;
-            p.blastRadius = 12f;
-            p.impactEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
-            p.explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
-            p.explosionSoundString = "FireballHit";
-            p.falloffModel = BlastAttack.FalloffModel.Linear;
 
-            ProjectileExplosion pz = ridleyFireballPrefab.GetComponent<ProjectileExplosion>();
-            pz.explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
-            pz.falloffModel = BlastAttack.FalloffModel.Linear;
-            ProjectileProximityBeamController bb = ridleyFireballPrefab.GetComponent<ProjectileProximityBeamController>();
-            GameObject.Destroy(bb);
-
-            GameObject.Destroy(ridleyFireballPrefab.GetComponent<AkEvent>());
-            /*
-            DancerFireballBouncer b = ridleyFireballPrefab.AddComponent<DancerFireballBouncer>();
-            InitializeImpactExplosion(b);
-            b.lifetime = 5f;
-            b.blastDamageCoefficient = 1f;
-            b.blastRadius = 12f;
-            b.explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
-            b.explosionSoundString = "FireballHit";
-            */
-
-            Modules.Prefabs.projectilePrefabs.Add(ridleyFireballPrefab);
+            Modules.Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
         }
 
 
-        private static void InitializeImpactExplosion(DancerFireballBouncer projectileImpactExplosion)
-        {
-            projectileImpactExplosion.blastDamageCoefficient = 1f;
-            projectileImpactExplosion.blastProcCoefficient = 1f;
-            projectileImpactExplosion.blastRadius = 1f;
-            projectileImpactExplosion.bonusBlastForce = Vector3.zero;
-            projectileImpactExplosion.childrenCount = 0;
-            projectileImpactExplosion.childrenDamageCoefficient = 0f;
-            projectileImpactExplosion.childrenProjectilePrefab = null;
-            projectileImpactExplosion.destroyOnEnemy = false;
-            projectileImpactExplosion.explosionSoundString = "";
-            projectileImpactExplosion.falloffModel = RoR2.BlastAttack.FalloffModel.None;
-            projectileImpactExplosion.fireChildren = false;
-            projectileImpactExplosion.impactEffect = null;
-            projectileImpactExplosion.lifetime = 0f;
-            projectileImpactExplosion.lifetimeExpiredSoundString = "";
-
-            projectileImpactExplosion.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
-        }
 
        
 

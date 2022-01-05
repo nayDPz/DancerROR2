@@ -4,6 +4,7 @@ using UnityEngine;
 using Dancer.Modules.Components;
 using Dancer.SkillStates;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 namespace Dancer.SkillStates
 {
@@ -44,11 +45,12 @@ namespace Dancer.SkillStates
 
             base.StartAimMode(2f);
             this.duration = DragonLunge.baseDuration / this.attackSpeedStat;
-            this.fireTime = 0.38f * this.duration;
+            this.fireTime = 0.4f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
-            this.muzzleString = "Muzzle";
-            base.PlayAnimation("FullBody, Override", "DragonLunge", "Slash.playbackRate", this.duration);
+            this.muzzleString = "LanceBase";
+            Util.PlaySound("LungeStart", base.gameObject);
+            base.PlayAnimation("FullBody, Override", "DragonLunge", "DragonLunge.playbackRate", this.duration * 0.975f);
             if (base.characterMotor && DragonLunge.smallHopStrength != 0f)
             {
                 base.characterMotor.velocity.y = DragonLunge.smallHopStrength;
@@ -61,7 +63,7 @@ namespace Dancer.SkillStates
         public override void OnExit()
         {
             this.weaponAnimator.StopRotationOverride();
-            this.animator.SetFloat("Slash.playbackRate", 1f);
+            this.animator.SetFloat("DragonLunge.playbackRate", 1f);
             base.OnExit();
         }
 
@@ -75,8 +77,8 @@ namespace Dancer.SkillStates
                 this.hasFired = true;
 
                 base.characterBody.AddSpreadBloom(1.5f);
-                EffectManager.SimpleMuzzleFlash(muzzleEffectPrefab, base.gameObject, this.muzzleString, false);
-                Util.PlaySound("DSpecialSwing", base.gameObject);
+                EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungeEffect, base.gameObject, this.muzzleString, false);
+                Util.PlaySound("LungeFire", base.gameObject);
 
                 if (base.isAuthority)
                 {
@@ -85,7 +87,7 @@ namespace Dancer.SkillStates
                     bool hitEnemy = false;
 
                     RaycastHit raycastHit;
-                    if (Util.CharacterSpherecast(base.gameObject, aimRay, 1f, out raycastHit, DragonLunge.range, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal))
+                    if (Util.CharacterSpherecast(base.gameObject, aimRay, 1.5f, out raycastHit, DragonLunge.range, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal))
                     {
                         hitWorld = true;
                         this.hitPoint = raycastHit.point;
@@ -108,12 +110,12 @@ namespace Dancer.SkillStates
                         isCrit = base.RollCrit(),
                         owner = base.gameObject,
                         muzzleName = muzzleString,
-                        smartCollision = true,
+                        smartCollision = false,
                         procChainMask = default(ProcChainMask),
                         procCoefficient = procCoefficient,
                         radius = 2f,
                         sniper = false,
-                        stopperMask = LayerIndex.CommonMasks.bullet,
+                        stopperMask = LayerIndex.world.mask, //LayerIndex.CommonMasks.bullet
                         weapon = null,
                         tracerEffectPrefab = null,
                         spreadPitchScale = 0f,
@@ -187,12 +189,19 @@ namespace Dancer.SkillStates
                                 }
                             }
                         }
-                        this.OnHitAnyAuthority();
+                        
                         return result;
                     };
                     bulletAttack.Fire();
-                    if (this.hitPoint != Vector3.zero)
-                        this.weaponAnimator.RotationOverride(this.hitPoint);
+
+                    if (this.hitWorld || hitEnemy)
+                        this.OnHitAnyAuthority();
+
+                    Vector3 between = this.hitPoint - base.transform.position;
+                    if (this.hitPoint != Vector3.zero && between.magnitude > 0f)
+                    {
+                        this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
+                    }
                     else
                         this.weaponAnimator.RotationOverride(aimRay.GetPoint(range));
                 }
@@ -202,7 +211,7 @@ namespace Dancer.SkillStates
         private void OnHitAnyAuthority()
         {
 
-            Util.PlaySound("DSpecialHit", base.gameObject);
+            Util.PlaySound("LungeHit", base.gameObject);
 
             base.characterMotor.velocity = Vector3.zero;
 
@@ -232,7 +241,7 @@ namespace Dancer.SkillStates
             if (this.hasHit)
             {
                 base.characterMotor.velocity = Vector3.zero;
-                this.animator.SetFloat("Slash.playbackRate", 0f);
+                this.animator.SetFloat("DragonLunge.playbackRate", 0f);
             }
                 
 
@@ -240,7 +249,7 @@ namespace Dancer.SkillStates
             {
                 if(this.hasHit)
                 {
-                    Util.PlaySound("DSpecialPull", base.gameObject);
+                    Util.PlaySound("LungeDash", base.gameObject);
                     float distance = Mathf.Max((this.hitPoint - base.transform.position).magnitude - 2f, 0);
                     Vector3 direction = (this.hitPoint - base.transform.position).normalized;
                     Vector3 point = distance * direction + base.transform.position;

@@ -20,7 +20,7 @@ namespace Dancer.SkillStates
 			this.stackGainAmount = 8;
 			this.swingSoundString = "PunchSwing";
 			this.hitSoundString = "JabHit1";
-			this.swingEffectPrefab = Assets.ridleySwingEffect;
+			this.swingEffectPrefab = Assets.swingEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab1HitSoundEvent.index;
 			this.animString = "UpTilt";

@@ -18,16 +18,16 @@ namespace Dancer.Modules.Survivors
 			{
 				Dancer.characterPrefab = Prefabs.CreatePrefab("DancerBody", "mdlDancer", new BodyInfo
 				{
-					armor = 15f,
-					armorGrowth = 1.5f,
+					armor = 20f,
+					armorGrowth = 0f,
 					bodyName = "DancerBody",
 					bodyNameToken = "NDP_DANCER_BODY_NAME",
 					bodyColor = Color.magenta,
 					characterPortrait = Assets.LoadCharacterIcon("Dancer"),
 					crosshair = Assets.LoadCrosshair("Standard"),
 					damage = 12f,
-					healthGrowth = 40f,
-					healthRegen = 1.5f,
+					healthGrowth = 48f,
+					healthRegen = 2.5f,
 					jumpCount = 1,
 					jumpPower = 17f,
 					acceleration = 80f,
@@ -36,16 +36,16 @@ namespace Dancer.Modules.Survivors
 					subtitleNameToken = "NDP_DANCER_BODY_SUBTITLE",
 					podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
 				});
-				//Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_acrid_step_sprint";
+				Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_treeBot_step";
 				//Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericLargeFootstepDust");
 				//Dancer.characterPrefab.GetComponent<SfxLocator>().fallDamageSound = "RidleyLandFallDamage";
 				Dancer.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 5f;
 				Dancer.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
-				//Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "RidleyLand";
+				Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "DancerLand";
 				Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
 				characterPrefab.AddComponent<WeaponAnimator>();
 
-				Material material = Assets.CreateMaterial("matDancer");
+				Material material = Assets.CreateMaterial("matDancer", 0.005f, Color.magenta);
 				Dancer.bodyRendererIndex = 0;
 				Prefabs.SetupCharacterModel(Dancer.characterPrefab, new CustomRendererInfo[]
 				{
@@ -106,7 +106,7 @@ namespace Dancer.Modules.Survivors
 		{
 			Skills.CreateSkillFamilies(Dancer.characterPrefab);
 			string str = "NDP";
-			Skills.AddPassiveSkill(Dancer.characterPrefab);
+			//Skills.AddPassiveSkill(Dancer.characterPrefab);
 			SkillDef skillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_PRIMARY_SLASH_NAME",
@@ -130,7 +130,34 @@ namespace Dancer.Modules.Survivors
 				requiredStock = 1,
 				stockToConsume = 1
 			});
+
+			SkillDef easySkillDef = Skills.CreateSkillDef(new SkillDefInfo
+			{
+				skillName = str + "_DANCER_BODY_PRIMARY_SLASH2_NAME",
+				skillNameToken = str + "_DANCER_BODY_PRIMARY_SLASH2_NAME",
+				skillDescriptionToken = str + "_DANCER_BODY_PRIMARY_SLASH2_DESCRIPTION",
+				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+				activationState = new SerializableEntityStateType(typeof(EasyM1Entry)),
+				activationStateMachineName = "Weapon",
+				baseMaxStock = 1,
+				baseRechargeInterval = 0f,
+				beginSkillCooldownOnSkillEnd = true,
+				canceledFromSprinting = false,
+				forceSprintDuringState = false,
+				fullRestockOnAssign = true,
+				interruptPriority = InterruptPriority.Any,
+				resetCooldownTimerOnUse = false,
+				isCombatSkill = true,
+				mustKeyPress = false,
+				cancelSprintingOnActivation = true,
+				rechargeStock = 1,
+				requiredStock = 1,
+				stockToConsume = 1
+			});
+
 			Skills.AddPrimarySkill(Dancer.characterPrefab, skillDef);
+			Skills.AddPrimarySkill(Dancer.characterPrefab, easySkillDef);
+
 			SkillDef skillDef2 = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_SECONDARY_SLASH_NAME",
@@ -140,7 +167,7 @@ namespace Dancer.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(SpinnyMove)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
-				baseRechargeInterval = 7f,
+				baseRechargeInterval = 6f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
@@ -181,9 +208,33 @@ namespace Dancer.Modules.Survivors
 				requiredStock = 1,
 				stockToConsume = 1
 			});
+			SkillDef skillDef32 = Skills.CreateSkillDef(new SkillDefInfo
+			{
+				skillName = str + "_DANCER_BODY_UTILITY_PULL2_NAME",
+				skillNameToken = str + "_DANCER_BODY_UTILITY_PULL2_NAME",
+				skillDescriptionToken = str + "_DANCER_BODY_UTILITY_PULL2_DESCRIPTION",
+				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
+				activationState = new SerializableEntityStateType(typeof(DragonLunge2)),
+				activationStateMachineName = "Body",
+				baseMaxStock = 1,
+				baseRechargeInterval = 6f,
+				beginSkillCooldownOnSkillEnd = true,
+				canceledFromSprinting = false,
+				forceSprintDuringState = false,
+				fullRestockOnAssign = true,
+				interruptPriority = InterruptPriority.PrioritySkill,
+				resetCooldownTimerOnUse = false,
+				isCombatSkill = true,
+				mustKeyPress = false,
+				cancelSprintingOnActivation = true,
+				rechargeStock = 1,
+				requiredStock = 1,
+				stockToConsume = 1
+			});
 			Skills.AddUtilitySkills(Dancer.characterPrefab, new SkillDef[]
 			{
-				skillDef3
+				skillDef3,
+				skillDef32,
 			});
 			SkillDef skillDef4 = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -191,10 +242,10 @@ namespace Dancer.Modules.Survivors
 				skillNameToken = str + "_DANCER_BODY_SPECIAL_RIBBON_NAME",
 				skillDescriptionToken = str + "_DANCER_BODY_SPECIAL_RIBBON_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
-				activationState = new SerializableEntityStateType(typeof(Skewer)),
+				activationState = new SerializableEntityStateType(typeof(FireChainRibbons)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
-				baseRechargeInterval = 9f,
+				baseRechargeInterval = 20f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,

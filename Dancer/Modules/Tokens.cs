@@ -26,25 +26,30 @@ namespace Dancer.Modules
 
             #region Primary
             LanguageAPI.Add(prefix + "PRIMARY_SLASH_NAME", "Primary");
-            LanguageAPI.Add(prefix + "PRIMARY_SLASH_DESCRIPTION",  $"melee attack based on aim inputs");
+            LanguageAPI.Add(prefix + "PRIMARY_SLASH_DESCRIPTION",  $"Melee attack based on aim inputs.");
 
+            LanguageAPI.Add(prefix + "PRIMARY_SLASH2_NAME", "Primary2");
+            LanguageAPI.Add(prefix + "PRIMARY_SLASH2_DESCRIPTION", $"Simpler melee attacks based on aim inputs. (gameplay is designed around regular primary but u can use this if u want)");
             #endregion
 
             #region Secondary
             LanguageAPI.Add(prefix + "SECONDARY_SLASH_NAME", "Secondary");
-            LanguageAPI.Add(prefix + "SECONDARY_SLASH_DESCRIPTION", $"hit 3 times");
+            LanguageAPI.Add(prefix + "SECONDARY_SLASH_DESCRIPTION", $"Dash in a target direction and strike <style=cIsDamage>3</style> times, each dealing <style=cIsDamage>{250}% damage</style>");
 
             #endregion
 
             #region Utility
             LanguageAPI.Add(prefix + "UTILITY_PULL_NAME", "Utility");
-            LanguageAPI.Add(prefix + "UTILITY_PULL_DESCRIPTION", $"extend weapon. pulls u and enemies to where it hits the ground");
+            LanguageAPI.Add(prefix + "UTILITY_PULL_DESCRIPTION", $"Extend your lance in a target direction, dealing <style=cIsDamage>{375}% damage to all enemies hit, </style> <style=cIsUtility>pulling them and yourself to the tip.</style>");
+
+            LanguageAPI.Add(prefix + "UTILITY_PULL2_NAME", "UtilityForMultiplayerBecauseIHateNetworking");
+            LanguageAPI.Add(prefix + "UTILITY_PULL_DESCRIPTION", $"Extend your lance in a target direction, dealing <style=cIsDamage>{500}% damage to an enemy, </style> <style=cIsUtility>pulling yourself to them.</style> (ideal in multiplayer if you arent the host)");
 
             #endregion
 
             #region Special
             LanguageAPI.Add(prefix + "SPECIAL_RIBBON_NAME", "Special");
-            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_DESCRIPTION", $"shoot ribbon that holds enemy in place. attacking ribboned targets extends the ribbon");
+            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_DESCRIPTION", $"Fire a ribbon that leaves enemies </style> <style=cIsUtility>unable to act.</style> Attacking ribboned enemies <style=cIsHealing>heals you </style>and <style=cIsDamage>extends the ribbon.</style>");
 
             #endregion
 

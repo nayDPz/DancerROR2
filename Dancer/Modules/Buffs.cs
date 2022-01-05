@@ -10,9 +10,13 @@ namespace Dancer.Modules
     {
         internal static List<BuffDef> buffDefs = new List<BuffDef>();
 
+        internal static BuffDef ribbonDebuff;
+        internal static float ribbonDebuffDuration = 15f;
+        internal static float ribbonSpreadRange = 50f;
+
         internal static void RegisterBuffs()
         {
-
+            ribbonDebuff = AddNewBuff("RibbonDebuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.magenta, false, true);
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

@@ -17,18 +17,17 @@
     <None Remove="assets" />
     <None Remove="dancerassets" />
     <None Remove="dancerassets.manifest" />
+    <None Remove="DancerBank.bnk" />
     <None Remove="Dancersurvivorassets" />
     <None Remove="dancersurvivorassets - Copy" />
-    <None Remove="HenryBank.bnk" />
     <None Remove="Modules\Survivors\Henry.cs~RF6221a098.TMP" />
-    <None Remove="DancerBank.bnk" />
     <None Remove="RidleyBank.bnk" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="dancerassets" />
     <EmbeddedResource Include="dancerassets.manifest" />
-    <EmbeddedResource Include="HenryBank.bnk" />
+    <EmbeddedResource Include="DancerBank.bnk" />
     <EmbeddedResource Include="RidleyBank.bnk" />
   </ItemGroup>
 

@@ -15,7 +15,10 @@ namespace Dancer.SkillStates
 		public bool earlyExitJump;
 		public string critHitSoundString;
 		private bool crit;
+		protected bool canMove = false;
 		private List<HealthComponent> hits;
+		protected EntityState nextState;
+
 		public override void OnEnter()
 		{
 			base.OnEnter();
@@ -130,12 +133,14 @@ namespace Dancer.SkillStates
 		{
 			if (!this.hasFired)
 			{
+
 				this.hasFired = true;
-				
+				this.PlaySwingEffect();
+				Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+
 				if (Util.HasEffectiveAuthority(base.gameObject))
 				{
-					this.PlaySwingEffect();
-					Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
+					
 					base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
 				}
 			}
@@ -281,7 +286,7 @@ namespace Dancer.SkillStates
 						this.animator.SetFloat("Slash.playbackRate", 0f);
 					}
 				}
-				if (!this.isAerial)
+				if (!this.isAerial && !this.canMove)
 				{
 					base.inputBank.moveVector = Vector3.zero;
 					if (this.isDash)
@@ -320,7 +325,7 @@ namespace Dancer.SkillStates
 				}
 				if (this.isAerial && base.characterMotor.isGrounded)
 				{
-					base.PlayCrossfade("FullBody, Override", "LandAerial", "Slash.playbackRate", this.duration, 0.05f);
+					//base.PlayCrossfade("FullBody, Override", "LandAerial", "Slash.playbackRate", this.duration, 0.05f);
 					this.outer.SetNextStateToMain();
 				}
 				else
@@ -330,7 +335,7 @@ namespace Dancer.SkillStates
 						EntityStateMachine e = base.GetComponent<EntityStateMachine>();
 						if (e && e.state is GenericCharacterMain)
 						{
-							if (base.inputBank.skill1.down && this.swingIndex != 2)
+							if (base.inputBank.skill1.down)
 							{
 								if (!this.hasFired)
 								{
@@ -353,15 +358,7 @@ namespace Dancer.SkillStates
 
 		protected virtual void SetNextState()
 		{
-			int num = this.swingIndex;
-			if (num == 0)
-			{
-				num = 1;
-				this.outer.SetNextState(new Jab2
-				{
-					swingIndex = num
-				});
-			}
+			this.outer.SetNextState(this.nextState);
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority()
@@ -371,7 +368,6 @@ namespace Dancer.SkillStates
 
 		public override void OnExit()
 		{
-			if(this.cancelled)
 			if (this.cancelled)
 				PlayAnimation("FullBody, Override", "BufferEmpty");
 
@@ -412,7 +408,7 @@ namespace Dancer.SkillStates
 		protected string swingSoundString = "";
 		protected string hitSoundString = "";
 
-		protected string muzzleString = "SwingCenter";
+		protected string muzzleString = "";
 		protected GameObject swingEffectPrefab;
 
 		protected GameObject hitEffectPrefab;

@@ -27,7 +27,7 @@ namespace Dancer.SkillStates
 			this.muzzleString = "Mouth";
 			this.cancelledFromSprinting = true;
 			this.earlyExitJump = true;
-			this.swingEffectPrefab = Assets.biteEffect;
+			this.swingEffectPrefab = Assets.dashAttackEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab3HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]

@@ -24,12 +24,12 @@ namespace Dancer.SkillStates
 			this.launchVectorOverride = true;
 			this.earlyExitJump = true;
 			this.stackGainAmount = 12;
-			this.swingSoundString = "DashAttack";
-			this.hitSoundString = "Jab3Hit";
+			this.swingSoundString = "ForwardAirStart";
+			this.hitSoundString = "WhipHit2";
 			this.critHitSoundString = "SwordHit3";
-			this.muzzleString = "Mouth";
-			this.swingEffectPrefab = Assets.biteEffect;
-			this.hitEffectPrefab = Assets.biteEffect;
+			this.muzzleString = "eDashAttack";
+			this.swingEffectPrefab = Assets.dashAttackEffect;
+			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.jab3HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
 			{

@@ -33,7 +33,7 @@ namespace Dancer.SkillStates
 		protected string swingSoundString = "";
 		protected string hitSoundString = "";
 
-		protected string muzzleString = "SwingCenter";
+		protected string muzzleString = "eUpAir1";
 		protected GameObject swingEffectPrefab;
 
 		protected GameObject hitEffectPrefab;
@@ -102,6 +102,9 @@ namespace Dancer.SkillStates
 			this.attack.hitBoxGroup = hitBoxGroup;
 			this.attack.isCrit = this.crit;
 			this.attack.impactSound = Modules.Assets.sword2HitSoundEvent.index;
+
+			this.swingSoundString = "DancerSwing1";
+			this.swingEffectPrefab = Modules.Assets.downTiltEffect;
 		}
 		private void StartAttack()
 		{
@@ -109,7 +112,7 @@ namespace Dancer.SkillStates
 			//Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.PlayCrossfade("FullBody, Override", this.animString, "Slash.playbackRate", this.duration * this.anim, 0.05f);
+			base.PlayAnimation("FullBody, Override", this.animString, "Slash.playbackRate", this.duration * this.anim);
 		}
 
 		public virtual void PlayHitSound()
@@ -302,6 +305,9 @@ namespace Dancer.SkillStates
 						this.hitboxName = "UpAir2";
 						this.pushForce = 1200f;
 						this.hitStopDuration = 0.125f;
+						this.muzzleString = "eUpAir2";
+						this.swingSoundString = "ForwardAirStart";
+						this.swingEffectPrefab = Modules.Assets.dashAttackEffect;
 
 						this.attack = new OverlapAttack();
 						this.attack.damageType = DamageType.BonusToLowHealth;
@@ -311,7 +317,7 @@ namespace Dancer.SkillStates
 						this.attack.damage = this.damageCoefficient * this.damageStat;
 						this.attack.procCoefficient = this.procCoefficient;
 						this.attack.hitEffectPrefab = this.hitEffectPrefab;
-
+						this.attack.impactSound = Modules.Assets.sword3HitSoundEvent.index;
 						this.attack.forceVector = Vector3.zero;
 						this.attack.pushAwayForce = 0f;
 

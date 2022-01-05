@@ -224,7 +224,7 @@ namespace Dancer.SkillStates
 						if (base.isGrounded && this.stopwatch >= this.minDropTime)
 						{
 							this.targetMoveVector = Vector3.zero;
-							this.dragEffect = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.groundDragEffect, base.FindModelChild("HandL").position, Util.QuaternionSafeLookRotation(Vector3.up));
+							//this.dragEffect = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.groundDragEffect, base.FindModelChild("HandL").position, Util.QuaternionSafeLookRotation(Vector3.up));
 							//this.dragEffect.transform.parent = base.FindModelChild("HandL");
 							this.finalAirTime = (this.stopwatch / this.maxAirTime);
 							if(Util.HasEffectiveAuthority(base.gameObject))

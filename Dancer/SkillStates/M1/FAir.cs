@@ -12,7 +12,7 @@ namespace Dancer.SkillStates
 		public bool hop;
 		public override void OnEnter()
 		{
-			Util.PlayAttackSpeedSound("FAir", base.gameObject, this.attackSpeedStat);
+			Util.PlayAttackSpeedSound("ForwardAirStart", base.gameObject, this.attackSpeedStat);
 			base.SmallHop(base.characterMotor, 5f);
 			this.anim = 1.15f;
 			this.baseDuration = 1f;
@@ -21,7 +21,7 @@ namespace Dancer.SkillStates
 			this.hitStopDuration = 0.15f;
 			this.attackRecoil = 6f;
 			this.hitHopVelocity = 12f;
-			this.damageCoefficient = 3.2f;
+			this.damageCoefficient = 3.4f;
 			this.hitStopDuration = 0.08f;
 			this.stackGainAmount = 3;
 			this.pushForce = 3500f;
@@ -29,14 +29,15 @@ namespace Dancer.SkillStates
 			this.isSus = true;
 			this.isFlinch = true;
 			this.launchVectorOverride = true;
-			this.swingSoundString = "Jab1";
+			this.swingSoundString = "SwordSwing3";
 			this.hitSoundString = "SwordHit3";
 			this.critHitSoundString = "SwordHit3";
-			this.swingEffectPrefab = Assets.ridleySwingEffect;
+			this.swingEffectPrefab = Assets.downTiltEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword1HitSoundEvent.index;
 			this.animString = "FAir";
 			this.hitboxName = "FAir";
+			this.muzzleString = "eFAir";
 			base.OnEnter();
 		}
 
@@ -71,7 +72,7 @@ namespace Dancer.SkillStates
 					if (body.GetComponent<SetStateOnHurt>() && component)
 					{
 						SpikedState newNextState = new SpikedState();
-						component.SetInterruptState(newNextState, InterruptPriority.Death);
+						component.SetInterruptState(newNextState, InterruptPriority.Pain);
 					}
 				}
 			}

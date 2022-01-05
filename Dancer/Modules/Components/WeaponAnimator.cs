@@ -11,7 +11,7 @@ public class WeaponAnimator : MonoBehaviour
     private Animator animator;
     private ModelLocator modelLocator;
     private Transform modelTransform;
-    private Transform weaponBase;
+    public Transform weaponBase;
     private Transform weaponExtender;
 
     private bool overrideRotation;

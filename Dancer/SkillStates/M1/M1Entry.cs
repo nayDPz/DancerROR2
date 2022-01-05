@@ -32,7 +32,7 @@ namespace Dancer.SkillStates
 				{
 					if (base.characterMotor.isGrounded)
 					{
-						this.outer.SetNextState(new DownTilt());
+						this.outer.SetNextState(new DownAirLand());
 					}
 					else if (y < -0.74f)
 					{

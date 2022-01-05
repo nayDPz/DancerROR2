@@ -44,6 +44,15 @@ namespace Dancer.Modules
 
             AddSkill(typeof(Skewer));
             AddSkill(typeof(SuspendedState));
+            AddSkill(typeof(SkeweredState));
+            AddSkill(typeof(RibbonedState));
+            AddSkill(typeof(SpikedState));
+            AddSkill(typeof(DragonLunge));
+            AddSkill(typeof(DragonLungeButEpic));
+            AddSkill(typeof(Pull));
+            AddSkill(typeof(PullDamage));
+            AddSkill(typeof(SpinnyMove));
+            AddSkill(typeof(FireChainRibbons));
 
             AddSkill(typeof(BaseM1));
             AddSkill(typeof(M1Entry));
@@ -52,6 +61,8 @@ namespace Dancer.Modules
             AddSkill(typeof(Jab3));
             AddSkill(typeof(DashAttack));
             AddSkill(typeof(DownTilt));
+            AddSkill(typeof(DownAir));
+            AddSkill(typeof(DownAirLand));
             AddSkill(typeof(FAir));
             AddSkill(typeof(NAir));
             AddSkill(typeof(UpAir));

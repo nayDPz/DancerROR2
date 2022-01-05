@@ -46,10 +46,10 @@ namespace Dancer.SkillStates
 			{
 				EffectManager.SimpleMuzzleFlash(FireFireball.effectPrefab, base.gameObject, "Mouth", false);
 			}
-			Projectiles.ridleyFireballPrefab.GetComponent<ProjectileExplosion>().explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
+			Projectiles.dancerRibbonProjectile.GetComponent<ProjectileExplosion>().explosionEffect = GlobalEventManager.CommonAssets.igniteOnKillExplosionEffectPrefab;
 			if (Util.HasEffectiveAuthority(base.gameObject))
 			{			
-				ProjectileManager.instance.FireProjectile(Projectiles.ridleyFireballPrefab, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * FireFireballs.damageCoefficient, FireFireballs.force, base.RollCrit(), DamageColorIndex.Default, null, -1f);
+				ProjectileManager.instance.FireProjectile(Projectiles.dancerRibbonProjectile, this.aimRay.origin, Util.QuaternionSafeLookRotation(this.aimRay.direction), base.gameObject, this.damageStat * FireFireballs.damageCoefficient, FireFireballs.force, base.RollCrit(), DamageColorIndex.Default, null, -1f);
 			}
 		}
 

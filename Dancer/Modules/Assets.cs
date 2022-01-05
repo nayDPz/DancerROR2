@@ -8,6 +8,8 @@ using RoR2.Audio;
 using System.Collections.Generic;
 using RoR2.UI;
 using RoR2.Projectile;
+using System.Linq;
+
 namespace Dancer.Modules
 {
     internal static class Assets
@@ -16,18 +18,22 @@ namespace Dancer.Modules
         internal static AssetBundle mainAssetBundle;
 
         internal static GameObject spikeGroundEffect;
-        internal static GameObject footDragEffect;
-        internal static GameObject groundDragEffect;
         // particle effects
-        internal static GameObject grabFireEffect;
-        internal static GameObject ridleySwingEffect;
-        internal static GameObject nairSwingEffect;
-        internal static GameObject swordHitImpactEffect;
-
-        internal static GameObject biteEffect;
+        internal static GameObject downAirEffect;
+        internal static GameObject downAirEndEffect;
+        internal static GameObject dashAttackEffect;
+        internal static GameObject downTiltEffect;
+        internal static GameObject dragonLungeEffect;
+        internal static GameObject dragonLungePullEffect;
+        internal static GameObject swingEffect;
+        internal static GameObject ribbonLine;
+        internal static GameObject ribbonedEffect;
 
         // networked hit sounds
         internal static NetworkSoundEventDef grabGroundSoundEvent;
+        internal static NetworkSoundEventDef lungeHitSoundEvent;
+        internal static NetworkSoundEventDef whip1HitSoundEvent;
+        internal static NetworkSoundEventDef whip2HitSoundEvent;
         internal static NetworkSoundEventDef sword1HitSoundEvent;
         internal static NetworkSoundEventDef sword2HitSoundEvent;
         internal static NetworkSoundEventDef sword3HitSoundEvent;
@@ -46,6 +52,11 @@ namespace Dancer.Modules
         public static Shader cloud = Resources.Load<Shader>("shaders/fx/hgcloudremap");
         public static Material commandoMat;
 
+        public static Dictionary<string, string> ShaderLookup = new Dictionary<string, string>()
+        {
+            {"stubbed hopoo games/deferred/standard", "shaders/deferred/hgstandard"},
+
+        };
         internal static void PopulateAssets()
         {
             if (mainAssetBundle == null)
@@ -56,7 +67,17 @@ namespace Dancer.Modules
                 }
             }
 
+            ShaderConversion(mainAssetBundle);
+            AttachControllerFinderToObjects(mainAssetBundle);
+
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("Dancer.RidleyBank.bnk"))
+            {
+                byte[] array = new byte[manifestResourceStream2.Length];
+                manifestResourceStream2.Read(array, 0, array.Length);
+                SoundAPI.SoundBanks.Add(array);
+            }
+
+            using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("Dancer.DancerBank.bnk"))
             {
                 byte[] array = new byte[manifestResourceStream2.Length];
                 manifestResourceStream2.Read(array, 0, array.Length);
@@ -66,13 +87,15 @@ namespace Dancer.Modules
             grabGroundSoundEvent = CreateNetworkSoundEventDef("GrabHitGround");
             sword1HitSoundEvent = CreateNetworkSoundEventDef("SwordHit1");
             sword2HitSoundEvent = CreateNetworkSoundEventDef("SwordHit2");
+            whip1HitSoundEvent = CreateNetworkSoundEventDef("WhipHit1");
+            whip2HitSoundEvent = CreateNetworkSoundEventDef("WhipHit2");
             sword3HitSoundEvent = CreateNetworkSoundEventDef("SwordHit3");
             jab1HitSoundEvent = CreateNetworkSoundEventDef("JabHit1");
             jab2HitSoundEvent = CreateNetworkSoundEventDef("JabHit2");
             jab3HitSoundEvent = CreateNetworkSoundEventDef("JabHit3");
             hit2SoundEvent = CreateNetworkSoundEventDef("Hit2");
             punchHitSoundEvent = CreateNetworkSoundEventDef("PunchHit");
-
+            lungeHitSoundEvent = CreateNetworkSoundEventDef("LungeHit");
 
             GameObject effect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam"), "DancerSpikeEffect");
             ShakeEmitter s = effect.GetComponent<ShakeEmitter>();
@@ -81,52 +104,47 @@ namespace Dancer.Modules
             if (s) GameObject.Destroy(s);
             spikeGroundEffect = effect;
 
+            downAirEffect = LoadEffect("DancerDAirEffect", true);
+            downAirEndEffect = LoadEffect("DancerDownAirEndEffect", true);
+            dashAttackEffect = LoadEffect("DancerDashAttackEffect", true);
+            downTiltEffect = LoadEffect("DancerDownTiltEffect", true);
+            dragonLungeEffect = LoadEffect("DancerDragonLungeEffect", true);
+            dragonLungePullEffect = LoadEffect("DancerDragonLungePullEffect", true);
+            swingEffect = LoadEffect("DancerSwingEffect", true);
+            ribbonedEffect = LoadEffect("RibbonedEffect", true);
 
-            GameObject b = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/projectileghosts/sunderghost"), "DancerGroundDrag");
-            if (b)
+            ribbonLine = mainAssetBundle.LoadAsset<GameObject>("RibbonLine");
+            ribbonLine.GetComponent<LineRenderer>().useWorldSpace = true;
+    }
+
+        public static void ShaderConversion(AssetBundle assets)
+        {
+            var materialAssets = assets.LoadAllAssets<Material>().Where(material => material.shader.name.StartsWith("Stubbed"));
+            foreach (Material material in materialAssets)
             {
-                GameObject.Destroy(b.GetComponent<ProjectileGhostController>());
-
-                var effectz = b.AddComponent<EffectComponent>();
-                effectz.applyScale = true;
-                effectz.effectIndex = EffectIndex.Invalid;
-                effectz.parentToReferencedTransform = true;
-                effectz.positionAtReferencedTransform = true;
-                groundDragEffect = b;
+                Debug.Log("replacing " + material.shader.name.ToLowerInvariant());
+                var replacementShader = Resources.Load<Shader>(ShaderLookup[material.shader.name.ToLowerInvariant()]);
+                if (replacementShader) { material.shader = replacementShader; }
             }
-
-            grabFireEffect = LoadEffect("GrabHandEffect");
-            grabFireEffect.AddComponent<DetachParticleOnDestroyAndEndEmission>();
-            GameObject f1 = grabFireEffect.transform.Find("Particle System").transform.Find("Fire Outer").gameObject;
-            f1.GetComponent<ParticleSystemRenderer>().material.shader = cloud;
-            Components.MaterialControllerComponents.HGControllerFinder c = f1.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
-            f1.AddComponent<DetachParticleOnDestroyAndEndEmission>().particleSystem = f1.GetComponent<ParticleSystem>();
-
-            GameObject f2 = grabFireEffect.transform.Find("Particle System").transform.Find("Fire Inner").gameObject;
-            f2.GetComponent<ParticleSystemRenderer>().material.shader = cloud;
-            f2.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
-            f2.AddComponent<DetachParticleOnDestroyAndEndEmission>().particleSystem = f2.GetComponent<ParticleSystem>();
-
-            ridleySwingEffect = Assets.LoadEffect("RidleySwingEffect", true);
-            swordHitImpactEffect = Assets.LoadEffect("ImpactHenrySlash");
-            nairSwingEffect = Assets.LoadEffect("RidleyNairEffect", true);
-            biteEffect = Assets.LoadEffect("RidleyBiteEffect", true);
         }
 
-        private static GameObject CreateTracer(string originalTracerName, string newTracerName)
+        public static void AttachControllerFinderToObjects(AssetBundle assetbundle)
         {
-            GameObject newTracer = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Effects/Tracers/" + originalTracerName), newTracerName, true);
+            if (!assetbundle) { return; }
 
-            if (!newTracer.GetComponent<EffectComponent>()) newTracer.AddComponent<EffectComponent>();
-            if (!newTracer.GetComponent<VFXAttributes>()) newTracer.AddComponent<VFXAttributes>();
-            if (!newTracer.GetComponent<NetworkIdentity>()) newTracer.AddComponent<NetworkIdentity>();
+            var gameObjects = assetbundle.LoadAllAssets<GameObject>();
 
-            newTracer.GetComponent<Tracer>().speed = 250f;
-            newTracer.GetComponent<Tracer>().length = 50f;
+            foreach (GameObject gameObject in gameObjects)
+            {
+                var foundRenderers = gameObject.GetComponentsInChildren<Renderer>().Where(x => x.sharedMaterial && x.sharedMaterial.shader.name.StartsWith("Hopoo Games"));
 
-            AddNewEffectDef(newTracer);
+                foreach (Renderer renderer in foundRenderers)
+                {
+                    var controller = renderer.gameObject.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
+                }
+            }
 
-            return newTracer;
+            gameObjects = null;
         }
 
         internal static NetworkSoundEventDef CreateNetworkSoundEventDef(string eventName)

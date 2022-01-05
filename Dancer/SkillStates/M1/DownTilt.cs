@@ -9,7 +9,7 @@ namespace Dancer.SkillStates
 	{
 		public override void OnEnter()
 		{
-			this.anim = 1f;
+			this.anim = 2f;
 			this.baseDuration = 0.4f;
 			this.attackStartTime = 0f;
 			this.attackEndTime = 0.4f;
@@ -23,15 +23,16 @@ namespace Dancer.SkillStates
 			this.pushForce = 1900f;
 			this.launchVectorOverride = true;
 			this.isFlinch = true;
+			this.canMove = false;
 			this.earlyExitJump = true;
 			this.swingSoundString = "DownTilt";
 			this.hitSoundString = "SwordHit";
 			this.critHitSoundString = "SwordHit2";
-			this.muzzleString = "DTilt";
-			this.swingEffectPrefab = Assets.ridleySwingEffect;
+			this.swingEffectPrefab = Assets.downTiltEffect;
 			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
 			this.impactSound = Assets.sword1HitSoundEvent.index;
 			this.animString = "DownTilt";
+			this.muzzleString = "eDownTilt";
 			this.hitboxName = "DownTilt";
 			this.hitHopVelocity = 11f;
 			base.OnEnter();
