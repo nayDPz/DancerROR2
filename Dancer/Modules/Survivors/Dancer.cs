@@ -43,7 +43,7 @@ namespace Dancer.Modules.Survivors
 				Dancer.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
 				Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "DancerLand";
 				Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
-				characterPrefab.AddComponent<WeaponAnimator>();
+				characterPrefab.AddComponent<DancerComponent>();
 
 				Material material = Assets.CreateMaterial("matDancer", 0.005f, Color.magenta);
 				Dancer.bodyRendererIndex = 0;
@@ -243,9 +243,9 @@ namespace Dancer.Modules.Survivors
 				skillDescriptionToken = str + "_DANCER_BODY_SPECIAL_RIBBON_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
 				activationState = new SerializableEntityStateType(typeof(FireChainRibbons)),
-				activationStateMachineName = "Body",
+				activationStateMachineName = "Weapon",
 				baseMaxStock = 1,
-				baseRechargeInterval = 20f,
+				baseRechargeInterval = 18f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,

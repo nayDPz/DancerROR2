@@ -12,19 +12,19 @@ namespace Dancer.SkillStates
 		{
 			this.anim = 1f;
 			this.baseDuration = 0.625f;
-			this.attackStartTime = 0.26f;
+			this.attackStartTime = 0.21f;
 			this.attackEndTime = 0.6f;
 			this.hitStopDuration = 0.025f;
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = 3.75f;
 			this.damageType = RoR2.DamageType.BonusToLowHealth;
-			this.hitStopDuration = 0.25f;
+			this.hitStopDuration = 0.0f;
 			this.pushForce = 1800f;
 			this.launchVectorOverride = true;
 			this.earlyExitJump = true;
 			this.stackGainAmount = 12;
-			this.swingSoundString = "ForwardAirStart";
+			this.swingSoundString = "SwordSwing3";
 			this.hitSoundString = "WhipHit2";
 			this.critHitSoundString = "SwordHit3";
 			this.muzzleString = "eDashAttack";
@@ -44,7 +44,13 @@ namespace Dancer.SkillStates
 			base.OnEnter();
 		}
 
-		public override void OnHitEnemyAuthority(List<HurtBox> list)
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+
+			base.characterDirection.forward = this.slideVector;
+        }
+        public override void OnHitEnemyAuthority(List<HurtBox> list)
 		{
 			foreach (HurtBox hurtBox in list)
 			{
@@ -62,7 +68,7 @@ namespace Dancer.SkillStates
 		public override void LaunchEnemy(CharacterBody body)
 		{
 			
-			Vector3 direction = base.characterDirection.forward * 15f + Vector3.up * 7.5f;
+			Vector3 direction = base.characterDirection.forward * 8f + Vector3.up * 10f;
 			Vector3 launchVector = (direction + base.transform.position) - body.transform.position;
 			launchVector = launchVector.normalized;
 			

@@ -50,7 +50,7 @@ namespace Dancer.SkillStates
         private Animator animator;
         private float stopwatch;
 
-        private WeaponAnimator weaponAnimator;
+        private DancerComponent weaponAnimator;
 
         public override void OnEnter()
         {
@@ -59,7 +59,7 @@ namespace Dancer.SkillStates
             if (base.characterBody && NetworkServer.active) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
 
             this.animator = base.GetModelAnimator();
-            this.weaponAnimator = base.GetComponent<WeaponAnimator>();
+            this.weaponAnimator = base.GetComponent<DancerComponent>();
 
             this.distance = (base.transform.position - this.target.coreTransform.position).magnitude;
             this.direction = (this.target.coreTransform.position - base.transform.position).normalized;

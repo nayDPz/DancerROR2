@@ -104,14 +104,24 @@ namespace Dancer.Modules
             if (s) GameObject.Destroy(s);
             spikeGroundEffect = effect;
 
-            downAirEffect = LoadEffect("DancerDAirEffect", true);
+            GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>("DancerDAirEffect");
+            newEffect.AddComponent<DestroyOnTimer>().duration = 12;
+            newEffect.AddComponent<NetworkIdentity>();
+            newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            downAirEffect = newEffect;
+
             downAirEndEffect = LoadEffect("DancerDownAirEndEffect", true);
             dashAttackEffect = LoadEffect("DancerDashAttackEffect", true);
             downTiltEffect = LoadEffect("DancerDownTiltEffect", true);
             dragonLungeEffect = LoadEffect("DancerDragonLungeEffect", true);
             dragonLungePullEffect = LoadEffect("DancerDragonLungePullEffect", true);
             swingEffect = LoadEffect("DancerSwingEffect", true);
-            ribbonedEffect = LoadEffect("RibbonedEffect", true);
+
+            newEffect = mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect");
+            newEffect.AddComponent<DestroyOnTimer>().duration = 12;
+            newEffect.AddComponent<NetworkIdentity>();
+            newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
+            ribbonedEffect = newEffect;
 
             ribbonLine = mainAssetBundle.LoadAsset<GameObject>("RibbonLine");
             ribbonLine.GetComponent<LineRenderer>().useWorldSpace = true;
@@ -230,6 +240,7 @@ namespace Dancer.Modules
         {
             return LoadEffect(resourceName, "", parentToTransform);
         }
+
 
         private static GameObject LoadEffect(string resourceName, string soundName, bool parentToTransform)
         {

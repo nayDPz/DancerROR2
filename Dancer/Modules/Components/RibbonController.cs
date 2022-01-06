@@ -12,7 +12,7 @@ namespace Dancer.Modules.Components
 	public class RibbonController : NetworkBehaviour
 	{
 		private EntityStateMachine ownerMachine;
-		private float damageCoefficient = 1f;
+		private float damageCoefficient = 3f;
 		private void Awake()
 		{
 			
@@ -83,7 +83,7 @@ namespace Dancer.Modules.Components
 
 				if (!this.nextHealthComponent.alive)
 				{
-					this.NetworktargetRoot = null;
+					this.NetworknextRoot = null;
 				}
 			}						
 		}
@@ -147,10 +147,31 @@ namespace Dancer.Modules.Components
 		}
 
 		private void FixedUpdate()
-		{			
+		{
+			if(this.nextRoot == this.ownerRoot || this.previousRoot == this.ownerRoot)
+            {
+				Debug.LogError("Ribbon got fucked up real bad, destroying");
+				Destroy(this);
+				return;
+			}
+
+			if (this.nextRoot == this.previousRoot && this.nextRoot != null)
+            {
+				Debug.LogError("Ribbon's next target and previous target were the same!");
+				this.nextRoot = null;
+			}
+				
+
 			if (this.nextRoot && this.ownerRoot)
 			{
-				if(this.startRibbonWhenAvailable)
+
+				if (this.nextRoot.GetComponent<RibbonController>() && !this.nextRoot.GetComponent<RibbonController>().previousRoot)
+				{
+					Debug.Log("Setting " + nextRoot.name + "'s previous to " + ownerRoot.name);
+					this.nextRoot.GetComponent<RibbonController>().previousRoot = this.ownerRoot;
+				}
+
+				if (this.startRibbonWhenAvailable)
                 {
 					this.startRibbonWhenAvailable = false;
 					this.ribbonInstace = UnityEngine.Object.Instantiate<GameObject>(this.ribbonPrefab, this.ownerBody.corePosition, Quaternion.identity);
@@ -171,16 +192,10 @@ namespace Dancer.Modules.Components
 					return;
 				}
 
-				if(this.nextRoot.GetComponent<RibbonController>())
-                {
-					this.nextRoot.GetComponent<RibbonController>().previousRoot = this.ownerRoot;
-				}
+				
 
 			}
-			else if (NetworkServer.active)
-			{
-				//UnityEngine.Object.Destroy(base.gameObject);
-			}
+
 			if(!this.nextRoot)
             {
 				if (this.ribbonInstace)
@@ -191,16 +206,7 @@ namespace Dancer.Modules.Components
 				this.attachStopwatch = 0f;
             }
 
-			if (!(this.ownerMachine.state is RibbonedState) && CanBeRibboned(ownerBody))
-			{
-				this.destroyStopwatch += Time.fixedDeltaTime;
-			}
-			else if(!CanBeRibboned(ownerBody) && !ownerBody.HasBuff(Modules.Buffs.ribbonDebuff))
-				this.destroyStopwatch += Time.fixedDeltaTime;
-			else
-				this.destroyStopwatch = 0f;
-
-			if (this.destroyStopwatch >= this.destroyTime || !ownerBody.HasBuff(Modules.Buffs.ribbonDebuff))
+			if (!ownerBody.HasBuff(Modules.Buffs.ribbonDebuff))
 				Destroy(this);
 
 		}
@@ -211,18 +217,55 @@ namespace Dancer.Modules.Components
             {
 				GameObject.Destroy(this.ribbonInstace);
             }
-			if(this.nextRoot && this.ownerRoot && this.previousRoot)
-            {
-				RibbonController next = this.nextRoot.GetComponent<RibbonController>();
-				RibbonController previous = this.previousRoot.GetComponent<RibbonController>();
-				if(next)
-					next.previousRoot = this.previousRoot;
-				if(previous)
-					previous.nextRoot = this.nextRoot;
 
-				if (false)//!next) //need to figure out how to attach even on death
-					AttachRibbon();
-            }
+			
+			if(this.nextRoot)
+            {
+                RibbonController next = this.nextRoot.GetComponent<RibbonController>();
+				if (next && this.previousRoot != this.ownerRoot && this.previousRoot != this.nextRoot)
+				{
+					if (this.previousRoot)
+                    {
+						next.previousRoot = this.previousRoot;
+						Debug.Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s previous, " + previousRoot.name);
+					}
+						
+					else
+                    {
+						next.previousRoot = null;
+						Debug.Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s null");
+					}
+						
+
+					
+				}
+			}
+			if(this.previousRoot)
+            {
+				RibbonController previous = this.previousRoot.GetComponent<RibbonController>();
+
+
+				if (previous && this.nextRoot != this.ownerRoot && this.nextRoot != this.previousRoot)
+				{
+					if (this.nextRoot)
+                    {
+						previous.nextRoot = this.nextRoot;
+						Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s next, " + nextRoot.name);
+					}
+						
+					else
+                    {
+						previous.nextRoot = null;
+						Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s null");
+					}
+						
+
+					
+				}
+			}
+			
+				
+            
         }
 
 		private bool CanBeRibboned(CharacterBody body)
@@ -233,7 +276,7 @@ namespace Dancer.Modules.Components
 		{
 		}
 
-		public GameObject NetworktargetRoot
+		public GameObject NetworknextRoot
 		{
 			get
 			{
@@ -345,7 +388,7 @@ namespace Dancer.Modules.Components
 		{
 			if (!this.___nextRootNetId.IsEmpty())
 			{
-				this.NetworktargetRoot = ClientScene.FindLocalObject(this.___nextRootNetId);
+				this.NetworknextRoot = ClientScene.FindLocalObject(this.___nextRootNetId);
 			}
 			if (!this.___ownerRootNetId.IsEmpty())
 			{
@@ -357,7 +400,7 @@ namespace Dancer.Modules.Components
 			}
 		}
 
-		private float destroyTime = 2f;
+		private float destroyTime = 0.5f;
 		private float destroyStopwatch;
 
 		private GameObject ribbonPrefab;
@@ -374,7 +417,7 @@ namespace Dancer.Modules.Components
 		public GameObject inflictorRoot;
 		private CharacterBody inflictorBody;
 
-		public float attachTime = 0.25f;
+		public float attachTime = 0.15f;
 
 		private float fixedAttachStopwatch;
 

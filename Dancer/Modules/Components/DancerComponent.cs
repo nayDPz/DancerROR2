@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using RoR2;
-public class WeaponAnimator : MonoBehaviour
+public class DancerComponent : MonoBehaviour
 {
     float leftFootPositionWeight;
     float leftFootRotationWeight;

@@ -22,7 +22,7 @@ namespace Dancer.SkillStates
 		protected string animString = "DownAir";
 		protected string hitboxName = "DownAir";
 		protected DamageType damageType = DamageType.Generic;
-		protected float damageCoefficient = 1.5f;
+		protected float damageCoefficient = 2.1f;
 		protected float procCoefficient = 0.5f;
 		protected float pushForce = 500f;
 		protected float baseDuration = 1.3f;

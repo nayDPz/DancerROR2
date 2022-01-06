@@ -34,7 +34,7 @@ namespace Dancer.Modules
 
             #region Secondary
             LanguageAPI.Add(prefix + "SECONDARY_SLASH_NAME", "Secondary");
-            LanguageAPI.Add(prefix + "SECONDARY_SLASH_DESCRIPTION", $"Dash in a target direction and strike <style=cIsDamage>3</style> times, each dealing <style=cIsDamage>{250}% damage</style>");
+            LanguageAPI.Add(prefix + "SECONDARY_SLASH_DESCRIPTION", $"Dash in a target direction and strike <style=cIsDamage>3</style> times, each dealing <style=cIsDamage>{250}% damage</style> and <style=cIsUtility>reducing the cooldown by 1 second</style> if it hits.");
 
             #endregion
 

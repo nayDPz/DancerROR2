@@ -10,12 +10,13 @@ namespace Dancer.SkillStates
 {
     public class DragonLunge : BaseSkillState
     {
+        public static float cooldownOnMiss = 0.5f;
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
         public static float damageCoefficient = 3.75f;
         public static float procCoefficient = 1f;
-        public static float baseDuration = 0.8f;
+        public static float baseDuration = 0.7f;
         public static float force = 0f;
         public static float recoil = 1f;
         public static float range = 62f;
@@ -23,7 +24,7 @@ namespace Dancer.SkillStates
         public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
-        private WeaponAnimator weaponAnimator;
+        private DancerComponent weaponAnimator;
 
         private bool hitWorld;
         private float stopwatch;
@@ -41,7 +42,7 @@ namespace Dancer.SkillStates
         {
             base.OnEnter();
 
-            this.weaponAnimator = base.GetComponent<WeaponAnimator>();
+            this.weaponAnimator = base.GetComponent<DancerComponent>();
 
             base.StartAimMode(2f);
             this.duration = DragonLunge.baseDuration / this.attackSpeedStat;
@@ -196,6 +197,10 @@ namespace Dancer.SkillStates
 
                     if (this.hitWorld || hitEnemy)
                         this.OnHitAnyAuthority();
+                    else
+                    {
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge.cooldownOnMiss;
+                    }
 
                     Vector3 between = this.hitPoint - base.transform.position;
                     if (this.hitPoint != Vector3.zero && between.magnitude > 0f)

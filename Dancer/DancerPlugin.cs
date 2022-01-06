@@ -169,7 +169,7 @@ namespace Dancer
                     if(self.body.HasBuff(Modules.Buffs.ribbonDebuff))
                     {
                         if(damageInfo.damage > 0f)
-                            damageInfo.attacker.GetComponent<CharacterBody>().healthComponent.HealFraction(.01f, default(ProcChainMask));
+                            damageInfo.attacker.GetComponent<CharacterBody>().healthComponent.HealFraction(.03f * damageInfo.procCoefficient, default(ProcChainMask));
 
                         Vector3 position = self.body.corePosition;
                         RibbonController ribbon = self.GetComponent<RibbonController>();
@@ -179,29 +179,28 @@ namespace Dancer
                             bool isCrit = damageInfo.crit;
                             float damageValue = 0f * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage; //dmg co
                             TeamIndex teamIndex2 = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
-                            if (ribbon.nextRoot)
+                            if (ribbon.nextRoot) // orbs too damb buggy goddd
                             {
                                 CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
                                 if(body)
                                 {
-                                    LightningOrb lightningOrb = new LightningOrb();
-                                    lightningOrb.attacker = damageInfo.attacker;
-                                    lightningOrb.bouncedObjects = null;
-                                    lightningOrb.bouncesRemaining = 0;
-                                    lightningOrb.damageCoefficientPerBounce = 1f;
-                                    lightningOrb.damageColorIndex = DamageColorIndex.Item;
-                                    lightningOrb.damageValue = damageValue;
-                                    lightningOrb.isCrit = isCrit;
-                                    lightningOrb.lightningType = LightningOrb.LightningType.Ukulele;
-                                    lightningOrb.origin = damageInfo.position;
-                                    lightningOrb.procChainMask = default(ProcChainMask);
-                                    lightningOrb.procChainMask.AddProc(ProcType.Thorns);
-                                    lightningOrb.procCoefficient = 0f;
-                                    lightningOrb.range = 0f;
-                                    lightningOrb.teamIndex = teamIndex2;
-                                    lightningOrb.target = body.mainHurtBox;
-                                    lightningOrb.duration = 0.5f; //change to static value
-                                    OrbManager.instance.AddOrb(lightningOrb);
+                                    DancerOrb dancerOrb = new DancerOrb();
+                                    dancerOrb.attacker = damageInfo.attacker;
+                                    dancerOrb.bouncedObjects = null;
+                                    dancerOrb.bouncesRemaining = 0;
+                                    dancerOrb.damageCoefficientPerBounce = 1f;
+                                    dancerOrb.damageColorIndex = DamageColorIndex.Item;
+                                    dancerOrb.damageValue = damageValue;
+                                    dancerOrb.isCrit = isCrit;
+                                    dancerOrb.origin = damageInfo.position;
+                                    dancerOrb.procChainMask = default(ProcChainMask);
+                                    dancerOrb.procChainMask.AddProc(ProcType.Thorns);
+                                    dancerOrb.procCoefficient = 0f;
+                                    dancerOrb.range = 0f;
+                                    dancerOrb.teamIndex = teamIndex2;
+                                    dancerOrb.target = body.mainHurtBox;
+                                    dancerOrb.duration = 0.1f; //change to static value
+                                    OrbManager.instance.AddOrb(dancerOrb);
                                 }
                                 
                             }
@@ -216,20 +215,25 @@ namespace Dancer
                                 bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
                                 bullseyeSearch.filterByLoS = true;
                                 bullseyeSearch.RefreshCandidates();
-
+                                bullseyeSearch.FilterOutGameObject(self.gameObject);
                                 foreach (HurtBox hurtBox in bullseyeSearch.GetResults())
                                 {
                                     if (hurtBox.healthComponent && hurtBox.healthComponent.body)
                                     {
                                         if (hurtBox.healthComponent.body.HasBuff(Modules.Buffs.ribbonDebuff))
-                                            bullseyeSearch.FilterOutGameObject(self.gameObject);
+                                            bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
+                                        if (ribbon.previousRoot && ribbon.previousRoot == hurtBox.healthComponent.gameObject)
+                                            bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
                                     }
                                 }
                                 HurtBox target = bullseyeSearch.GetResults().FirstOrDefault<HurtBox>();
                                 if (target && target.healthComponent && target.healthComponent.body)
                                 {
+                                    
                                     ribbon.nextRoot = target.healthComponent.body.gameObject;
                                     ribbon.inflictorRoot = damageInfo.attacker;
+
+                                    Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
                                 }
                                 #endregion
                             }
@@ -255,6 +259,8 @@ namespace Dancer
                                 {
                                     if (hurtBox.healthComponent.body.HasBuff(Modules.Buffs.ribbonDebuff))
                                         bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
+                                    if (hurtBox.healthComponent.gameObject.GetComponent<RibbonController>())
+                                        bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
                                 }
                             }
                             HurtBox target = bullseyeSearch.GetResults().FirstOrDefault<HurtBox>();
@@ -262,6 +268,7 @@ namespace Dancer
                             {
                                 RibbonController newRibbon = self.gameObject.AddComponent<RibbonController>();
                                 newRibbon.nextRoot = target.healthComponent.body.gameObject;
+                                Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
                                 newRibbon.inflictorRoot = damageInfo.attacker;
                             }
                             #endregion

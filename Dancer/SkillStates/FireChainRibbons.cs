@@ -12,7 +12,7 @@ namespace Dancer.SkillStates
     {
         public static float damageCoefficient = 1f;
         public static float procCoefficient = 0.5f;
-        public static float baseDuration = 0.5f;
+        public static float baseDuration = 0.35f;
         public static float force = 0f;
         public static float recoil = 1f;
         public static float range = 62f;

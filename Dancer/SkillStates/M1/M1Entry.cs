@@ -11,20 +11,10 @@ namespace Dancer.SkillStates
 			base.OnEnter();
 			float y = base.inputBank.aimDirection.y;
 
-			if (base.characterBody.isSprinting && base.isGrounded)
+			
+			if (y > 0.575f)
 			{
-				this.outer.SetNextState(new DashAttack());
-			}
-			else if (y > 0.575f)
-			{
-				if (base.characterMotor.isGrounded)
-				{
-					this.outer.SetNextState(new UpAir()); //this.outer.SetNextState(new Jab1());
-				}
-				else
-				{
-					this.outer.SetNextState(new UpAir());
-				}
+				this.outer.SetNextState(new UpAir());
 			}
 			else
 			{
@@ -50,8 +40,13 @@ namespace Dancer.SkillStates
 						this.outer.SetNextState(new FAir());
 					}
 					else
-					{					
-						this.outer.SetNextState(new Jab1());
+					{
+						if (base.characterBody.isSprinting)
+						{
+							this.outer.SetNextState(new DashAttack());
+						}
+						else
+							this.outer.SetNextState(new Jab1());
 					}
 				}
 			}

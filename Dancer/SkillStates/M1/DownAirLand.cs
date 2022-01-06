@@ -20,7 +20,7 @@ namespace Dancer.SkillStates
 		protected float damageCoefficient = 3f;
 		protected float procCoefficient = 1f;
 		protected float pushForce = 1900f;
-		protected float baseDuration = 0.45f;
+		protected float baseDuration = 0.4f;
 		protected float attackStartTime = 0.0f;
 		protected float attackEndTime = 1f;
 		protected float hitStopDuration = 0.09f;
@@ -104,7 +104,7 @@ namespace Dancer.SkillStates
 			Util.PlayAttackSpeedSound("DancerDownTilt", base.gameObject, this.attackSpeedStat);
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.5f, 0.01f);
+			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.35f, 0.01f);
 		}
 		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
 		{
@@ -225,9 +225,39 @@ namespace Dancer.SkillStates
 
 		}
 
+		private void SetNextStateFromJump()
+		{
+			float y = base.inputBank.aimDirection.y;
+
+
+			if (y > 0.575f)
+			{
+				this.outer.SetNextState(new UpAir());
+			}
+			else
+			{
+				this.outer.SetNextState(new FAir());
+			}
+
+		}
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+
+			if (false)//!base.isGrounded && base.inputBank.jump.down)
+			{
+				if(this.inHitPause)
+                {
+					base.ConsumeHitStopCachedState(this.hitStopCachedState, base.characterMotor, this.animator);
+					base.characterMotor.velocity = this.storedVelocity;
+				}
+					
+				//this.SetNextStateFromJump();
+				this.outer.SetNextStateToMain();
+				this.cancelled = true;
+				return;
+			}
 
 			base.inputBank.moveVector = Vector3.zero;
 			this.hitPauseTimer -= Time.fixedDeltaTime;

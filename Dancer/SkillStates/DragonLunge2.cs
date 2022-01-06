@@ -23,7 +23,7 @@ namespace Dancer.SkillStates
         public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
-        private WeaponAnimator weaponAnimator;
+        private DancerComponent weaponAnimator;
         private CharacterBody hitTarget;
 
         private bool hitEnemy;
@@ -42,7 +42,7 @@ namespace Dancer.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-            this.weaponAnimator = base.GetComponent<WeaponAnimator>();
+            this.weaponAnimator = base.GetComponent<DancerComponent>();
 
             base.StartAimMode(2f);
             this.duration = DragonLunge2.baseDuration / this.attackSpeedStat;
@@ -193,7 +193,7 @@ namespace Dancer.SkillStates
             {
                 if (this.hasHit)
                 {
-                    Util.PlaySound("DSpecialPull", base.gameObject);
+                    Util.PlaySound("LungeDash", base.gameObject);
                     if (this.hitWorld)
                     {
                         float distance = Mathf.Max((this.hitPoint - base.transform.position).magnitude - 2f, 0);

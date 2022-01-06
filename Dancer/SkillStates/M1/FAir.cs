@@ -13,11 +13,11 @@ namespace Dancer.SkillStates
 		public override void OnEnter()
 		{
 			Util.PlayAttackSpeedSound("ForwardAirStart", base.gameObject, this.attackSpeedStat);
-			base.SmallHop(base.characterMotor, 5f);
-			this.anim = 1.15f;
-			this.baseDuration = 1f;
-			this.attackStartTime = 0.35f;
-			this.attackEndTime = 0.65f;
+			base.SmallHop(base.characterMotor, 4.5f);
+			this.anim = 1.08f;
+			this.baseDuration = 0.8f;
+			this.attackStartTime = 0.375f;
+			this.attackEndTime = 0.7f;
 			this.hitStopDuration = 0.15f;
 			this.attackRecoil = 6f;
 			this.hitHopVelocity = 12f;

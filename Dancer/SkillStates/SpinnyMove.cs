@@ -10,6 +10,7 @@ namespace Dancer.SkillStates
 {
     public class SpinnyMove : BaseSkillState
     {
+        public static float cooldownReductionOnHit = 1f;
         private Animator animator;
 
         private BaseState.HitStopCachedState hitStopCachedState;
@@ -40,7 +41,8 @@ namespace Dancer.SkillStates
 
         private float procCoefficient = 1f;
         private float damageCoefficient = 2.5f;
-        private float pushForce = 2325f;
+
+        private float pushForce = 2200f;
         private float attackRadius = 6f;
         private bool crit;
 
@@ -176,6 +178,9 @@ namespace Dancer.SkillStates
 
         private void OnHitEnemyAuthority()
         {
+            if(base.activatorSkillSlot.rechargeStopwatch >= 0f)
+                base.activatorSkillSlot.rechargeStopwatch += SpinnyMove.cooldownReductionOnHit;
+
             if (!this.inHitPause && this.hitStopDuration > 0f)
             {
                 this.storedVelocity = base.characterMotor.velocity;

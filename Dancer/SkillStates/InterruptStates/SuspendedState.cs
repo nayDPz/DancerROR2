@@ -28,6 +28,14 @@ namespace Dancer.SkillStates
 					base.rigidbodyMotor.moveVector = Vector3.zero;
 				}
 			}
+
+			foreach (EntityStateMachine e in base.gameObject.GetComponents<EntityStateMachine>())
+			{
+				if (e && e.customName.Equals("Weapon"))
+				{
+					e.SetNextStateToMain();
+				}
+			}
 		}
 		public override void OnExit()
 		{

@@ -14,6 +14,7 @@ namespace Dancer.SkillStates
 		public bool cancelledFromSprinting;
 		public bool earlyExitJump;
 		public string critHitSoundString;
+		private bool jumpCancelled;
 		private bool crit;
 		protected bool canMove = false;
 		private List<HealthComponent> hits;
@@ -76,7 +77,7 @@ namespace Dancer.SkillStates
 			base.PlayAnimation("FullBody, Override", this.animString, "Slash.playbackRate", this.duration * this.anim);
 			if (!this.isAerial)
 			{
-				base.inputBank.moveVector = Vector3.zero;
+				//base.inputBank.moveVector = Vector3.zero;
 				if (this.isDash)
 				{
 					base.characterMotor.moveDirection = Vector3.zero;
@@ -91,6 +92,7 @@ namespace Dancer.SkillStates
 				if (Util.HasEffectiveAuthority(base.gameObject))
 				{
 					base.characterMotor.velocity *= 0.2f;
+					//this.slideVector = base.inputBank.moveVector != Vector3.zero && !base.characterBody.isSprinting ? base.inputBank.moveVector.normalized : base.inputBank.aimDirection;// base.inputBank.aimDirection;
 					this.slideVector = base.inputBank.aimDirection;
 					this.slideVector.y = 0f;
 				}
@@ -107,7 +109,7 @@ namespace Dancer.SkillStates
                 }
                 this.hasHopped = true;
             }
-            if (!this.inHitPause && this.hitStopDuration > 0f)
+            if (!this.inHitPause && this.hitStopDuration > 0f && !this.jumpCancelled)
             {
                 this.storedVelocity = base.characterMotor.velocity;
                 this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, "Slash.playbackRate");
@@ -249,16 +251,50 @@ namespace Dancer.SkillStates
 			}
 		}
 
+		private void SetNextStateFromJump()
+        {
+			float y = base.inputBank.aimDirection.y;
+
+
+			if (y > 0.575f)
+			{
+				this.outer.SetNextState(new UpAir());
+			}
+			else if (y < -0.74f)
+			{
+				this.outer.SetNextState(new DownAir());
+			}
+			else
+			{
+				this.outer.SetNextState(new FAir());
+			}
+				
+		}
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
 
 			if(true)//NetworkServer.active)
             {
-				if (this.cancelledFromSprinting && base.characterBody.isSprinting && base.inputBank.skill1.down)
+                if (this.cancelledFromSprinting && (base.characterBody.isSprinting || base.inputBank.sprint.justPressed) && base.inputBank.skill1.down)
+                {
+                    this.outer.SetNextStateToMain();
+                    this.cancelled = true;
+                    return;
+                }
+				if (!base.isGrounded && this.isDash) // buggy
 				{
-					this.outer.SetNextStateToMain();
+					if(base.inputBank.jump.down)
+                    {
+						this.jumpCancelled = true;
+					}										
+				}
+				if(this.jumpCancelled && base.fixedAge >= this.duration * this.attackStartTime && !base.isGrounded)
+                {
 					this.cancelled = true;
+
+					this.SetNextStateFromJump();
 					return;
 				}
 
@@ -289,25 +325,20 @@ namespace Dancer.SkillStates
 				if (!this.isAerial && !this.canMove)
 				{
 					base.inputBank.moveVector = Vector3.zero;
-					if (this.isDash)
-					{
-						base.characterMotor.moveDirection = Vector3.zero;
-					}
-					else
-					{
-						base.characterMotor.moveDirection = Vector3.zero;
-					}
+					base.characterMotor.moveDirection = Vector3.zero;
 				}
 				if (this.isDash)
 				{
 					if (base.characterMotor && !this.inHitPause)
 					{
 						float num = this.dashSpeedCurve.Evaluate(this.stopwatch / this.duration);
-						float num2 = (!this.hasHopped) ? 1f : 0.4f;
+						float num2 = (!this.hasHopped) ? 1f : 0.65f;
 						base.characterDirection.forward = this.slideVector;
 						base.characterMotor.rootMotion += 0.6f * num2 * (this.slideRotation * (num * this.moveSpeedStat * this.slideVector * Time.fixedDeltaTime));
-						base.characterMotor.velocity.y = 0f;
+						if(!base.isGrounded && !this.jumpCancelled)
+							base.characterMotor.velocity.y = 0f;
 					}
+					
 				}
 				if (this.stopwatch >= this.duration * this.attackStartTime && this.stopwatch <= this.duration * this.attackEndTime)
 				{
@@ -323,35 +354,29 @@ namespace Dancer.SkillStates
 					}
 					this.FireAttack(); //this.FireAttack()
 				}
-				if (this.isAerial && base.characterMotor.isGrounded)
+
+				if (this.stopwatch >= this.duration - this.earlyExitTime && this.isCombo)
 				{
-					//base.PlayCrossfade("FullBody, Override", "LandAerial", "Slash.playbackRate", this.duration, 0.05f);
+					EntityStateMachine e = base.GetComponent<EntityStateMachine>();
+					if (e && e.state is GenericCharacterMain)
+					{
+						if (base.inputBank.skill1.down)
+						{
+							if (!this.hasFired)
+							{
+								this.FireAttack(); //this.FireAttack()
+							}
+							this.SetNextState();
+							return;
+						}
+					}
+
+				}
+				if (this.stopwatch >= this.duration)
+				{
 					this.outer.SetNextStateToMain();
 				}
-				else
-				{
-					if (this.stopwatch >= this.duration - this.earlyExitTime && this.isCombo)
-					{
-						EntityStateMachine e = base.GetComponent<EntityStateMachine>();
-						if (e && e.state is GenericCharacterMain)
-						{
-							if (base.inputBank.skill1.down)
-							{
-								if (!this.hasFired)
-								{
-									this.FireAttack(); //this.FireAttack()
-								}
-								this.SetNextState();
-								return;
-							}
-						}
-
-					}
-					if (this.stopwatch >= this.duration)
-					{
-						this.outer.SetNextStateToMain();
-					}
-				}
+				
 			}
 			
 		}
@@ -368,8 +393,13 @@ namespace Dancer.SkillStates
 
 		public override void OnExit()
 		{
+			if (!this.hasFired)
+				this.FireAttack();
 			if (this.cancelled)
+            {				
 				PlayAnimation("FullBody, Override", "BufferEmpty");
+			}
+				
 
 			base.GetAimAnimator().enabled = true;
 			this.animator.SetFloat("Slash.playbackRate", 1f);
