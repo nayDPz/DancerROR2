@@ -290,7 +290,7 @@ namespace Dancer.SkillStates
 						this.jumpCancelled = true;
 					}										
 				}
-				if(this.jumpCancelled && base.fixedAge >= this.duration * this.attackStartTime && !base.isGrounded)
+				if(this.jumpCancelled && base.fixedAge >= this.duration * (this.attackStartTime + this.attackEndTime) / 2f && !base.isGrounded)
                 {
 					this.cancelled = true;
 

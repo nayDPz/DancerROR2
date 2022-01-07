@@ -132,7 +132,7 @@ namespace Dancer.Modules
             var materialAssets = assets.LoadAllAssets<Material>().Where(material => material.shader.name.StartsWith("Stubbed"));
             foreach (Material material in materialAssets)
             {
-                Debug.Log("replacing " + material.shader.name.ToLowerInvariant());
+                //Debug.Log("replacing " + material.shader.name.ToLowerInvariant());
                 var replacementShader = Resources.Load<Shader>(ShaderLookup[material.shader.name.ToLowerInvariant()]);
                 if (replacementShader) { material.shader = replacementShader; }
             }

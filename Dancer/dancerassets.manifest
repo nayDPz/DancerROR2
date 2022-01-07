@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2650286024
+CRC: 3652898393
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fff92b89f0e942e44475bdd957c31edf
+    Hash: 7f68cfd1ac569418fe4bd583c8a8d67d
   TypeTreeHash:
     serializedVersion: 2
     Hash: 0bee7097113bb04123a1febaaed9617f
@@ -419,7 +419,6 @@ Assets:
 - Assets/RIDLEY RIDLEY RIDLEY/Effects/New Project (30).png
 - Assets/RIDLEY RIDLEY RIDLEY/Icons/Skins/texGreenSkin.png
 - Assets/HenryAssets/VFX/Textures/texLightning.tif
-- Assets/DancerAssets/texDancerIcon.png
 - Assets/RIDLEY RIDLEY RIDLEY/Materials/matMetaRidleyMetal.mat
 - Assets/DancerAssets/VFX/Shit.mat
 - Assets/DancerAssets/Animations/maskGesture.mask

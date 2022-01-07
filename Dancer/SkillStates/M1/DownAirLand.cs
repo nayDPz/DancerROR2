@@ -20,7 +20,7 @@ namespace Dancer.SkillStates
 		protected float damageCoefficient = 3f;
 		protected float procCoefficient = 1f;
 		protected float pushForce = 1900f;
-		protected float baseDuration = 0.4f;
+		protected float baseDuration = 0.55f;
 		protected float attackStartTime = 0.0f;
 		protected float attackEndTime = 1f;
 		protected float hitStopDuration = 0.09f;
@@ -104,7 +104,7 @@ namespace Dancer.SkillStates
 			Util.PlayAttackSpeedSound("DancerDownTilt", base.gameObject, this.attackSpeedStat);
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.35f, 0.01f);
+			base.PlayCrossfade("FullBody, Override", "DAirGround", "Slash.playbackRate", this.duration * 1.2f, 0.01f);
 		}
 		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
 		{
@@ -241,9 +241,27 @@ namespace Dancer.SkillStates
 
 		}
 
+		private bool jumpCancelled;
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+
+
+			if (!base.isGrounded) // buggy
+			{
+				if (base.inputBank.jump.down)
+				{
+					this.jumpCancelled = true;
+				}
+			}
+			if (this.jumpCancelled && base.fixedAge >= this.duration * (this.attackStartTime + this.attackEndTime) * 0.75f && !base.isGrounded)
+			{
+				this.cancelled = true;
+
+				this.SetNextStateFromJump();
+				return;
+			}
 
 			if (false)//!base.isGrounded && base.inputBank.jump.down)
 			{

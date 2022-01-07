@@ -31,11 +31,9 @@ public class DancerComponent : MonoBehaviour
         if (this.modelTransform)
         {
             this.weaponBase = modelTransform.Find("DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/Lance 1");
-            if(this.weaponBase)
-                Debug.Log("found dancer weapon");
+
             this.weaponExtender = modelTransform.Find("DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/Lance 1/Lance.001/Lance.002/Lance.003/Lance.004/Lance.005/Lance.006/Lance.007/Lance.008/LanceExtension");
-            if (this.weaponExtender)
-                Debug.Log("found dancer weapon extender");
+
         }
     }
 

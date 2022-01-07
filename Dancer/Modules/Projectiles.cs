@@ -21,12 +21,21 @@ namespace Dancer.Modules
             SphereCollider zs = dancerRibbonProjectile.GetComponent<SphereCollider>();
             zs.radius = 1.25f;
 
+            ProjectileController c = dancerRibbonProjectile.GetComponent<ProjectileController>();
+            GameObject ghostPrefab = PrefabAPI.InstantiateClone(Assets.mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect"), "RibbonProjectileGhost");
+            if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
+            if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
+            c.ghostPrefab = ghostPrefab;
+
             ProjectileSimple s = dancerRibbonProjectile.GetComponent<ProjectileSimple>();
             s.desiredForwardSpeed = 150f;
 
             ProjectileDamage d = dancerRibbonProjectile.GetComponent<ProjectileDamage>();
             d.damageType = DamageType.FruitOnHit;
 
+            ProjectileSingleTargetImpact i = dancerRibbonProjectile.GetComponent<ProjectileSingleTargetImpact>();
+            i.enemyHitSoundString = "WhipHit1";
+            i.hitSoundString = "LungeHit";
 
             Modules.Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
         }

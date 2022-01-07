@@ -12,7 +12,7 @@ namespace Dancer.Modules.Components
 	public class RibbonController : NetworkBehaviour
 	{
 		private EntityStateMachine ownerMachine;
-		private float damageCoefficient = 3f;
+		private float damageCoefficient = 1f;
 		private void Awake()
 		{
 			
@@ -69,6 +69,7 @@ namespace Dancer.Modules.Components
 				}
 				this.nextHealthComponent.body.AddTimedBuff(Modules.Buffs.ribbonDebuff, time);
 				EntityStateMachine component = this.nextRoot.GetComponent<EntityStateMachine>();
+				Util.PlaySound("WhipHit1", this.nextRoot.gameObject);
 				if (CanBeRibboned(this.nextHealthComponent.body) && component)
 				{
 
@@ -150,14 +151,14 @@ namespace Dancer.Modules.Components
 		{
 			if(this.nextRoot == this.ownerRoot || this.previousRoot == this.ownerRoot)
             {
-				Debug.LogError("Ribbon got fucked up real bad, destroying");
+				//Debug.LogError("Ribbon got fucked up real bad, destroying");
 				Destroy(this);
 				return;
 			}
 
 			if (this.nextRoot == this.previousRoot && this.nextRoot != null)
             {
-				Debug.LogError("Ribbon's next target and previous target were the same!");
+				//Debug.LogError("Ribbon's next target and previous target were the same!");
 				this.nextRoot = null;
 			}
 				
@@ -167,13 +168,14 @@ namespace Dancer.Modules.Components
 
 				if (this.nextRoot.GetComponent<RibbonController>() && !this.nextRoot.GetComponent<RibbonController>().previousRoot)
 				{
-					Debug.Log("Setting " + nextRoot.name + "'s previous to " + ownerRoot.name);
+					//Debug.Log("Setting " + nextRoot.name + "'s previous to " + ownerRoot.name);
 					this.nextRoot.GetComponent<RibbonController>().previousRoot = this.ownerRoot;
 				}
 
 				if (this.startRibbonWhenAvailable)
                 {
 					this.startRibbonWhenAvailable = false;
+					Util.PlaySound("Play_item_proc_whip", base.gameObject);
 					this.ribbonInstace = UnityEngine.Object.Instantiate<GameObject>(this.ribbonPrefab, this.ownerBody.corePosition, Quaternion.identity);
 					this.ribbonRenderer = this.ribbonInstace.GetComponent<LineRenderer>();
 					this.ribbonRenderer.positionCount = 2;
@@ -227,13 +229,13 @@ namespace Dancer.Modules.Components
 					if (this.previousRoot)
                     {
 						next.previousRoot = this.previousRoot;
-						Debug.Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s previous, " + previousRoot.name);
+						//Debug.Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s previous, " + previousRoot.name);
 					}
 						
 					else
                     {
 						next.previousRoot = null;
-						Debug.Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s null");
+						//Log("(ONDESTROY)- Setting " + nextRoot.name + "'s previous to " + ownerRoot.name + "'s null");
 					}
 						
 
@@ -250,13 +252,13 @@ namespace Dancer.Modules.Components
 					if (this.nextRoot)
                     {
 						previous.nextRoot = this.nextRoot;
-						Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s next, " + nextRoot.name);
+						//Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s next, " + nextRoot.name);
 					}
 						
 					else
                     {
 						previous.nextRoot = null;
-						Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s null");
+						//Debug.Log("(ONDESTROY)- Setting " + previousRoot.name + "'s next to " + ownerRoot.name + "'s null");
 					}
 						
 

@@ -67,13 +67,14 @@ namespace Dancer
             new Modules.ContentPacks().Initialize();
 
 
+            RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
 
             Hook();
         }
 
-        
 
-        private void Start()
+
+        private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
             Modules.Survivors.Dancer.SetItemDisplays();
         }
@@ -233,7 +234,7 @@ namespace Dancer
                                     ribbon.nextRoot = target.healthComponent.body.gameObject;
                                     ribbon.inflictorRoot = damageInfo.attacker;
 
-                                    Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
+                                    //Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
                                 }
                                 #endregion
                             }
@@ -268,7 +269,7 @@ namespace Dancer
                             {
                                 RibbonController newRibbon = self.gameObject.AddComponent<RibbonController>();
                                 newRibbon.nextRoot = target.healthComponent.body.gameObject;
-                                Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
+                                //Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
                                 newRibbon.inflictorRoot = damageInfo.attacker;
                             }
                             #endregion
@@ -282,7 +283,7 @@ namespace Dancer
                         self.body.AddTimedBuff(Modules.Buffs.ribbonDebuff, duration); 
 
                         EntityStateMachine component = self.body.GetComponent<EntityStateMachine>();
-                        if (self.body.GetComponent<SetStateOnHurt>() && self.body.GetComponent<SetStateOnHurt>().canBeFrozen && component)
+                        if (self.body.GetComponent<SetStateOnHurt>() && self.body.GetComponent<SetStateOnHurt>().canBeFrozen && component && !self.body.isChampion)
                         {
 
                             RibbonedState newNextState = new RibbonedState

@@ -315,7 +315,7 @@ namespace Dancer.Modules.Survivors
 		{
 			CharacterModel componentInChildren = Dancer.characterPrefab.GetComponentInChildren<CharacterModel>();
 			Dancer.itemDisplayRuleSet = ScriptableObject.CreateInstance<ItemDisplayRuleSet>();
-			Dancer.itemDisplayRuleSet.name = "idrsHenry";
+			Dancer.itemDisplayRuleSet.name = "idrsDancer";
 			componentInChildren.itemDisplayRuleSet = Dancer.itemDisplayRuleSet;
 		}
 		internal static void SetItemDisplays()
@@ -333,9 +333,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBugWings"),
 							childName = "Chest",
-							localPos = new Vector3(0.0009f, 0.2767f, -0.1f),
-							localAngles = new Vector3(21.4993f, 358.6616f, 358.3334f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+localPos = new Vector3(0.00477F, 0.10516F, -0.07228F),
+localAngles = new Vector3(341.0195F, 0F, 0F),
+localScale = new Vector3(0.35593F, 0.15914F, 0.12779F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -353,9 +353,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGoldGat"),
 							childName = "Chest",
-							localPos = new Vector3(0.1009f, 0.4728f, -0.1278f),
-							localAngles = new Vector3(22.6043f, 114.6042f, 299.1935f),
-							localScale = new Vector3(0.15f, 0.15f, 0.15f),
+localPos = new Vector3(0.19943F, 0.36153F, 0.04903F),
+localAngles = new Vector3(58.84191F, 250.4249F, 142.6867F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -373,9 +373,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBFG"),
 							childName = "Chest",
-							localPos = new Vector3(0.0782f, 0.4078f, 0f),
-							localAngles = new Vector3(0f, 0f, 313.6211f),
-							localScale = new Vector3(0.3f, 0.3f, 0.3f),
+localPos = new Vector3(0.10222F, 0.20518F, 0.05978F),
+localAngles = new Vector3(0F, 0F, 327.4607F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -393,9 +393,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGlasses"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1687f, 0.1558f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.3215f, 0.3034f, 0.3034f),
+localPos = new Vector3(0F, 0.12999F, 0.16031F),
+localAngles = new Vector3(9.15538F, 0F, 0F),
+localScale = new Vector3(0.3215F, 0.3034F, 0.3034F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -412,10 +412,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySyringeCluster"),
-							childName = "Chest",
-							localPos = new Vector3(-0.0534f, 0.0352f, 0f),
-							localAngles = new Vector3(0f, 0f, 83.2547f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.00565F, 0.18895F, -0.04959F),
+localAngles = new Vector3(352.4485F, 266.223F, 79.63069F),
+localScale = new Vector3(0.15F, 0.15F, 0.15F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -432,10 +432,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBehemoth"),
-							childName = "Gun",
-							localPos = new Vector3(0f, 0.2247f, -0.1174f),
-							localAngles = new Vector3(6.223f, 180f, 0f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+							childName = "Chest",
+localPos = new Vector3(0F, 0.2158F, -0.19895F),
+localAngles = new Vector3(6.223F, 180F, 330.578F),
+localScale = new Vector3(0.05801F, 0.07173F, 0.05726F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -453,9 +453,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMissileLauncher"),
 							childName = "Chest",
-							localPos = new Vector3(-0.3075f, 0.5204f, -0.049f),
-							localAngles = new Vector3(0f, 0f, 51.9225f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+localPos = new Vector3(-0.42134F, 0.52133F, 0.02885F),
+localAngles = new Vector3(2.35642F, 3.01076F, 51.98444F),
+localScale = new Vector3(0.1F, 0.12268F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -473,9 +473,19 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDagger"),
 							childName = "Chest",
-							localPos = new Vector3(-0.0553f, 0.2856f, 0.0945f),
-							localAngles = new Vector3(334.8839f, 31.5284f, 34.6784f),
-							localScale = new Vector3(1.2428f, 1.2428f, 1.2299f),
+localPos = new Vector3(0.27055F, 0.31367F, -0.03923F),
+localAngles = new Vector3(305.3635F, 11.31594F, 355.1549F),
+localScale = new Vector3(0.7F, 0.7F, 0.7F),
+							limbMask = LimbFlags.None
+						},
+						new ItemDisplayRule
+						{
+							ruleType = ItemDisplayRuleType.ParentedPrefab,
+							followerPrefab = ItemDisplays.LoadDisplay("DisplayDagger"),
+							childName = "Chest",
+localPos = new Vector3(-0.26105F, 0.30321F, -0.044F),
+localAngles = new Vector3(56.48328F, 175.5279F, 179.5179F),
+localScale = new Vector3(-0.7F, -0.7F, -0.7F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -493,9 +503,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayHoof"),
 							childName = "CalfL",
-							localPos = new Vector3(-0.0071f, 0.3039f, -0.051f),
-							localAngles = new Vector3(76.5928f, 0f, 0f),
-							localScale = new Vector3(0.0846f, 0.0846f, 0.0758f),
+localPos = new Vector3(-0.01997F, 0.78193F, 0.05326F),
+localAngles = new Vector3(87.04044F, 76.51312F, 243.9886F),
+localScale = new Vector3(0.13069F, 0.1303F, 0.13955F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -513,9 +523,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayUkulele"),
 							childName = "Chest",
-							localPos = new Vector3(-0.0011f, 0.1031f, -0.0901f),
-							localAngles = new Vector3(0f, 180f, 89.3997f),
-							localScale = new Vector3(0.4749f, 0.4749f, 0.4749f),
+localPos = new Vector3(-0.0011F, 0.1031F, -0.16005F),
+localAngles = new Vector3(9.29676F, 174.7346F, 24.99983F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -533,9 +543,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMask"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1748f, 0.0937f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.6313f, 0.6313f, 0.6313f),
+localPos = new Vector3(0.00301F, 0.12038F, 0.056F),
+localAngles = new Vector3(7.80833F, 0F, 0F),
+localScale = new Vector3(0.73147F, 0.6313F, 1.33377F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -553,9 +563,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMushroom"),
 							childName = "UpperArmR",
-							localPos = new Vector3(-0.0139f, 0.1068f, 0f),
-							localAngles = new Vector3(0f, 0f, 89.4525f),
-							localScale = new Vector3(0.0501f, 0.0501f, 0.0501f),
+localPos = new Vector3(-0.00688F, 0.15733F, -0.04649F),
+localAngles = new Vector3(359.4526F, 271.4876F, 89.98575F),
+localScale = new Vector3(0.07F, 0.071F, 0.0701F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -573,9 +583,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWolfPelt"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2783f, -0.002f),
-							localAngles = new Vector3(358.4554f, 0f, 0f),
-							localScale = new Vector3(0.5666f, 0.5666f, 0.5666f),
+localPos = new Vector3(0F, 0.14479F, 0.09794F),
+localAngles = new Vector3(13.53955F, 0F, 0F),
+localScale = new Vector3(0.5666F, 0.5666F, 0.5666F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -592,10 +602,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayTriTip"),
-							childName = "Chest",
-							localPos = new Vector3(-0.1247f, 0.416f, 0.1225f),
-							localAngles = new Vector3(11.5211f, 128.5354f, 165.922f),
-							localScale = new Vector3(0.2615f, 0.2615f, 0.2615f),
+							childName = "Pelvis",
+localPos = new Vector3(0.19175F, 0.34523F, 0.0177F),
+localAngles = new Vector3(36.59357F, 177.5122F, 178.7256F),
+localScale = new Vector3(0.5F, 0.5F, 0.68416F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -612,10 +622,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWarbanner"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0168f, 0.0817f, -0.0955f),
-							localAngles = new Vector3(0f, 0f, 90f),
-							localScale = new Vector3(0.3162f, 0.3162f, 0.3162f),
+							childName = "Chest",
+localPos = new Vector3(0.0168F, 0.26039F, -0.21587F),
+localAngles = new Vector3(0F, 0F, 90F),
+localScale = new Vector3(0.3162F, 0.3162F, 0.3162F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -633,9 +643,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayScythe"),
 							childName = "Chest",
-							localPos = new Vector3(0.0278f, 0.2322f, -0.0877f),
-							localAngles = new Vector3(323.9545f, 90f, 270f),
-							localScale = new Vector3(0.1884f, 0.1884f, 0.1884f),
+localPos = new Vector3(-0.08898F, 0.08614F, -0.19459F),
+localAngles = new Vector3(293.1983F, 281.6273F, 259.683F),
+localScale = new Vector3(0.30835F, 0.1884F, 0.32014F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -652,10 +662,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySnail"),
-							childName = "UpperArmL",
-							localPos = new Vector3(0f, 0.3267f, 0.046f),
-							localAngles = new Vector3(90f, 0f, 0f),
-							localScale = new Vector3(0.0289f, 0.0289f, 0.0289f),
+							childName = "Chest",
+localPos = new Vector3(-0.11196F, 0.21602F, 0.01362F),
+localAngles = new Vector3(24.59701F, 9.63536F, 35.11288F),
+localScale = new Vector3(0.07F, 0.07F, 0.07F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -672,10 +682,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayClover"),
-							childName = "Gun",
-							localPos = new Vector3(0.0004f, 0.1094f, -0.1329f),
-							localAngles = new Vector3(85.6192f, 0.0001f, 179.4897f),
-							localScale = new Vector3(0.2749f, 0.2749f, 0.2749f),
+							childName = "Head",
+localPos = new Vector3(0.0039F, 0.04673F, 0.2657F),
+localAngles = new Vector3(85.61921F, 0.0001F, 179.4897F),
+localScale = new Vector3(0.35F, 0.35F, 0.35F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -692,10 +702,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAegis"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0f, 0.1396f, 0f),
-							localAngles = new Vector3(86.4709f, 180f, 180f),
-							localScale = new Vector3(0.2849f, 0.2849f, 0.2849f),
+							childName = "LowerArmR",
+localPos = new Vector3(-0.08954F, 0.0619F, 0.01725F),
+localAngles = new Vector3(81.85985F, 259.0763F, 155.0281F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -713,9 +723,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBoneCrown"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1791f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(1.1754f, 1.1754f, 1.1754f),
+localPos = new Vector3(0F, 0.15792F, -0.02926F),
+localAngles = new Vector3(13.43895F, 311.3283F, 343.426F),
+localScale = new Vector3(1.1754F, 1.1754F, 0.92166F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -732,10 +742,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayPauldron"),
-							childName = "UpperArmL",
-							localPos = new Vector3(0.0435f, 0.0905f, 0.0118f),
-							localAngles = new Vector3(82.0839f, 160.9228f, 100.7722f),
-							localScale = new Vector3(0.7094f, 0.7094f, 0.7094f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.07401F, 0.15409F, -0.07474F),
+localAngles = new Vector3(65.18475F, 214.0179F, 355.7895F),
+localScale = new Vector3(0.7094F, 0.7094F, 0.7094F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -753,9 +763,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBuckler"),
 							childName = "LowerArmR",
-							localPos = new Vector3(-0.005f, 0.285f, 0.0074f),
-							localAngles = new Vector3(358.4802f, 192.347f, 88.4811f),
-							localScale = new Vector3(0.3351f, 0.3351f, 0.3351f),
+localPos = new Vector3(0.00659F, 0.25923F, 0.00061F),
+localAngles = new Vector3(357.2321F, 117.9287F, 90.60644F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -772,10 +782,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayIceRing"),
-							childName = "Gun",
-							localPos = new Vector3(0.0334f, 0.2587f, -0.1223f),
-							localAngles = new Vector3(274.3965f, 90f, 270f),
-							localScale = new Vector3(0.3627f, 0.3627f, 0.3627f),
+							childName = "Weapon",
+localPos = new Vector3(0.00685F, 0.08912F, 0F),
+localAngles = new Vector3(274.3965F, 90F, 270F),
+localScale = new Vector3(0.5F, 0.5F, 1.0828F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -792,10 +802,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFireRing"),
-							childName = "Gun",
-							localPos = new Vector3(0.0352f, 0.282f, -0.1223f),
-							localAngles = new Vector3(274.3965f, 90f, 270f),
-							localScale = new Vector3(0.3627f, 0.3627f, 0.3627f),
+							childName = "Weapon",
+localPos = new Vector3(0.0028F, 0.24892F, 0.00001F),
+localAngles = new Vector3(274.3965F, 90F, 270F),
+localScale = new Vector3(0.5F, 0.5F, 1.12845F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -812,20 +822,20 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAfterburnerShoulderRing"),
-							childName = "UpperArmL",
-							localPos = new Vector3(0f, 0f, -0.002f),
-							localAngles = new Vector3(-90f, 0f, 0f),
-							localScale = new Vector3(0.01f, 0.01f, 0.01f),
+							childName = "Chest",
+localPos = new Vector3(-0.34596F, 0.28343F, -0.00666F),
+localAngles = new Vector3(313.2421F, 95.99242F, 180F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAfterburnerShoulderRing"),
-							childName = "UpperArmR",
-							localPos = new Vector3(0f, 0f, -0.002f),
-							localAngles = new Vector3(-90f, 0f, 0f),
-							localScale = new Vector3(0.01f, 0.01f, 0.01f),
+							childName = "Chest",
+localPos = new Vector3(0.34932F, 0.30434F, -0.00161F),
+localAngles = new Vector3(49.85487F, 108.7415F, 199.3213F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -843,9 +853,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWaxBird"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.0529f, -0.1242f),
-							localAngles = new Vector3(24.419f, 0f, 0f),
-							localScale = new Vector3(0.5253f, 0.5253f, 0.5253f),
+localPos = new Vector3(0F, -0.20925F, -0.41214F),
+localAngles = new Vector3(34.52309F, 0F, 0F),
+localScale = new Vector3(1.09546F, 0.99388F, 1.40369F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -882,10 +892,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDiamond"),
-							childName = "Sword",
-							localPos = new Vector3(-0.002f, 0.1828f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1236f, 0.1236f, 0.1236f),
+							childName = "Weapon",
+localPos = new Vector3(-0.002F, -0.03488F, 0F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.1236F, 0.1236F, 0.1236F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -902,10 +912,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayRepulsionArmorPlate"),
-							childName = "ThighL",
-							localPos = new Vector3(0.0218f, 0.4276f, 0f),
-							localAngles = new Vector3(90f, 180f, 0f),
-							localScale = new Vector3(0.1971f, 0.1971f, 0.1971f),
+							childName = "LowerArmL",
+localPos = new Vector3(0.06063F, 0.19185F, -0.01304F),
+localAngles = new Vector3(76.57407F, 81.50978F, 180F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -923,9 +933,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMissileRack"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.2985f, -0.0663f),
-							localAngles = new Vector3(90f, 180f, 0f),
-							localScale = new Vector3(0.3362f, 0.3362f, 0.3362f),
+localPos = new Vector3(-0.23202F, 0.28282F, 0.01393F),
+localAngles = new Vector3(342.4002F, 168.7708F, 34.96157F),
+localScale = new Vector3(0.3362F, 0.3362F, 0.3362F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -942,10 +952,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFeather"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0.001f, 0.2755f, 0.0454f),
-							localAngles = new Vector3(270f, 91.2661f, 0f),
-							localScale = new Vector3(0.0285f, 0.0285f, 0.0285f),
+							childName = "Head",
+localPos = new Vector3(-0.01522F, 0.13423F, -0.05715F),
+localAngles = new Vector3(314.8987F, 357.7154F, 11.71727F),
+localScale = new Vector3(0.03962F, 0.03327F, 0.0285F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -962,10 +972,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayCrowbar"),
-							childName = "Chest",
-							localPos = new Vector3(0f, 0.1219f, -0.0764f),
-							localAngles = new Vector3(90f, 90f, 0f),
-							localScale = new Vector3(0.1936f, 0.1936f, 0.1936f),
+							childName = "Pelvis",
+localPos = new Vector3(-0.1691F, 0.24688F, -0.14963F),
+localAngles = new Vector3(43.55907F, 11.81575F, 11.82357F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -983,9 +993,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGravBoots"),
 							childName = "CalfL",
-							localPos = new Vector3(-0.0038f, 0.3729f, -0.0046f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1485f, 0.1485f, 0.1485f),
+localPos = new Vector3(-0.0038F, 0.37291F, -0.01597F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.25F, 0.25F, 0.30579F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -993,9 +1003,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGravBoots"),
 							childName = "CalfR",
-							localPos = new Vector3(-0.0038f, 0.3729f, -0.0046f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1485f, 0.1485f, 0.1485f),
+localPos = new Vector3(-0.0038F, 0.37291F, -0.01597F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.25F, 0.25F, 0.30579F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1013,9 +1023,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGuillotine"),
 							childName = "ThighR",
-							localPos = new Vector3(-0.0561f, 0.1607f, 0f),
-							localAngles = new Vector3(90f, 90f, 0f),
-							localScale = new Vector3(0.1843f, 0.1843f, 0.1843f),
+localPos = new Vector3(-0.15427F, 0.16356F, 0.0345F),
+localAngles = new Vector3(80.68687F, 279.3683F, 175.5874F),
+localScale = new Vector3(0.1843F, 0.1843F, 0.1843F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1032,10 +1042,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBattery"),
-							childName = "Chest",
-							localPos = new Vector3(0f, 0.0791f, 0.0726f),
-							localAngles = new Vector3(0f, 270f, 292.8411f),
-							localScale = new Vector3(0.0773f, 0.0773f, 0.0773f),
+							childName = "Weapon",
+localPos = new Vector3(0.00188F, 0.07925F, -0.00277F),
+localAngles = new Vector3(272.4369F, 145.8502F, 32.1286F),
+localScale = new Vector3(0.2F, 0.2F, 0.23894F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1053,9 +1063,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDevilHorns"),
 							childName = "Head",
-							localPos = new Vector3(0.0949f, 0.0945f, 0.0654f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.5349f, 0.5349f, 0.5349f),
+localPos = new Vector3(-0.0949F, 0.0945F, 0.0654F),
+localAngles = new Vector3(6.82254F, 22.89301F, 0F),
+localScale = new Vector3(-0.5349F, 0.5349F, 0.5349F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -1063,9 +1073,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDevilHorns"),
 							childName = "Head",
-							localPos = new Vector3(-0.0949f, 0.0945f, 0.0105f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(-0.5349f, 0.5349f, 0.5349f),
+localPos = new Vector3(0.0949F, 0.0945F, 0.0654F),
+localAngles = new Vector3(6.82253F, 337.107F, 0F),
+localScale = new Vector3(0.5349F, 0.5349F, 0.5349F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1082,10 +1092,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayInfusion"),
-							childName = "Pelvis",
-							localPos = new Vector3(-0.0703f, 0.0238f, -0.0366f),
-							localAngles = new Vector3(0f, 45f, 0f),
-							localScale = new Vector3(0.5253f, 0.5253f, 0.5253f),
+							childName = "Chest",
+localPos = new Vector3(-0.17919F, -0.00327F, 0.06826F),
+localAngles = new Vector3(20.46128F, 304.1627F, 0F),
+localScale = new Vector3(0.5253F, 0.5253F, 0.5253F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1102,10 +1112,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMedkit"),
-							childName = "Chest",
-							localPos = new Vector3(0.0039f, -0.0125f, -0.0546f),
-							localAngles = new Vector3(290f, 180f, 0f),
-							localScale = new Vector3(0.4907f, 0.4907f, 0.4907f),
+							childName = "Pelvis",
+localPos = new Vector3(0.11193F, 0.30977F, 0.0997F),
+localAngles = new Vector3(280.1438F, 349.5922F, 38.17199F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1122,10 +1132,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBandolier"),
-							childName = "Chest",
-							localPos = new Vector3(0.0035f, 0f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.1684f, 0.242f, 0.242f),
+							childName = "Pelvis",
+localPos = new Vector3(0.01815F, 0.35131F, -0.02141F),
+localAngles = new Vector3(270F, 0F, 0F),
+localScale = new Vector3(0.42224F, 0.59252F, 0.242F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1143,9 +1153,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayHook"),
 							childName = "Chest",
-							localPos = new Vector3(-0.0922f, 0.4106f, -0.0015f),
-							localAngles = new Vector3(290.3197f, 89f, 0f),
-							localScale = new Vector3(0.214f, 0.214f, 0.214f),
+localPos = new Vector3(0.167F, 0.23155F, -0.0053F),
+localAngles = new Vector3(358.6279F, 35.35772F, 283.0336F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1163,9 +1173,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGasoline"),
 							childName = "ThighL",
-							localPos = new Vector3(0.0494f, 0.0954f, 0.0015f),
-							localAngles = new Vector3(90f, 0f, 0f),
-							localScale = new Vector3(0.3165f, 0.3165f, 0.3165f),
+localPos = new Vector3(0.1586F, 0.09434F, 0.04533F),
+localAngles = new Vector3(78.44348F, 270F, 270F),
+localScale = new Vector3(0.65F, 0.65F, 0.65F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1182,10 +1192,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayStunGrenade"),
-							childName = "ThighR",
-							localPos = new Vector3(0.001f, 0.3609f, 0.0523f),
-							localAngles = new Vector3(90f, 0f, 0f),
-							localScale = new Vector3(0.5672f, 0.5672f, 0.5672f),
+							childName = "Chest",
+localPos = new Vector3(-0.18348F, -0.04668F, 0.05757F),
+localAngles = new Vector3(8.86498F, 4.53647F, 11.30128F),
+localScale = new Vector3(0.8F, 0.8F, 0.8F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1202,10 +1212,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFirework"),
-							childName = "Muzzle",
-							localPos = new Vector3(0.0086f, 0.0069f, 0.0565f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1194f, 0.1194f, 0.1194f),
+							childName = "HandR",
+localPos = new Vector3(0.03615F, 0.09452F, 0.09992F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.1194F, 0.1194F, 0.17403F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1222,10 +1232,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayLunarDagger"),
-							childName = "Chest",
-							localPos = new Vector3(-0.0015f, 0.2234f, -0.0655f),
-							localAngles = new Vector3(277.637f, 358.2474f, 1.4903f),
-							localScale = new Vector3(0.3385f, 0.3385f, 0.3385f),
+							childName = "HandR",
+localPos = new Vector3(0.01621F, 0.05569F, 0.01211F),
+localAngles = new Vector3(65.45142F, 346.3312F, 235.2556F),
+localScale = new Vector3(0.3385F, 1.01916F, 0.3385F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1242,10 +1252,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayKnurl"),
-							childName = "LowerArmL",
-							localPos = new Vector3(-0.0186f, 0.0405f, -0.0049f),
-							localAngles = new Vector3(78.8707f, 36.6722f, 105.8275f),
-							localScale = new Vector3(0.0848f, 0.0848f, 0.0848f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.02841F, 0.14421F, -0.01509F),
+localAngles = new Vector3(78.87074F, 36.6722F, 105.8275F),
+localScale = new Vector3(0.0848F, 0.1006F, 0.10147F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1262,10 +1272,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBeetleGland"),
-							childName = "Chest",
-							localPos = new Vector3(0.0852f, 0.0577f, 0f),
-							localAngles = new Vector3(359.9584f, 0.1329f, 39.8304f),
-							localScale = new Vector3(0.0553f, 0.0553f, 0.0553f),
+							childName = "Pelvis",
+localPos = new Vector3(-0.25656F, 0.29023F, -0.0332F),
+localAngles = new Vector3(349.7159F, 177.1544F, 2.7042F),
+localScale = new Vector3(0.09594F, 0.08604F, 0.09076F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1283,9 +1293,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySoda"),
 							childName = "Pelvis",
-							localPos = new Vector3(-0.075f, 0.095f, 0f),
-							localAngles = new Vector3(270f, 251.0168f, 0f),
-							localScale = new Vector3(0.1655f, 0.1655f, 0.1655f),
+localPos = new Vector3(-0.19025F, 0.25343F, -0.03256F),
+localAngles = new Vector3(270F, 251.0168F, 0F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1302,10 +1312,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDoubleMag"),
-							childName = "Gun",
-							localPos = new Vector3(-0.0018f, 0.0002f, 0.097f),
-							localAngles = new Vector3(84.2709f, 200.5981f, 25.0139f),
-							localScale = new Vector3(0.0441f, 0.0441f, 0.0441f),
+							childName = "LowerArmL",
+localPos = new Vector3(-0.06727F, 0.18375F, 0.03843F),
+localAngles = new Vector3(335.0898F, 25.122F, 176.703F),
+localScale = new Vector3(0.07F, 0.07F, 0.07F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1322,10 +1332,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayStickyBomb"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0594f, 0.0811f, 0.0487f),
-							localAngles = new Vector3(8.4958f, 176.5473f, 162.7601f),
-							localScale = new Vector3(0.0736f, 0.0736f, 0.0736f),
+							childName = "HandR",
+localPos = new Vector3(0.01519F, 0.0686F, -0.08218F),
+localAngles = new Vector3(78.27731F, 0.00002F, 171.4936F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1342,10 +1352,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayKey"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0589f, 0.1056f, -0.0174f),
-							localAngles = new Vector3(0.2454f, 195.0205f, 89.0854f),
-							localScale = new Vector3(0.4092f, 0.4092f, 0.4092f),
+							childName = "CalfR",
+localPos = new Vector3(-0.06349F, -0.13659F, -0.04507F),
+localAngles = new Vector3(345.2247F, 238.6147F, 228.6344F),
+localScale = new Vector3(1F, 1F, 1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1363,9 +1373,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAPRound"),
 							childName = "Pelvis",
-							localPos = new Vector3(-0.0371f, 0.0675f, -0.052f),
-							localAngles = new Vector3(90f, 41.5689f, 0f),
-							localScale = new Vector3(0.2279f, 0.2279f, 0.2279f),
+localPos = new Vector3(0.21936F, 0.36784F, -0.00669F),
+localAngles = new Vector3(78.75988F, 151.3122F, 84.95592F),
+localScale = new Vector3(0.7F, 0.7F, 0.46965F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1382,10 +1392,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBauble"),
-							childName = "Pelvis",
-							localPos = new Vector3(-0.0074f, 0.076f, -0.0864f),
-							localAngles = new Vector3(0f, 23.7651f, 0f),
-							localScale = new Vector3(0.0687f, 0.0687f, 0.0687f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.70539F, 0.12032F, 0.01842F),
+localAngles = new Vector3(70.31753F, 62.26086F, 287.2839F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1403,9 +1413,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayHippo"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.3001f, 0.0555f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2645f, 0.2645f, 0.2645f),
+localPos = new Vector3(0.00655F, 0.11081F, 0.21627F),
+localAngles = new Vector3(11.20005F, 351.6793F, 344.3522F),
+localScale = new Vector3(0.32F, 0.32F, 0.32F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1423,9 +1433,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBrainstalk"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1882f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2638f, 0.2638f, 0.2638f),
+localPos = new Vector3(0.04038F, 0.12258F, 0.03265F),
+localAngles = new Vector3(39.83437F, 0F, 0F),
+localScale = new Vector3(0.38565F, 0.2638F, 0.41101F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1442,10 +1452,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayCorpseFlower"),
-							childName = "UpperArmR",
-							localPos = new Vector3(-0.0393f, 0.1484f, 0f),
-							localAngles = new Vector3(270f, 90f, 0f),
-							localScale = new Vector3(0.1511f, 0.1511f, 0.1511f),
+							childName = "UpperArmL",
+localPos = new Vector3(0.15459F, 0.1895F, -0.15276F),
+localAngles = new Vector3(76.12807F, 336.4276F, 180F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1462,10 +1472,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFossil"),
-							childName = "Chest",
-							localPos = new Vector3(-0.0722f, 0.0921f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.4208f, 0.4208f, 0.4208f),
+							childName = "Pelvis",
+localPos = new Vector3(-0.00514F, 0.28757F, 0.1698F),
+localAngles = new Vector3(0F, 89.42922F, 0F),
+localScale = new Vector3(0.4208F, 0.4208F, 0.4208F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1483,9 +1493,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAntler"),
 							childName = "Head",
-							localPos = new Vector3(0.1003f, 0.269f, 0f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.3395f, 0.3395f, 0.3395f),
+localPos = new Vector3(0.07414F, 0.19751F, -0.0258F),
+localAngles = new Vector3(344.5861F, 132.518F, 356.9124F),
+localScale = new Vector3(0.3395F, 0.3395F, 0.3395F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -1493,9 +1503,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAntler"),
 							childName = "Head",
-							localPos = new Vector3(-0.1003f, 0.269f, 0f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.3395f, 0.3395f, -0.3395f),
+localPos = new Vector3(-0.07414F, 0.19751F, -0.0258F),
+localAngles = new Vector3(15.41393F, 42F, 356.9124F),
+localScale = new Vector3(0.3395F, 0.3395F, -0.3395F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1513,9 +1523,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGoldHeart"),
 							childName = "Chest",
-							localPos = new Vector3(-0.0571f, 0.3027f, 0.0755f),
-							localAngles = new Vector3(335.0033f, 343.2951f, 0f),
-							localScale = new Vector3(0.1191f, 0.1191f, 0.1191f),
+localPos = new Vector3(-0.10856F, 0.05727F, 0.17572F),
+localAngles = new Vector3(340.0459F, 326.5524F, 1.80304F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1532,10 +1542,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBrokenMask"),
-							childName = "UpperArmR",
-							localPos = new Vector3(-0.0283f, 0.0452f, -0.0271f),
-							localAngles = new Vector3(0f, 270f, 0f),
-							localScale = new Vector3(0.1385f, 0.1385f, 0.1385f),
+							childName = "Chest",
+localPos = new Vector3(0.13391F, 0.05807F, 0.15326F),
+localAngles = new Vector3(20.49514F, 15.08605F, 357.7958F),
+localScale = new Vector3(0.1385F, 0.1385F, 0.1385F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1552,10 +1562,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBrooch"),
-							childName = "Gun",
-							localPos = new Vector3(-0.0097f, -0.0058f, -0.0847f),
-							localAngles = new Vector3(0f, 0f, 84.3456f),
-							localScale = new Vector3(0.1841f, 0.1841f, 0.1841f),
+							childName = "LowerArmR",
+localPos = new Vector3(-0.0614F, 0.18859F, 0.02649F),
+localAngles = new Vector3(81.03616F, 314.4032F, 15.99828F),
+localScale = new Vector3(0.6F, 0.6F, 0.6F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1572,10 +1582,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayGlowFlower"),
-							childName = "UpperArmL",
-							localPos = new Vector3(0.0399f, 0.1684f, 0.0121f),
-							localAngles = new Vector3(0f, 73.1449f, 0f),
-							localScale = new Vector3(0.2731f, 0.2731f, 0.0273f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.15287F, 0.19369F, -0.13507F),
+localAngles = new Vector3(0F, 222.6754F, 0F),
+localScale = new Vector3(0.35F, 0.35F, 0.35F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1592,10 +1602,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBirdFoot"),
-							childName = "Head",
-							localPos = new Vector3(0f, 0.2387f, -0.199f),
-							localAngles = new Vector3(0f, 270f, 0f),
-							localScale = new Vector3(0.2833f, 0.2833f, 0.2833f),
+							childName = "CalfR",
+localPos = new Vector3(0F, 0.76226F, 0.16685F),
+localAngles = new Vector3(0F, 270F, 272.4676F),
+localScale = new Vector3(1F, 1.4565F, 1.2945F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1633,9 +1643,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBirdEye"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1738f, 0.1375f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.2866f, 0.2866f, 0.2866f),
+localPos = new Vector3(-0.07555F, 0.12033F, 0.15897F),
+localAngles = new Vector3(301.2076F, 146.43F, 189.6029F),
+localScale = new Vector3(0.25567F, 0.23304F, 0.17833F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1652,10 +1662,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayJellyGuts"),
-							childName = "Head",
-							localPos = new Vector3(-0.0484f, -0.0116f, 0.0283f),
-							localAngles = new Vector3(316.2306f, 45.1087f, 303.6165f),
-							localScale = new Vector3(0.1035f, 0.1035f, 0.1035f),
+							childName = "Chest",
+localPos = new Vector3(0.01407F, 0.31906F, 0.0984F),
+localAngles = new Vector3(47.005F, 278.725F, 140.888F),
+localScale = new Vector3(0.15F, 0.15F, 0.15F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1672,10 +1682,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBeads"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0f, 0.3249f, 0.0381f),
-							localAngles = new Vector3(0f, 0f, 90f),
-							localScale = new Vector3(1f, 1f, 1f),
+							childName = "UpperArmL",
+localPos = new Vector3(-0.00329F, 0.16805F, 0.05026F),
+localAngles = new Vector3(0F, 0F, 99.29353F),
+localScale = new Vector3(1.13087F, 1.19312F, 1.08218F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1692,10 +1702,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayInterstellarDeskPlant"),
-							childName = "UpperArmR",
-							localPos = new Vector3(-0.0663f, 0.2266f, 0f),
-							localAngles = new Vector3(4.9717f, 270f, 54.4915f),
-							localScale = new Vector3(0.0429f, 0.0429f, 0.0429f),
+							childName = "Chest",
+localPos = new Vector3(0.17918F, 0.26891F, 0.01079F),
+localAngles = new Vector3(299.256F, 26.12627F, 249.1656F),
+localScale = new Vector3(0.07F, 0.07F, 0.07F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1713,9 +1723,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBear"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.3014f, 0.0662f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2034f, 0.2034f, 0.2034f),
+localPos = new Vector3(0.01423F, 0.21404F, -0.20479F),
+localAngles = new Vector3(359.4737F, 180.8153F, 2.00493F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1732,10 +1742,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDeathMark"),
-							childName = "LowerArmR",
-							localPos = new Vector3(0f, 0.4099f, 0.0252f),
-							localAngles = new Vector3(277.5254f, 0f, 0f),
-							localScale = new Vector3(-0.0375f, -0.0341f, -0.0464f),
+							childName = "UpperArmR",
+localPos = new Vector3(-0.00634F, 0.14811F, -0.02871F),
+localAngles = new Vector3(277.5254F, 0F, 346.0966F),
+localScale = new Vector3(-0.05F, -0.05F, -0.06F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1752,10 +1762,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWilloWisp"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0595f, 0.0696f, -0.0543f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.0283f, 0.0283f, 0.0283f),
+							childName = "LowerArmR",
+localPos = new Vector3(-0.00096F, 0.41647F, 0.00463F),
+localAngles = new Vector3(2.77335F, 359.1895F, 176.0624F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1772,10 +1782,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySeed"),
-							childName = "Head",
-							localPos = new Vector3(-0.1702f, 0.1366f, -0.026f),
-							localAngles = new Vector3(344.0657f, 196.8238f, 275.5892f),
-							localScale = new Vector3(0.0275f, 0.0275f, 0.0275f),
+							childName = "Chest",
+localPos = new Vector3(0.05344F, -0.04829F, 0.15088F),
+localAngles = new Vector3(306.1523F, 261.2392F, 242.3862F),
+localScale = new Vector3(0.03394F, 0.03326F, 0.03041F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1793,9 +1803,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWhip"),
 							childName = "Pelvis",
-							localPos = new Vector3(0.1001f, -0.0132f, 0f),
-							localAngles = new Vector3(0f, 0f, 20.1526f),
-							localScale = new Vector3(0.2845f, 0.2845f, 0.2845f),
+localPos = new Vector3(0.23977F, 0.22895F, -0.00201F),
+localAngles = new Vector3(1.87579F, 354.8801F, 24.10377F),
+localScale = new Vector3(0.4F, 0.4F, 0.4F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1832,10 +1842,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayStealthkit"),
-							childName = "CalfL",
-							localPos = new Vector3(-0.0063f, 0.2032f, -0.0507f),
-							localAngles = new Vector3(90f, 0f, 0f),
-							localScale = new Vector3(0.1454f, 0.2399f, 0.16f),
+							childName = "ThighR",
+localPos = new Vector3(-0.08927F, 0.20322F, 0.12008F),
+localAngles = new Vector3(90F, 139.0103F, 0F),
+localScale = new Vector3(0.37577F, 0.56422F, 0.35F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1872,10 +1882,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayTeslaCoil"),
-							childName = "Chest",
-							localPos = new Vector3(0.0008f, 0.3747f, -0.0423f),
-							localAngles = new Vector3(297.6866f, 1.3864f, 358.5596f),
-							localScale = new Vector3(0.3229f, 0.3229f, 0.3229f),
+							childName = "Head",
+localPos = new Vector3(0F, 0.10735F, -0.0308F),
+localAngles = new Vector3(295.9102F, 0F, 0F),
+localScale = new Vector3(0.3229F, 0.3229F, 0.3229F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1893,9 +1903,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayShieldBug"),
 							childName = "Head",
-							localPos = new Vector3(0.0868f, 0.3114f, 0f),
-							localAngles = new Vector3(348.1819f, 268.0985f, 0.3896f),
-							localScale = new Vector3(0.3521f, 0.3521f, 0.3521f),
+localPos = new Vector3(-0.0868F, 0.26797F, 0F),
+localAngles = new Vector3(11.8181F, 268.0985F, 359.6104F),
+localScale = new Vector3(0.3521F, 0.3521F, -0.3521F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -1903,9 +1913,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayShieldBug"),
 							childName = "Head",
-							localPos = new Vector3(-0.0868f, 0.3114f, 0f),
-							localAngles = new Vector3(11.8181f, 268.0985f, 359.6104f),
-							localScale = new Vector3(0.3521f, 0.3521f, -0.3521f),
+localPos = new Vector3(0.07771F, 0.26797F, 0F),
+localAngles = new Vector3(348.1819F, 268.0985F, 0.3896F),
+localScale = new Vector3(0.3521F, 0.3521F, 0.3521F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1922,10 +1932,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAlienHead"),
-							childName = "Chest",
-							localPos = new Vector3(0.0417f, 0.2791f, -0.0493f),
-							localAngles = new Vector3(284.1172f, 243.7966f, 260.89f),
-							localScale = new Vector3(0.6701f, 0.6701f, 0.6701f),
+							childName = "Weapon",
+localPos = new Vector3(0.02859F, -0.04522F, 0.01442F),
+localAngles = new Vector3(284.1172F, 243.7966F, 260.89F),
+localScale = new Vector3(0.8F, 0.8F, 0.8F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1943,9 +1953,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySkullCrown"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2556f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.4851f, 0.1617f, 0.1617f),
+localPos = new Vector3(0F, 0.2442F, 0.03993F),
+localAngles = new Vector3(15.9298F, 0F, 0F),
+localScale = new Vector3(0.4851F, 0.1617F, 0.1617F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1962,10 +1972,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWarHorn"),
-							childName = "Pelvis",
-							localPos = new Vector3(-0.1509f, 0.0659f, 0f),
-							localAngles = new Vector3(0f, 0f, 69.9659f),
-							localScale = new Vector3(0.2732f, 0.2732f, 0.2732f),
+							childName = "Head",
+localPos = new Vector3(-0.06565F, 0.01069F, 0.33667F),
+localAngles = new Vector3(321.7959F, 253.9446F, 1.83296F),
+localScale = new Vector3(0.2732F, 0.2732F, 0.2732F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -1983,9 +1993,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySteakCurved"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.3429f, -0.0671f),
-							localAngles = new Vector3(294.98f, 180f, 180f),
-							localScale = new Vector3(0.1245f, 0.1155f, 0.1155f),
+localPos = new Vector3(0F, 0.18682F, 0.13945F),
+localAngles = new Vector3(285.4012F, 0.00002F, -0.00001F),
+localScale = new Vector3(0.1245F, 0.1155F, 0.1155F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2003,9 +2013,19 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayToothMeshLarge"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.0687f, 0.0998f),
-							localAngles = new Vector3(344.9017f, 0f, 0f),
-							localScale = new Vector3(7.5452f, 7.5452f, 7.5452f),
+localPos = new Vector3(0.04568F, -0.00035F, 0.19319F),
+localAngles = new Vector3(25.05384F, 17.60428F, 7.65284F),
+localScale = new Vector3(1.5F, 1.5F, 1.5F),
+							limbMask = LimbFlags.None
+						},
+						new ItemDisplayRule
+						{
+							ruleType = ItemDisplayRuleType.ParentedPrefab,
+							followerPrefab = ItemDisplays.LoadDisplay("DisplayToothMeshLarge"),
+							childName = "Head",
+localPos = new Vector3(-0.02361F, -0.003F, 0.19844F),
+localAngles = new Vector3(25.68274F, 348.6905F, 355.0463F),
+localScale = new Vector3(1.5F, 1.5F, 1.5F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2042,10 +2062,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayShinyPearl"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0f, 0f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+							childName = "Chest",
+localPos = new Vector3(0F, 0F, 0F),
+localAngles = new Vector3(328.163F, 284.6944F, 27.83253F),
+localScale = new Vector3(0.3F, 0.3F, 0.3F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2063,9 +2083,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayTome"),
 							childName = "ThighR",
-							localPos = new Vector3(0.0155f, 0.2145f, 0.0615f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.0475f, 0.0475f, 0.0475f),
+localPos = new Vector3(-0.13437F, 0.02671F, 0.00331F),
+localAngles = new Vector3(4.74548F, 269.9583F, 359.6995F),
+localScale = new Vector3(0.08F, 0.08F, 0.08F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2082,10 +2102,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySquidTurret"),
-							childName = "Head",
-							localPos = new Vector3(-0.0164f, 0.1641f, -0.0005f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.2235f, 0.3016f, 0.3528f),
+							childName = "Chest",
+localPos = new Vector3(-0.0164F, 0.23145F, 0.0095F),
+localAngles = new Vector3(0F, 90F, 7.10089F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2142,10 +2162,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayLaserTurbine"),
-							childName = "Chest",
-							localPos = new Vector3(0f, 0.0622f, -0.0822f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2159f, 0.2159f, 0.2159f),
+							childName = "Pelvis",
+localPos = new Vector3(0F, 0.27358F, 0.17357F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2182,10 +2202,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayAncestralIncubator"),
-							childName = "Chest",
-							localPos = new Vector3(0f, 0.3453f, 0f),
-							localAngles = new Vector3(353.0521f, 317.2421f, 69.6292f),
-							localScale = new Vector3(0.0528f, 0.0528f, 0.0528f),
+							childName = "UpperArmL",
+localPos = new Vector3(0.03967F, 0.23859F, 0.00643F),
+localAngles = new Vector3(353.0521F, 317.2421F, 263.0239F),
+localScale = new Vector3(0.03F, 0.03F, 0.03F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2202,10 +2222,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFireballsOnHit"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0f, 0.3365f, -0.0878f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.0761f, 0.0761f, 0.0761f),
+							childName = "HandR",
+localPos = new Vector3(0.01431F, 0.07931F, 0.00529F),
+localAngles = new Vector3(344.0956F, 176.9312F, 2.92877F),
+localScale = new Vector3(0.0697F, 0.07056F, 0.074F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2222,10 +2242,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplaySiphonOnLowHealth"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0542f, 0.0206f, -0.0019f),
-							localAngles = new Vector3(0f, 303.4368f, 0f),
-							localScale = new Vector3(0.0385f, 0.0385f, 0.0385f),
+							childName = "LowerArmR",
+localPos = new Vector3(-0.00745F, 0.25453F, 0.03687F),
+localAngles = new Vector3(354.4601F, 0F, 0F),
+localScale = new Vector3(0.1F, 0.16051F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2243,9 +2263,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBleedOnHitAndExplode"),
 							childName = "ThighR",
-							localPos = new Vector3(0f, 0.0575f, -0.0178f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.0486f, 0.0486f, 0.0486f),
+localPos = new Vector3(-0.11983F, -0.00669F, 0.03566F),
+localAngles = new Vector3(0F, 0F, 105.2972F),
+localScale = new Vector3(0.08F, 0.08F, 0.08F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2262,10 +2282,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayMonstersOnShrineUse"),
-							childName = "ThighR",
-							localPos = new Vector3(0.0022f, 0.084f, 0.066f),
-							localAngles = new Vector3(352.4521f, 260.6884f, 341.5106f),
-							localScale = new Vector3(0.0246f, 0.0246f, 0.0246f),
+							childName = "Chest",
+localPos = new Vector3(-0.08897F, 0.00789F, 0.20548F),
+localAngles = new Vector3(55.74505F, 264.118F, 355.134F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2282,10 +2302,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayRandomDamageZone"),
-							childName = "LowerArmL",
-							localPos = new Vector3(0.0709f, 0.4398f, 0.0587f),
-							localAngles = new Vector3(349.218f, 235.9453f, 0f),
-							localScale = new Vector3(0.0465f, 0.0465f, 0.0465f),
+							childName = "Chest",
+localPos = new Vector3(-0.00001F, 0.17219F, -0.30708F),
+localAngles = new Vector3(34.84705F, 0F, 0F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2302,10 +2322,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayFruit"),
-							childName = "Chest",
-							localPos = new Vector3(-0.0513f, 0.2348f, -0.1839f),
-							localAngles = new Vector3(354.7403f, 305.3714f, 336.9526f),
-							localScale = new Vector3(0.2118f, 0.2118f, 0.2118f),
+							childName = "Weapon",
+localPos = new Vector3(-0.08626F, -0.15387F, 0.21263F),
+localAngles = new Vector3(16.74619F, 94.02277F, 334.7391F),
+localScale = new Vector3(0.2118F, 0.2118F, 0.2118F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2323,9 +2343,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteHorn"),
 							childName = "Head",
-							localPos = new Vector3(0.1201f, 0.2516f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1036f, 0.1036f, 0.1036f),
+localPos = new Vector3(0.09221F, 0.18718F, -0.03466F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.1036F, 0.1036F, 0.1036F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -2333,9 +2353,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteHorn"),
 							childName = "Head",
-							localPos = new Vector3(-0.1201f, 0.2516f, 0f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(-0.1036f, 0.1036f, 0.1036f),
+localPos = new Vector3(-0.09221F, 0.18718F, -0.03466F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(-0.1036F, 0.1036F, 0.1036F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2353,9 +2373,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteRhinoHorn"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2648f, 0.1528f),
-							localAngles = new Vector3(315f, 0f, 0f),
-							localScale = new Vector3(0.2f, 0.2f, 0.2f),
+localPos = new Vector3(0F, 0.09709F, 0.19904F),
+localAngles = new Vector3(315F, 0F, 0F),
+localScale = new Vector3(0.2F, 0.2F, 0.2F),
 							limbMask = LimbFlags.None
 						},
 						new ItemDisplayRule
@@ -2363,9 +2383,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteRhinoHorn"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.3022f, 0.1055f),
-							localAngles = new Vector3(300f, 0f, 0f),
-							localScale = new Vector3(0.1f, 0.1f, 0.1f),
+localPos = new Vector3(0F, 0.14871F, 0.15627F),
+localAngles = new Vector3(300F, 0F, 0F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2383,9 +2403,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteIceCrown"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2836f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.0265f, 0.0265f, 0.0265f),
+localPos = new Vector3(0F, 0.28471F, 0.01687F),
+localAngles = new Vector3(282.0894F, 0F, 0F),
+localScale = new Vector3(0.0265F, 0.0265F, 0.0265F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2403,9 +2423,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteUrchinCrown"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2679f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.0496f, 0.0496f, 0.0496f),
+localPos = new Vector3(0F, 0.19891F, 0.0624F),
+localAngles = new Vector3(298.819F, 0F, 0F),
+localScale = new Vector3(0.0496F, 0.0496F, 0.0496F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2423,9 +2443,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEliteStealthCrown"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.2143f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.065f, 0.065f, 0.065f),
+localPos = new Vector3(0F, 0.26174F, 0.00841F),
+localAngles = new Vector3(280.0554F, 0F, 0F),
+localScale = new Vector3(0.065F, 0.065F, 0.065F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2443,9 +2463,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayNeuralImplant"),
 							childName = "Head",
-							localPos = new Vector3(0f, 0.1861f, 0.2328f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2326f, 0.2326f, 0.2326f),
+localPos = new Vector3(0F, 0.05455F, 0.41408F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.2326F, 0.2326F, 0.2326F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2462,10 +2482,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayRadio"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0604f, 0.1269f, 0f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.2641f, 0.2641f, 0.2641f),
+							childName = "ThighL",
+localPos = new Vector3(0.12572F, -0.04588F, -0.01867F),
+localAngles = new Vector3(11.69349F, 91.28197F, 186.3007F),
+localScale = new Vector3(0.7F, 0.7F, 0.7F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2502,10 +2522,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayPotion"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.078f, 0.065f, 0f),
-							localAngles = new Vector3(359.1402f, 0.1068f, 331.8908f),
-							localScale = new Vector3(0.0307f, 0.0307f, 0.0307f),
+							childName = "HandR",
+localPos = new Vector3(0.00713F, 0.10868F, -0.11556F),
+localAngles = new Vector3(63.45895F, 264.0619F, 232.0915F),
+localScale = new Vector3(0.05F, 0.05F, 0.05F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2523,9 +2543,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEffigy"),
 							childName = "Pelvis",
-							localPos = new Vector3(0.0768f, -0.0002f, 0f),
-							localAngles = new Vector3(0f, 270f, 0f),
-							localScale = new Vector3(0.2812f, 0.2812f, 0.2812f),
+localPos = new Vector3(0.12859F, 0.21196F, 0.11489F),
+localAngles = new Vector3(354.6827F, 203.9411F, 339.1208F),
+localScale = new Vector3(0.4F, 0.4F, 0.4F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2543,9 +2563,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayBatteryArray"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.2584f, -0.0987f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.2188f, 0.2188f, 0.2188f),
+localPos = new Vector3(0F, 0.19107F, -0.15272F),
+localAngles = new Vector3(0F, 0F, 0F),
+localScale = new Vector3(0.2188F, 0.2188F, 0.2188F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2562,10 +2582,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayElephantFigure"),
-							childName = "CalfR",
-							localPos = new Vector3(0f, 0.3011f, 0.0764f),
-							localAngles = new Vector3(77.5634f, 0f, 0f),
-							localScale = new Vector3(0.6279f, 0.6279f, 0.6279f),
+							childName = "Chest",
+localPos = new Vector3(-0.17946F, 0.30134F, -0.02533F),
+localAngles = new Vector3(7.57041F, 0F, 26.79241F),
+localScale = new Vector3(0.6279F, 0.6279F, 0.6279F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2583,9 +2603,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayRecycler"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.1976f, -0.0993f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.0802f, 0.0802f, 0.0802f),
+localPos = new Vector3(0F, 0.18308F, -0.14788F),
+localAngles = new Vector3(0F, 90F, 343.8301F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2603,9 +2623,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayEgg"),
 							childName = "Pelvis",
-							localPos = new Vector3(0.0727f, 0.0252f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.1891f, 0.1891f, 0.1891f),
+localPos = new Vector3(0.21155F, 0.33451F, 0.00231F),
+localAngles = new Vector3(284.2241F, 279.7924F, 78.87299F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2623,9 +2643,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayWaterPack"),
 							childName = "Chest",
-							localPos = new Vector3(0f, 0.1996f, -0.0489f),
-							localAngles = new Vector3(0f, 180f, 0f),
-							localScale = new Vector3(0.0821f, 0.0821f, 0.0821f),
+localPos = new Vector3(0F, 0.02586F, -0.13308F),
+localAngles = new Vector3(16.98321F, 180F, 0F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2642,10 +2662,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayTonic"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.066f, 0.058f, 0f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.1252f, 0.1252f, 0.1252f),
+							childName = "HandR",
+localPos = new Vector3(0.01919F, 0.09174F, -0.08501F),
+localAngles = new Vector3(347.4816F, 264.4327F, 270.9305F),
+localScale = new Vector3(0.25F, 0.25F, 0.25F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2663,9 +2683,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayVase"),
 							childName = "Pelvis",
-							localPos = new Vector3(0.0807f, 0.0877f, 0f),
-							localAngles = new Vector3(0f, 90f, 0f),
-							localScale = new Vector3(0.0982f, 0.0982f, 0.0982f),
+localPos = new Vector3(-0.21348F, 0.3313F, 0F),
+localAngles = new Vector3(12.8791F, 90F, 0F),
+localScale = new Vector3(0.2F, 0.2F, 0.11834F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2742,10 +2762,10 @@ namespace Dancer.Modules.Survivors
 						{
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayScanner"),
-							childName = "Pelvis",
-							localPos = new Vector3(0.0857f, 0.0472f, 0.0195f),
-							localAngles = new Vector3(270f, 154.175f, 0f),
-							localScale = new Vector3(0.0861f, 0.0861f, 0.0861f),
+							childName = "Chest",
+localPos = new Vector3(-0.2131F, 0.25091F, -0.03601F),
+localAngles = new Vector3(298.4561F, 249.0693F, 90.00001F),
+localScale = new Vector3(0.13F, 0.13F, 0.13F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2763,9 +2783,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayDeathProjectile"),
 							childName = "Pelvis",
-							localPos = new Vector3(0f, 0.028f, -0.0977f),
-							localAngles = new Vector3(0f, 180f, 0f),
-							localScale = new Vector3(0.0596f, 0.0596f, 0.0596f),
+localPos = new Vector3(-0.18682F, 0.32519F, 0.07876F),
+localAngles = new Vector3(338.9847F, 300.7574F, 347.3894F),
+localScale = new Vector3(0.08F, 0.08F, 0.08F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2783,9 +2803,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayLifestealOnHit"),
 							childName = "Head",
-							localPos = new Vector3(-0.2175f, 0.4404f, -0.141f),
-							localAngles = new Vector3(44.0939f, 33.5151f, 43.5058f),
-							localScale = new Vector3(0.1246f, 0.1246f, 0.1246f),
+localPos = new Vector3(-0.06527F, 0.13382F, 0.20953F),
+localAngles = new Vector3(38.51534F, 153.1544F, 92.39183F),
+localScale = new Vector3(0.09F, 0.09F, 0.09F),
 							limbMask = LimbFlags.None
 						}
 					}
@@ -2803,9 +2823,9 @@ namespace Dancer.Modules.Survivors
 							ruleType = ItemDisplayRuleType.ParentedPrefab,
 							followerPrefab = ItemDisplays.LoadDisplay("DisplayTeamWarCry"),
 							childName = "Pelvis",
-							localPos = new Vector3(0f, 0f, 0.1866f),
-							localAngles = new Vector3(0f, 0f, 0f),
-							localScale = new Vector3(0.1233f, 0.1233f, 0.1233f),
+localPos = new Vector3(0F, 0.31184F, 0.19003F),
+localAngles = new Vector3(2.97821F, 0F, 0F),
+localScale = new Vector3(0.1F, 0.1F, 0.1F),
 							limbMask = LimbFlags.None
 						}
 					}

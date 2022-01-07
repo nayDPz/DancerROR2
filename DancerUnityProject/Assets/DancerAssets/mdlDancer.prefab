@@ -4968,6 +4968,52 @@ MonoBehaviour:
     transform: {fileID: 7130338087745834074}
   - name: eSecondary2
     transform: {fileID: 205119488970354446}
+  - name: Head
+    transform: {fileID: 5968828404320745850}
+  - name: Chest
+    transform: {fileID: 5968828404320745816}
+  - name: UpperArmR
+    transform: {fileID: 5968828404320745712}
+  - name: LowerArmR
+    transform: {fileID: 5968828404320745636}
+  - name: HandR
+    transform: {fileID: 5968828404320745824}
+  - name: UpperArmL
+    transform: {fileID: 5968828404320745726}
+  - name: LowerArmL
+    transform: {fileID: 5968828404320745634}
+  - name: HandL
+    transform: {fileID: 5968828404320745838}
+  - name: Weapon
+    transform: {fileID: 5968828404320745624}
+  - name: Pelvis
+    transform: {fileID: 5968828404320745854}
+  - name: ThighR
+    transform: {fileID: 5968828404320745696}
+  - name: CalfR
+    transform: {fileID: 5968828404320745684}
+  - name: ThighL
+    transform: {fileID: 5968828404320745710}
+  - name: CalfL
+    transform: {fileID: 5968828404320745680}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
+  - name: eSecondary2
+    transform: {fileID: 205119488970354446}
 --- !u!114 &8110141719453487750
 MonoBehaviour:
   m_ObjectHideFlags: 0
