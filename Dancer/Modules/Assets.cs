@@ -125,7 +125,21 @@ namespace Dancer.Modules
 
             ribbonLine = mainAssetBundle.LoadAsset<GameObject>("RibbonLine");
             ribbonLine.GetComponent<LineRenderer>().useWorldSpace = true;
-    }
+
+            /*
+            GameObject arti = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/networkedobjects/lockedmage"), "LockedMageNoAchievement");
+            if (arti.GetComponent<GameObjectUnlockableFilter>())
+            {
+                arti.GetComponent<GameObjectUnlockableFilter>().requiredUnlockableDef = arti.GetComponent<GameObjectUnlockableFilter>().forbiddenUnlockableDef;
+                arti.GetComponent<GameObjectUnlockableFilter>().forbiddenUnlockableDef = null;
+            }
+            */
+
+
+
+
+
+        }
 
         public static void ShaderConversion(AssetBundle assets)
         {

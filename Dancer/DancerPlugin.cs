@@ -66,7 +66,6 @@ namespace Dancer
             Modules.Survivors.Dancer.CreateCharacter();
             new Modules.ContentPacks().Initialize();
 
-
             RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
 
             Hook();
@@ -200,7 +199,7 @@ namespace Dancer
                                     dancerOrb.range = 0f;
                                     dancerOrb.teamIndex = teamIndex2;
                                     dancerOrb.target = body.mainHurtBox;
-                                    dancerOrb.duration = 0.1f; //change to static value
+                                    dancerOrb.duration = 0.25f; //change to static value
                                     OrbManager.instance.AddOrb(dancerOrb);
                                 }
                                 

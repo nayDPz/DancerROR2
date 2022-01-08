@@ -419,7 +419,7 @@ namespace Dancer.Modules.Components
 		public GameObject inflictorRoot;
 		private CharacterBody inflictorBody;
 
-		public float attachTime = 0.15f;
+		public float attachTime = 0.25f;
 
 		private float fixedAttachStopwatch;
 

@@ -137,12 +137,12 @@ namespace Dancer.SkillStates
 			{
 
 				this.hasFired = true;
-				this.PlaySwingEffect();
+				
 				Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
 
 				if (Util.HasEffectiveAuthority(base.gameObject))
 				{
-					
+					this.PlaySwingEffect();
 					base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
 				}
 			}

@@ -14,7 +14,7 @@ namespace Dancer.SkillStates
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
-        public static float damageCoefficient = 3.75f;
+        public static float damageCoefficient = 4f;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.7f;
         public static float force = 0f;
