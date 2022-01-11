@@ -12,7 +12,7 @@ namespace Dancer.SkillStates
 		{
 			
 			this.anim = 1.1f;
-			this.damageCoefficient = 3f;
+			this.damageCoefficient = StaticValues.jab2DamageCoefficient;
 			this.baseDuration = 0.55f;
 			this.attackStartTime = 0.1f;
 			this.attackEndTime = 0.6f;

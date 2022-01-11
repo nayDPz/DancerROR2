@@ -10,7 +10,7 @@ namespace Dancer.SkillStates
 {
     public class SpinnyMove : BaseSkillState
     {
-        public static float cooldownReductionOnHit = 1f;
+        public static float cooldownReductionOnHit = 0f;
         private Animator animator;
 
         private BaseState.HitStopCachedState hitStopCachedState;
@@ -40,7 +40,7 @@ namespace Dancer.SkillStates
         private Vector3 moveDirection;
 
         private float procCoefficient = 1f;
-        private float damageCoefficient = 2.5f;
+        private float damageCoefficient = Modules.StaticValues.secondaryDamageCoefficient;
 
         private float pushForce = 2200f;
         private float attackRadius = 6f;
@@ -51,18 +51,20 @@ namespace Dancer.SkillStates
             this.animator = base.GetModelAnimator();
             base.StartAimMode(2f, true);
 
+            float speed = base.characterBody.attackSpeed; // this.attackSpeedStat doesnt fucking work ?????????
+            this.windupDuration /= speed;
+            this.attackInterval = this.baseAttackInterval / speed;
+            this.duration = this.attackInterval * this.numAttacks + this.windupDuration;
+            this.stopwatch = this.attackInterval;
 
-            foreach(EntityStateMachine e in base.gameObject.GetComponents<EntityStateMachine>())
+            foreach (EntityStateMachine e in base.gameObject.GetComponents<EntityStateMachine>())
                 if (e.customName == "Weapon")
                     e.SetNextStateToMain();
 
             this.groundStart = base.isGrounded;
 
-            this.windupDuration /= this.attackSpeedStat;
-            this.attackInterval = this.baseAttackInterval / this.attackSpeedStat;
-            this.duration = this.attackInterval * this.numAttacks + this.windupDuration;
+           
             
-            this.stopwatch = this.attackInterval;
             this.crit = base.RollCrit();
             base.PlayAnimation("FullBody, Override", "Secondary", "Spinny.playbackRate", this.duration * 1.4f);
             this.moveDirection = base.inputBank.aimDirection;

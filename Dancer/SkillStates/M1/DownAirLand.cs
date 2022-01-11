@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Dancer.Modules;
 namespace Dancer.SkillStates
 {
 	public class DownAirLand : BaseSkillState
@@ -17,7 +18,7 @@ namespace Dancer.SkillStates
 		protected string animString = "DownAirGround";
 		protected string hitboxName = "DownAirGround";
 		protected DamageType damageType = DamageType.Generic;
-		protected float damageCoefficient = 3f;
+		protected float damageCoefficient = StaticValues.downTiltDamageCoefficient;
 		protected float procCoefficient = 1f;
 		protected float pushForce = 1900f;
 		protected float baseDuration = 0.55f;

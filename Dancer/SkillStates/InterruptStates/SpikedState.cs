@@ -65,6 +65,7 @@ namespace Dancer.SkillStates {
 			float force = 0.25f;
 			if (m)
 			{
+				m.velocity = Vector3.zero;
 				float f = Mathf.Max(100f, m.mass);
 				force = f / 100f;
 				launchVector *= force;
@@ -72,6 +73,7 @@ namespace Dancer.SkillStates {
 			}
 			else if (body.rigidbody)
 			{
+				body.rigidbody.velocity = Vector3.zero;
 				float f = Mathf.Max(50f, body.rigidbody.mass);
 				force = f / 200f;
 				launchVector *= force;

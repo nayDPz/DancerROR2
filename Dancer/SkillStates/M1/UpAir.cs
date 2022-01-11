@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Dancer.Modules;
 namespace Dancer.SkillStates
 {
 	public class UpAir : BaseSkillState
@@ -18,7 +19,7 @@ namespace Dancer.SkillStates
 		protected string animString = "UpAir";
 		protected string hitboxName = "UpAir";
 		protected DamageType damageType = DamageType.Generic;
-		protected float damageCoefficient = 2.75f;
+		protected float damageCoefficient = StaticValues.upAir1DamageCoefficient;
 		protected float procCoefficient = 1f;
 		protected float pushForce = 2200f;
 		protected Vector3 bonusForce = Vector3.zero;
@@ -300,7 +301,7 @@ namespace Dancer.SkillStates
 			{
 				if (this.stopwatch >= this.duration * this.attackResetTime && !this.secondAttack)
 				{
-					this.damageCoefficient = 3.5f;
+					this.damageCoefficient = StaticValues.upAir2DamageCoefficient;
 					this.hasFired = false;
 					this.secondAttack = true;
 					this.hitboxName = "UpAir2";

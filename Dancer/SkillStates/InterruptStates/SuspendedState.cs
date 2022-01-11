@@ -3,6 +3,7 @@ using EntityStates;
 using UnityEngine;
 using RoR2;
 using EntityStates;
+using UnityEngine.Networking;
 namespace Dancer.SkillStates
 {
 	internal class SuspendedState : BaseState
@@ -83,6 +84,16 @@ namespace Dancer.SkillStates
 			return InterruptPriority.Frozen;
 		}
 
-		
+		public override void OnSerialize(NetworkWriter writer)
+		{
+			base.OnSerialize(writer);
+			writer.Write((double)this.duration);
+		}
+
+		public override void OnDeserialize(NetworkReader reader)
+		{
+			base.OnDeserialize(reader);
+			this.duration = (float)reader.ReadDouble();
+		}
 	}
 }

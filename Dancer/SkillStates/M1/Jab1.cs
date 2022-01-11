@@ -11,7 +11,7 @@ namespace Dancer.SkillStates
 		public override void OnEnter()
 		{		
 			this.anim = 1.1f;
-			this.damageCoefficient = 3f;
+			this.damageCoefficient = StaticValues.jab1DamageCoefficient;
 			this.baseDuration = 0.55f;
 			this.attackStartTime = 0.1f;
 			this.attackEndTime = 0.6f;

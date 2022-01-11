@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using RoR2;
 using Dancer.SkillStates;
 using EntityStates;
+using System.Collections.Generic;
 
 namespace Dancer.Modules.Components
 {
@@ -12,11 +13,11 @@ namespace Dancer.Modules.Components
 	public class RibbonController : NetworkBehaviour
 	{
 		private EntityStateMachine ownerMachine;
-		private float damageCoefficient = 1f;
+		private float damageCoefficient = 0f;
 		private void Awake()
 		{
-			
 
+			//this.inflictorBody = this.inflictorRoot.GetComponent<CharacterBody>();
 			this.ownerRoot = base.gameObject;
 			this.ownerBody = base.GetComponent<CharacterBody>();
 			this.ownerMachine = base.GetComponent<EntityStateMachine>();
@@ -53,7 +54,7 @@ namespace Dancer.Modules.Components
 					inflictor = this.ownerRoot,
 					damage = this.damageCoefficient * this.ownerBody.damage,
 					damageColorIndex = DamageColorIndex.Default,
-					damageType = DamageType.BlightOnHit,
+					damageType = DamageType.Generic,
 					crit = this.inflictorBody.RollCrit(),
 					force = Vector3.zero,
 					procChainMask = default(ProcChainMask),
@@ -68,6 +69,7 @@ namespace Dancer.Modules.Components
 						time = buff.timer;
 				}
 				this.nextHealthComponent.body.AddTimedBuff(Modules.Buffs.ribbonDebuff, time);
+
 				EntityStateMachine component = this.nextRoot.GetComponent<EntityStateMachine>();
 				Util.PlaySound("WhipHit1", this.nextRoot.gameObject);
 				if (CanBeRibboned(this.nextHealthComponent.body) && component)
@@ -78,9 +80,41 @@ namespace Dancer.Modules.Components
 						duration = time,
 					};
 					component.SetInterruptState(newNextState, InterruptPriority.Frozen);
-
-
 				}
+
+				
+				DotController dotController = DotController.FindDotController(nextRoot);
+				bool flag = false;
+				if (dotController)
+				{
+					flag = dotController.HasDotActive(Modules.Buffs.ribbonDotIndex);
+				}
+				if (!flag)
+				{
+					InflictDotInfo inflictDotInfo = new InflictDotInfo
+					{
+						attackerObject = this.inflictorRoot,
+						victimObject = this.nextRoot,
+						dotIndex = Buffs.ribbonDotIndex,
+						duration = time,
+						damageMultiplier = 1f
+					};
+					DotController.InflictDot(ref inflictDotInfo);
+				}
+				else
+				{
+					DotController.DotDef dotDef = dotController.GetDotDef(Buffs.ribbonDotIndex);
+					for (int i = dotController.dotStackList.Count - 1; i >= 0; i--)
+					{
+						DotController.DotStack dotStack = dotController.dotStackList[i];
+						if (dotStack.dotIndex == Buffs.ribbonDotIndex)
+						{
+							dotStack.timer = time;
+						}
+					}
+				}
+
+
 
 				if (!this.nextHealthComponent.alive)
 				{
@@ -88,7 +122,8 @@ namespace Dancer.Modules.Components
 				}
 			}						
 		}
-
+		
+		
 		private void LateUpdate()
         {
 			if (this.nextRoot)
@@ -147,9 +182,173 @@ namespace Dancer.Modules.Components
 			
 		}
 
+		public void GetNextObjects(ref List<GameObject> list)
+        {
+
+			if (this.nextRoot)
+            {
+				list.Add(nextRoot);
+				RibbonController controller = this.nextRoot.GetComponent<RibbonController>();
+				if(controller)
+                {
+					controller.GetNextObjects(ref list);
+                }
+            }			
+			
+        }
+
+		public void GetPreviousObjects(ref List<GameObject> list)
+		{		
+			if (this.previousRoot)
+			{
+				list.Add(previousRoot);
+				RibbonController controller = this.previousRoot.GetComponent<RibbonController>();
+				if (controller)
+				{
+					controller.GetPreviousObjects(ref list);
+				}
+			}
+
+		}
+		private void SetRibbonTimers(List<GameObject> list, float timeToSet)
+        {
+			foreach (GameObject gameObject in list)
+			{
+				CharacterBody body = gameObject.GetComponent<CharacterBody>();
+				if (body)
+				{
+					foreach (CharacterBody.TimedBuff buff in body.timedBuffs)
+					{
+						if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex && timeToSet > buff.timer)
+						{
+							buff.timer = timeToSet;
+							DotController dotController = DotController.FindDotController(gameObject);
+							bool flag = false;
+							if (dotController)
+							{
+								flag = dotController.HasDotActive(Modules.Buffs.ribbonDotIndex);
+							}
+							if (!flag)
+							{
+								InflictDotInfo inflictDotInfo = new InflictDotInfo
+								{
+									attackerObject = this.inflictorRoot,
+									victimObject = this.nextRoot,
+									dotIndex = Buffs.ribbonDotIndex,
+									duration = timeToSet,
+									damageMultiplier = 1f
+								};
+								DotController.InflictDot(ref inflictDotInfo);
+							}
+							else
+							{
+								DotController.DotDef dotDef = dotController.GetDotDef(Buffs.ribbonDotIndex);
+								for (int i = dotController.dotStackList.Count - 1; i >= 0; i--)
+								{
+									DotController.DotStack dotStack = dotController.dotStackList[i];
+									if (dotStack.dotIndex == Buffs.ribbonDotIndex)
+									{
+										dotStack.timer = timeToSet;
+									}
+								}
+							}
+							EntityStateMachine e = gameObject.GetComponent<EntityStateMachine>();
+							if (e)
+							{
+								if (gameObject.GetComponent<SetStateOnHurt>() && gameObject.GetComponent<SetStateOnHurt>().canBeFrozen)
+								{
+									if (!(e.state is RibbonedState))
+									{
+										RibbonedState newNextState = new RibbonedState
+										{
+											duration = timeToSet,
+										};
+										e.SetInterruptState(newNextState, InterruptPriority.Frozen);
+									}
+									else
+									{
+										RibbonedState ribbonedState = e.state as RibbonedState;
+										if (ribbonedState.timer < timeToSet)
+										{
+											ribbonedState.SetNewTimer(timeToSet);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
+		public void SyncRibbonTimersToNewTime(float newTime)
+        {
+			if (!this.ownerBody)
+				this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
+			EntityStateMachine component = this.ownerRoot.GetComponent<EntityStateMachine>();
+			if (this.ownerRoot.GetComponent<SetStateOnHurt>() && this.ownerRoot.GetComponent<SetStateOnHurt>().canBeFrozen && component && !this.ownerBody.isChampion)
+			{
+
+				RibbonedState newNextState = new RibbonedState
+				{
+					duration = newTime,
+				};
+				component.SetInterruptState(newNextState, InterruptPriority.Death);
+
+
+			}
+			DotController dotController = DotController.FindDotController(this.ownerRoot);
+			bool flag = false;
+			if (dotController)
+			{
+				flag = dotController.HasDotActive(Modules.Buffs.ribbonDotIndex);
+			}
+			if (!flag)
+			{
+				InflictDotInfo inflictDotInfo = new InflictDotInfo
+				{
+					attackerObject = this.inflictorRoot,
+					victimObject = this.ownerRoot,
+					dotIndex = Modules.Buffs.ribbonDotIndex,
+					duration = newTime,
+					damageMultiplier = 1f
+				};
+				DotController.InflictDot(ref inflictDotInfo);
+			}
+			else
+			{
+				DotController.DotDef dotDef = dotController.GetDotDef(Buffs.ribbonDotIndex);
+				for (int i = dotController.dotStackList.Count - 1; i >= 0; i--)
+				{
+					DotController.DotStack dotStack = dotController.dotStackList[i];
+					if (dotStack.dotIndex == Buffs.ribbonDotIndex)
+					{
+						dotStack.timer = newTime;
+					}
+				}
+			}
+
+			List<GameObject> next = new List<GameObject>();
+			this.GetNextObjects(ref next);
+
+			this.SetRibbonTimers(next, newTime);
+
+			List<GameObject> previous = new List<GameObject>();
+			this.GetPreviousObjects(ref previous);
+			this.SetRibbonTimers(previous, newTime);
+			
+		}
+
 		private void FixedUpdate()
 		{
-			if(this.nextRoot == this.ownerRoot || this.previousRoot == this.ownerRoot)
+
+			if (!ownerBody.HasBuff(Modules.Buffs.ribbonDebuff))
+            {
+				//Debug.LogError("Ribbon debuff expired, destroying");
+				Destroy(this);
+				return;
+			}				
+			if (this.nextRoot == this.ownerRoot || this.previousRoot == this.ownerRoot)
             {
 				//Debug.LogError("Ribbon got fucked up real bad, destroying");
 				Destroy(this);
@@ -161,16 +360,25 @@ namespace Dancer.Modules.Components
 				//Debug.LogError("Ribbon's next target and previous target were the same!");
 				this.nextRoot = null;
 			}
+
 				
 
 			if (this.nextRoot && this.ownerRoot)
 			{
+				CharacterBody body = this.nextRoot.GetComponent<CharacterBody>();
+				if (body && !body.HasBuff(Modules.Buffs.ribbonDebuff) && this.ribbonAttached)
+				{
+					this.nextRoot = null;
+					return;
+				}
 
 				if (this.nextRoot.GetComponent<RibbonController>() && !this.nextRoot.GetComponent<RibbonController>().previousRoot)
 				{
 					//Debug.Log("Setting " + nextRoot.name + "'s previous to " + ownerRoot.name);
 					this.nextRoot.GetComponent<RibbonController>().previousRoot = this.ownerRoot;
 				}
+
+				
 
 				if (this.startRibbonWhenAvailable)
                 {
@@ -179,11 +387,6 @@ namespace Dancer.Modules.Components
 					this.ribbonInstace = UnityEngine.Object.Instantiate<GameObject>(this.ribbonPrefab, this.ownerBody.corePosition, Quaternion.identity);
 					this.ribbonRenderer = this.ribbonInstace.GetComponent<LineRenderer>();
 					this.ribbonRenderer.positionCount = 2;
-					/*
-					this.bezierCurveLine = this.ribbonInstace.GetComponent<BezierCurveLine>();
-					this.bezierCurveLine.v0 = Vector3.zero;
-					this.bezierCurveLine.v1 = Vector3.zero;
-					*/
 				}
 				this.fixedAttachStopwatch += Time.fixedDeltaTime;
 				Vector3 targetRootPosition = this.GetTargetRootPosition();
@@ -198,7 +401,9 @@ namespace Dancer.Modules.Components
 
 			}
 
-			if(!this.nextRoot)
+			
+
+			if (!this.nextRoot)
             {
 				if (this.ribbonInstace)
 					GameObject.Destroy(this.ribbonInstace);
@@ -208,8 +413,7 @@ namespace Dancer.Modules.Components
 				this.attachStopwatch = 0f;
             }
 
-			if (!ownerBody.HasBuff(Modules.Buffs.ribbonDebuff))
-				Destroy(this);
+			
 
 		}
 
@@ -219,7 +423,10 @@ namespace Dancer.Modules.Components
             {
 				GameObject.Destroy(this.ribbonInstace);
             }
-
+			if(!this.ownerBody.healthComponent.alive && this.nextRoot && !this.ribbonAttached)
+            {
+				this.AttachRibbon();
+            }
 			
 			if(this.nextRoot)
             {

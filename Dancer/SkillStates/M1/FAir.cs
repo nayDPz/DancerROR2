@@ -21,7 +21,7 @@ namespace Dancer.SkillStates
 			this.hitStopDuration = 0.15f;
 			this.attackRecoil = 6f;
 			this.hitHopVelocity = 12f;
-			this.damageCoefficient = 3.4f;
+			this.damageCoefficient = StaticValues.forwardAirDamageCoefficient;
 			this.hitStopDuration = 0.08f;
 			this.stackGainAmount = 3;
 			this.pushForce = 3500f;

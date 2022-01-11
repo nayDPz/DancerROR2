@@ -9,7 +9,7 @@ namespace Dancer.SkillStates
 	{
 		public float duration = 2f;
 		public float pullDuration = 1f;
-		private float stopwatch;
+		public float timer;
 		public Vector3 destination;
 		public float deceleration = 0.5f;
 		private GameObject ribbonVfxInstance;
@@ -21,6 +21,8 @@ namespace Dancer.SkillStates
 			int layerIndex = modelAnimator.GetLayerIndex("Body");
 			modelAnimator.CrossFadeInFixedTime((UnityEngine.Random.Range(0, 2) == 0) ? "Hurt1" : "Hurt2", 0.1f);
 			modelAnimator.Update(0f);
+			this.timer = this.duration;
+
 			if (base.rigidbody && !base.rigidbody.isKinematic)
 			{
 				base.rigidbody.velocity = Vector3.zero;
@@ -36,8 +38,13 @@ namespace Dancer.SkillStates
 					e.SetNextStateToMain();
 				}
 			}
-			this.ribbonVfxInstance = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonedEffect, base.characterBody.coreTransform);
+			this.ribbonVfxInstance = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonedEffect, base.transform);// base.characterBody.coreTransform);
 		}
+
+		public void SetNewTimer(float newDuration)
+        {
+			this.timer = newDuration;
+        }
 		public override void OnExit()
 		{
 			Animator modelAnimator = base.GetModelAnimator();
@@ -50,9 +57,13 @@ namespace Dancer.SkillStates
 			base.OnExit();
 		}
 
+		
+
 		public override void FixedUpdate()
 		{
 			base.FixedUpdate();
+			this.timer -= Time.fixedDeltaTime;
+
 			Animator modelAnimator = base.GetModelAnimator();
 			if (modelAnimator && base.fixedAge > this.wait)
 			{
@@ -76,7 +87,7 @@ namespace Dancer.SkillStates
 			}
 
 
-			if (base.fixedAge >= this.duration)
+			if (this.timer <= 0f)
 			{
 				this.outer.SetNextStateToMain();
 				return;

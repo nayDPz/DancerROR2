@@ -16,7 +16,7 @@ namespace Dancer.Modules
         
         internal static void RegisterProjectiles()
         {
-            dancerRibbonProjectile = CloneProjectilePrefab("Fireball", "DancerRibbons");
+            dancerRibbonProjectile = CloneProjectilePrefab("Fireball", "RibbonProjectile");
 
             SphereCollider zs = dancerRibbonProjectile.GetComponent<SphereCollider>();
             zs.radius = 1.25f;

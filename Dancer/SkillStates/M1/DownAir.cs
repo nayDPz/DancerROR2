@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Dancer.Modules;
 namespace Dancer.SkillStates
 {
 	public class DownAir : BaseSkillState
@@ -22,7 +23,7 @@ namespace Dancer.SkillStates
 		protected string animString = "DownAir";
 		protected string hitboxName = "DownAir";
 		protected DamageType damageType = DamageType.Generic;
-		protected float damageCoefficient = 2.1f;
+		protected float damageCoefficient = StaticValues.downAirDamageCoefficient;
 		protected float procCoefficient = 0.5f;
 		protected float pushForce = 500f;
 		protected float baseDuration = 1.3f;
@@ -124,21 +125,6 @@ namespace Dancer.SkillStates
 			this.animator.SetBool("attacking", true);
 			base.characterDirection.forward = base.inputBank.aimDirection;
 			base.PlayAnimation("FullBody, Override", "DAir", "Slash.playbackRate", 0.75f);
-		}
-		private void StartAttackServer()
-		{
-			if (NetworkServer.active)
-			{
-				base.characterBody.SetAimTimer(this.duration);
-				Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
-				this.animator.SetBool("attacking", true);
-				base.characterDirection.forward = base.inputBank.aimDirection;
-
-				base.characterMotor.velocity *= 0.2f;
-				this.slideVector = Vector3.down;
-				
-			}
-
 		}
 
 		public virtual void PlayHitSound()

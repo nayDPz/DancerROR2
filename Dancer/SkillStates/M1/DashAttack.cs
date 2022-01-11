@@ -17,7 +17,7 @@ namespace Dancer.SkillStates
 			this.hitStopDuration = 0.025f;
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
-			this.damageCoefficient = 3.75f;
+			this.damageCoefficient = StaticValues.dashAttackDamageCoefficient;
 			this.damageType = RoR2.DamageType.BonusToLowHealth;
 			this.hitStopDuration = 0.0f;
 			this.pushForce = 1800f;

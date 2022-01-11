@@ -14,7 +14,7 @@ namespace Dancer.SkillStates
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
-        public static float damageCoefficient = 4f;
+        public static float damageCoefficient = Modules.StaticValues.dragonLungeDamageCoefficient;
         public static float procCoefficient = 1f;
         public static float baseDuration = 0.7f;
         public static float force = 0f;
@@ -131,10 +131,8 @@ namespace Dancer.SkillStates
                     {
                         var result = bulletAttack.DefaultHitCallback(ref hitInfo);
 
-
                         if(!hitWorld)
                             this.hitPoint = hitInfo.point;
-                        //this.hitPoint.y += 2f;
 
                         float distance = (base.transform.position - this.hitPoint).magnitude;
                         Vector3 direction = (this.hitPoint - base.transform.position).normalized;
@@ -161,7 +159,7 @@ namespace Dancer.SkillStates
                                             h.body.rigidbody.MovePosition(d.normalized + h.body.corePosition);
                                         }
 
-                                        if (h.body.isChampion && !(h.gameObject.name.Contains("Brother") && h.gameObject.name.Contains("Body")))
+                                        if (h.body.isChampion && !(h.gameObject.name.Contains("Brother")))
                                         {
                                             this.hitWorld = true;
                                             this.hitPoint = hitInfo.point;
@@ -203,7 +201,7 @@ namespace Dancer.SkillStates
                     }
 
                     Vector3 between = this.hitPoint - base.transform.position;
-                    if (this.hitPoint != Vector3.zero && between.magnitude > 0f)
+                    if (this.hitPoint != Vector3.zero && between.magnitude > 5f)
                     {
                         this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
                     }

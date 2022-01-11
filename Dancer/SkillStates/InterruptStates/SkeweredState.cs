@@ -3,6 +3,7 @@ using EntityStates;
 using UnityEngine;
 using RoR2;
 using EntityStates;
+using UnityEngine.Networking;
 
 namespace Dancer.SkillStates
 {
@@ -95,7 +96,7 @@ namespace Dancer.SkillStates
 			}
 			if (base.fixedAge >= this.skewerDuration + this.pullDuration)
 			{
-				if (base.GetComponent<SetStateOnHurt>().canBeStunned)
+				if (base.GetComponent<SetStateOnHurt>().canBeStunned && base.isAuthority)
 					this.outer.SetNextState(new StunState { stunDuration = 1f });
 				else
 					this.outer.SetNextStateToMain();
@@ -107,6 +108,20 @@ namespace Dancer.SkillStates
 			return InterruptPriority.Frozen;
 		}
 
+        public override void OnSerialize(NetworkWriter writer)
+        {
+            base.OnSerialize(writer);
+			writer.Write(this.destination);
+			writer.Write((double)this.pullDuration);
+			writer.Write((double)this.skewerDuration);
+        }
 
-	}
+        public override void OnDeserialize(NetworkReader reader)
+        {
+            base.OnDeserialize(reader);
+			this.destination = reader.ReadVector3();
+			this.pullDuration = (float)reader.ReadDouble();
+			this.skewerDuration = (float)reader.ReadDouble();
+        }
+    }
 }

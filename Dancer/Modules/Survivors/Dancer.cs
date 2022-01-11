@@ -22,7 +22,7 @@ namespace Dancer.Modules.Survivors
 					armorGrowth = 0f,
 					bodyName = "DancerBody",
 					bodyNameToken = "NDP_DANCER_BODY_NAME",
-					bodyColor = Color.magenta,
+					bodyColor = new Color(230, 55, 134),
 					characterPortrait = Assets.LoadCharacterIcon("Dancer"),
 					crosshair = Assets.LoadCrosshair("Standard"),
 					damage = 12f,
@@ -66,7 +66,7 @@ namespace Dancer.Modules.Survivors
 					}
 				}, Dancer.bodyRendererIndex);
 				Dancer.displayPrefab = Prefabs.CreateDisplayPrefab("mdlDancer", Dancer.characterPrefab);
-				Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, Color.magenta, "DANCER");
+				Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, new Color(230, 55, 134), "DANCER");
 				Dancer.CreateHitboxes();
 				Dancer.CreateSkills();
 				Dancer.CreateSkins();
@@ -128,7 +128,8 @@ namespace Dancer.Modules.Survivors
 				cancelSprintingOnActivation = false,
 				rechargeStock = 1,
 				requiredStock = 1,
-				stockToConsume = 1
+				stockToConsume = 1,
+				keywordTokens = new string[] { "KEYWORD_DANCER_CANCELS","KEYWORD_DANCER_JAB","KEYWORD_DANCER_DASH","KEYWORD_DANCER_DOWNTILT","KEYWORD_DANCER_UPAIR","KEYWORD_DANCER_FORWARDAIR","KEYWORD_DANCER_DOWNAIR"  }
 			});
 
 			SkillDef easySkillDef = Skills.CreateSkillDef(new SkillDefInfo
@@ -156,7 +157,7 @@ namespace Dancer.Modules.Survivors
 			});
 
 			Skills.AddPrimarySkill(Dancer.characterPrefab, skillDef);
-			Skills.AddPrimarySkill(Dancer.characterPrefab, easySkillDef);
+			//Skills.AddPrimarySkill(Dancer.characterPrefab, easySkillDef);
 
 			SkillDef skillDef2 = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -167,7 +168,7 @@ namespace Dancer.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(SpinnyMove)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
-				baseRechargeInterval = 6f,
+				baseRechargeInterval = 5f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
@@ -234,7 +235,6 @@ namespace Dancer.Modules.Survivors
 			Skills.AddUtilitySkills(Dancer.characterPrefab, new SkillDef[]
 			{
 				skillDef3,
-				skillDef32,
 			});
 			SkillDef skillDef4 = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -245,7 +245,7 @@ namespace Dancer.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(FireChainRibbons)),
 				activationStateMachineName = "Weapon",
 				baseMaxStock = 1,
-				baseRechargeInterval = 18f,
+				baseRechargeInterval = 12f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
@@ -257,7 +257,8 @@ namespace Dancer.Modules.Survivors
 				cancelSprintingOnActivation = true,
 				rechargeStock = 1,
 				requiredStock = 1,
-				stockToConsume = 1
+				stockToConsume = 1,
+				keywordTokens = new string[] { "KEYWORD_DANCER_RIBBON" }
 			});
 			Skills.AddSpecialSkills(Dancer.characterPrefab, new SkillDef[]
 			{

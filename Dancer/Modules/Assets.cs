@@ -67,8 +67,8 @@ namespace Dancer.Modules
                 }
             }
 
-            ShaderConversion(mainAssetBundle);
-            AttachControllerFinderToObjects(mainAssetBundle);
+            //ShaderConversion(mainAssetBundle);
+            //AttachControllerFinderToObjects(mainAssetBundle);
 
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("Dancer.RidleyBank.bnk"))
             {
@@ -118,10 +118,10 @@ namespace Dancer.Modules
             swingEffect = LoadEffect("DancerSwingEffect", true);
 
             newEffect = mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect");
-            newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
             newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             ribbonedEffect = newEffect;
+            //ribbonedEffect = mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect");
 
             ribbonLine = mainAssetBundle.LoadAsset<GameObject>("RibbonLine");
             ribbonLine.GetComponent<LineRenderer>().useWorldSpace = true;
