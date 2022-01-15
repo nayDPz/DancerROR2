@@ -138,7 +138,7 @@ namespace Dancer
                 EntityStateMachine e = self.GetComponent<EntityStateMachine>();
                 if (e)
                 {
-                    if (self.GetComponent<SetStateOnHurt>() && self.GetComponent<SetStateOnHurt>().canBeFrozen)
+                    if (self.GetComponent<SetStateOnHurt>() && self.GetComponent<SetStateOnHurt>().canBeFrozen && !self.isChampion)
                     {
                         if(!(e.state is RibbonedState))
                         {
@@ -171,9 +171,9 @@ namespace Dancer
             {
                 if (damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "NDP_DANCER_BODY_NAME")
                 {
-                    if(self.body.HasBuff(Modules.Buffs.ribbonDebuff) && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT)
+                    if(self.body.HasBuff(Modules.Buffs.ribbonDebuff) && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
                     {                      
-                        damageInfo.attacker.GetComponent<CharacterBody>().healthComponent.HealFraction(.03f * damageInfo.procCoefficient, default(ProcChainMask));
+                        damageInfo.attacker.GetComponent<CharacterBody>().healthComponent.HealFraction(.01f * damageInfo.procCoefficient, default(ProcChainMask));
                         Vector3 position = self.body.corePosition;
                         RibbonController ribbon = self.GetComponent<RibbonController>();
                         if(ribbon)
@@ -307,6 +307,10 @@ namespace Dancer
 
                         
                         
+                    }
+                    if(damageInfo.damageType == DamageType.ApplyMercExpose)
+                    {
+                        damageInfo.damageType = DamageType.Generic;
                     }
 
                 }

@@ -110,7 +110,6 @@ namespace Dancer.SkillStates
 
         public override void OnSerialize(NetworkWriter writer)
         {
-            base.OnSerialize(writer);
 			writer.Write(this.destination);
 			writer.Write((double)this.pullDuration);
 			writer.Write((double)this.skewerDuration);
@@ -118,7 +117,6 @@ namespace Dancer.SkillStates
 
         public override void OnDeserialize(NetworkReader reader)
         {
-            base.OnDeserialize(reader);
 			this.destination = reader.ReadVector3();
 			this.pullDuration = (float)reader.ReadDouble();
 			this.skewerDuration = (float)reader.ReadDouble();

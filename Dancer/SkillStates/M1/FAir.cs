@@ -14,8 +14,8 @@ namespace Dancer.SkillStates
 		{
 			Util.PlayAttackSpeedSound("ForwardAirStart", base.gameObject, this.attackSpeedStat);
 			base.SmallHop(base.characterMotor, 4.5f);
-			this.anim = 1.08f;
-			this.baseDuration = 0.8f;
+			this.anim = 1.1f;
+			this.baseDuration = 0.9f;
 			this.attackStartTime = 0.375f;
 			this.attackEndTime = 0.7f;
 			this.hitStopDuration = 0.15f;
@@ -24,7 +24,7 @@ namespace Dancer.SkillStates
 			this.damageCoefficient = StaticValues.forwardAirDamageCoefficient;
 			this.hitStopDuration = 0.08f;
 			this.stackGainAmount = 3;
-			this.pushForce = 3500f;
+			this.pushForce = 6000f;
 			this.isAerial = true;
 			this.isSus = true;
 			this.isFlinch = true;
@@ -71,8 +71,8 @@ namespace Dancer.SkillStates
 					EntityStateMachine component = body.GetComponent<EntityStateMachine>();
 					if (body.GetComponent<SetStateOnHurt>() && component)
 					{
-						SpikedState newNextState = new SpikedState();
-						component.SetInterruptState(newNextState, InterruptPriority.Pain);
+						SpikedState newNextState = new SpikedState{ inflictor = base.gameObject };
+						component.SetInterruptState(newNextState, InterruptPriority.Death);
 					}
 				}
 			}

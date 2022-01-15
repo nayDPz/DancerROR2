@@ -22,7 +22,7 @@ namespace Dancer.Modules.Survivors
 					armorGrowth = 0f,
 					bodyName = "DancerBody",
 					bodyNameToken = "NDP_DANCER_BODY_NAME",
-					bodyColor = new Color(230, 55, 134),
+					bodyColor = Color.magenta,
 					characterPortrait = Assets.LoadCharacterIcon("Dancer"),
 					crosshair = Assets.LoadCrosshair("Standard"),
 					damage = 12f,
@@ -66,7 +66,7 @@ namespace Dancer.Modules.Survivors
 					}
 				}, Dancer.bodyRendererIndex);
 				Dancer.displayPrefab = Prefabs.CreateDisplayPrefab("mdlDancer", Dancer.characterPrefab);
-				Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, new Color(230, 55, 134), "DANCER");
+				Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, Color.magenta, "DANCER");
 				Dancer.CreateHitboxes();
 				Dancer.CreateSkills();
 				Dancer.CreateSkins();

@@ -86,13 +86,11 @@ namespace Dancer.SkillStates
 
 		public override void OnSerialize(NetworkWriter writer)
 		{
-			base.OnSerialize(writer);
 			writer.Write((double)this.duration);
 		}
 
 		public override void OnDeserialize(NetworkReader reader)
 		{
-			base.OnDeserialize(reader);
 			this.duration = (float)reader.ReadDouble();
 		}
 	}

@@ -21,7 +21,19 @@ namespace Dancer.SkillStates
 			int layerIndex = modelAnimator.GetLayerIndex("Body");
 			modelAnimator.CrossFadeInFixedTime((UnityEngine.Random.Range(0, 2) == 0) ? "Hurt1" : "Hurt2", 0.1f);
 			modelAnimator.Update(0f);
+
 			this.timer = this.duration;
+			if (this.timer > Modules.Buffs.ribbonBossCCDuration && base.characterBody.isChampion)
+				this.timer = Modules.Buffs.ribbonBossCCDuration;
+
+			float time = 0f;
+			foreach (CharacterBody.TimedBuff buff in base.characterBody.timedBuffs)
+			{
+				if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
+					time = buff.timer;
+			}
+			if (this.timer > time)
+				this.timer = time;
 
 			if (base.rigidbody && !base.rigidbody.isKinematic)
 			{
@@ -44,7 +56,19 @@ namespace Dancer.SkillStates
 		public void SetNewTimer(float newDuration)
         {
 			this.timer = newDuration;
-        }
+			if (this.timer > Modules.Buffs.ribbonBossCCDuration && base.characterBody.isChampion)
+				this.timer = Modules.Buffs.ribbonBossCCDuration;
+
+			float time = 0f;
+			foreach (CharacterBody.TimedBuff buff in base.characterBody.timedBuffs)
+			{
+				if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
+					time = buff.timer;
+			}
+			if (this.timer > time)
+				this.timer = time;
+		}
+
 		public override void OnExit()
 		{
 			Animator modelAnimator = base.GetModelAnimator();

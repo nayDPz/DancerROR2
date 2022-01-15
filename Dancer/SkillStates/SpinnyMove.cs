@@ -43,7 +43,7 @@ namespace Dancer.SkillStates
         private float damageCoefficient = Modules.StaticValues.secondaryDamageCoefficient;
 
         private float pushForce = 2200f;
-        private float attackRadius = 6f;
+        private float attackRadius = 5.5f;
         private bool crit;
 
         public override void OnEnter()
@@ -65,7 +65,6 @@ namespace Dancer.SkillStates
 
            
             
-            this.crit = base.RollCrit();
             base.PlayAnimation("FullBody, Override", "Secondary", "Spinny.playbackRate", this.duration * 1.4f);
             this.moveDirection = base.inputBank.aimDirection;
 
@@ -76,7 +75,7 @@ namespace Dancer.SkillStates
 
         private void Fire()
         {
-            Vector3 attackPosition = this.moveDirection * this.attackRadius + base.transform.position;
+            Vector3 attackPosition = this.moveDirection * (this.attackRadius - 1) + base.transform.position;
             this.PlaySwingEffect();
 
             if (Util.HasEffectiveAuthority(base.gameObject))
@@ -106,7 +105,7 @@ namespace Dancer.SkillStates
                     attackerFiltering = AttackerFiltering.Default,
                     teamIndex = base.GetTeam(),
                     inflictor = base.gameObject,
-                    crit = this.crit,
+                    crit = base.RollCrit(),
                 }.Fire().hitCount > 0)
                 {
                     this.OnHitEnemyAuthority();

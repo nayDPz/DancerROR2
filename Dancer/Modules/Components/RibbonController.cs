@@ -6,6 +6,7 @@ using RoR2;
 using Dancer.SkillStates;
 using EntityStates;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Dancer.Modules.Components
 {
@@ -13,7 +14,7 @@ namespace Dancer.Modules.Components
 	public class RibbonController : NetworkBehaviour
 	{
 		private EntityStateMachine ownerMachine;
-		private float damageCoefficient = 0f;
+		private float damageCoefficient = StaticValues.ribbonDamageCoefficient;
 		private void Awake()
 		{
 
@@ -45,7 +46,7 @@ namespace Dancer.Modules.Components
 			{
 				this.inflictorBody = this.inflictorRoot.GetComponent<CharacterBody>();
 			}
-			if (this.ownerRoot && this.inflictorRoot)
+			if (this.ownerRoot && this.inflictorRoot && this.nextHealthComponent)
 			{
 				DamageInfo damageInfo = new DamageInfo
 				{
@@ -54,15 +55,21 @@ namespace Dancer.Modules.Components
 					inflictor = this.ownerRoot,
 					damage = this.damageCoefficient * this.ownerBody.damage,
 					damageColorIndex = DamageColorIndex.Default,
-					damageType = DamageType.Generic,
+					damageType = DamageType.ApplyMercExpose,
 					crit = this.inflictorBody.RollCrit(),
 					force = Vector3.zero,
 					procChainMask = default(ProcChainMask),
-					procCoefficient = 0f
+					procCoefficient = 0.67f
 				};
 				this.nextHealthComponent.TakeDamage(damageInfo);
+				GlobalEventManager.instance.OnHitEnemy(damageInfo, this.ownerRoot);
+				GlobalEventManager.instance.OnHitAll(damageInfo, this.ownerRoot);
 
-				float time = Modules.Buffs.ribbonDebuffDuration;
+				RibbonController ribbon = this.nextHealthComponent.gameObject.AddComponent<RibbonController>();
+				ribbon.previousRoot = this.ownerRoot;
+				ribbon.inflictorRoot = this.inflictorRoot;
+
+				float time = 0f;
 				foreach (CharacterBody.TimedBuff buff in this.ownerBody.timedBuffs)
 				{
 					if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
@@ -72,7 +79,7 @@ namespace Dancer.Modules.Components
 
 				EntityStateMachine component = this.nextRoot.GetComponent<EntityStateMachine>();
 				Util.PlaySound("WhipHit1", this.nextRoot.gameObject);
-				if (CanBeRibboned(this.nextHealthComponent.body) && component)
+				if (component)//CanBeRibboned(this.nextHealthComponent.body) && component)
 				{
 
 					RibbonedState newNextState = new RibbonedState
@@ -177,10 +184,6 @@ namespace Dancer.Modules.Components
 			return base.transform.position;
 		}
 
-		private void Update()
-		{
-			
-		}
 
 		public void GetNextObjects(ref List<GameObject> list)
         {
@@ -255,7 +258,7 @@ namespace Dancer.Modules.Components
 							EntityStateMachine e = gameObject.GetComponent<EntityStateMachine>();
 							if (e)
 							{
-								if (gameObject.GetComponent<SetStateOnHurt>() && gameObject.GetComponent<SetStateOnHurt>().canBeFrozen)
+								if (true)//gameObject.GetComponent<SetStateOnHurt>() && gameObject.GetComponent<SetStateOnHurt>().canBeFrozen)
 								{
 									if (!(e.state is RibbonedState))
 									{
@@ -286,7 +289,7 @@ namespace Dancer.Modules.Components
 			if (!this.ownerBody)
 				this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
 			EntityStateMachine component = this.ownerRoot.GetComponent<EntityStateMachine>();
-			if (this.ownerRoot.GetComponent<SetStateOnHurt>() && this.ownerRoot.GetComponent<SetStateOnHurt>().canBeFrozen && component && !this.ownerBody.isChampion)
+			if (component)//this.ownerRoot.GetComponent<SetStateOnHurt>() && this.ownerRoot.GetComponent<SetStateOnHurt>().canBeFrozen && component && !this.ownerBody.isChampion)
 			{
 
 				RibbonedState newNextState = new RibbonedState
@@ -350,7 +353,7 @@ namespace Dancer.Modules.Components
 			}				
 			if (this.nextRoot == this.ownerRoot || this.previousRoot == this.ownerRoot)
             {
-				//Debug.LogError("Ribbon got fucked up real bad, destroying");
+				Debug.LogError("Ribbon got fucked up real bad, destroying");
 				Destroy(this);
 				return;
 			}
@@ -417,15 +420,53 @@ namespace Dancer.Modules.Components
 
 		}
 
+		private void SearchNewTarget()
+        {
+			if(!this.inflictorBody)
+				this.inflictorBody = this.inflictorRoot.GetComponent<CharacterBody>();
+			BullseyeSearch bullseyeSearch = new BullseyeSearch();
+			bullseyeSearch.searchOrigin = this.ownerBody.corePosition;
+			bullseyeSearch.maxDistanceFilter = Modules.Buffs.ribbonSpreadRange;
+			bullseyeSearch.teamMaskFilter = TeamMask.allButNeutral;
+			bullseyeSearch.teamMaskFilter.RemoveTeam(this.inflictorBody.teamComponent.teamIndex);
+			bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
+			bullseyeSearch.filterByLoS = true;
+			bullseyeSearch.RefreshCandidates();
+			foreach (HurtBox hurtBox in bullseyeSearch.GetResults())
+			{
+				if (hurtBox.healthComponent && hurtBox.healthComponent.body)
+				{
+					if (hurtBox.healthComponent.body.HasBuff(Modules.Buffs.ribbonDebuff))
+						bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
+					if (hurtBox.healthComponent.gameObject.GetComponent<RibbonController>())
+						bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
+				}
+			}
+			HurtBox target = bullseyeSearch.GetResults().FirstOrDefault<HurtBox>();
+			if (target && target.healthComponent && target.healthComponent.body)
+			{
+				this.nextRoot = target.healthComponent.gameObject;
+			}
+			else
+				this.nextRoot = null;
+		}
+
 		private void OnDestroy()
         {
 			if(this.ribbonInstace)
             {
 				GameObject.Destroy(this.ribbonInstace);
             }
-			if(!this.ownerBody.healthComponent.alive && this.nextRoot && !this.ribbonAttached)
+			if(!this.ownerBody.healthComponent.alive && !this.ribbonAttached)
             {
-				this.AttachRibbon();
+				if(this.nextRoot)
+					this.AttachRibbon();
+				else if(false)
+                {
+					this.SearchNewTarget();
+					if(this.nextRoot)
+						this.AttachRibbon();
+                }
             }
 			
 			if(this.nextRoot)

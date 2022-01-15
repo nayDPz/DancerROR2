@@ -3,6 +3,7 @@ using EntityStates;
 using UnityEngine;
 using RoR2;
 using EntityStates;
+using UnityEngine.Networking;
 namespace Dancer.SkillStates { 
 
 	internal class SpikedState : BaseState
@@ -11,15 +12,18 @@ namespace Dancer.SkillStates {
 		private float stopwatch;
 		private float wait = 0.2f;
 		private bool hitPause;
-		private float bounceForce = 1500f;
+		private float bounceForce = 5000f;
 		private Vector3 storedVelocity;
-
+		public static float damageCoefficient = Modules.StaticValues.forwardAirSpikeDamageCoefficient;
+		public GameObject inflictor;
 		public override void OnEnter()
 		{
 			base.OnEnter();
 			Animator modelAnimator = base.GetModelAnimator();
-			
-			if(modelAnimator)
+
+			if (base.characterBody && NetworkServer.active) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+
+			if (modelAnimator)
             {
 				int layerIndex = modelAnimator.GetLayerIndex("Body");
 				modelAnimator.enabled = false;
@@ -41,6 +45,9 @@ namespace Dancer.SkillStates {
 		}
 		public override void OnExit()
 		{
+
+			if (NetworkServer.active) base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
+
 			Animator modelAnimator = base.GetModelAnimator();
 			if (modelAnimator)
 			{
@@ -53,7 +60,7 @@ namespace Dancer.SkillStates {
 		{
 			Vector3 launchVector = Vector3.up;
 			launchVector *= this.bounceForce;
-			float d = (this.duration - base.fixedAge) / this.duration;
+			float d = Mathf.Max(base.fixedAge / this.duration, this.wait);
 			launchVector *= d;
 			if (body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
 			{
@@ -75,7 +82,7 @@ namespace Dancer.SkillStates {
 			{
 				body.rigidbody.velocity = Vector3.zero;
 				float f = Mathf.Max(50f, body.rigidbody.mass);
-				force = f / 200f;
+				force = f / 300f;
 				launchVector *= force;
 				body.rigidbody.AddForce(launchVector, ForceMode.Impulse);
 			}
@@ -113,7 +120,8 @@ namespace Dancer.SkillStates {
 					base.rigidbody.velocity = this.storedVelocity;
 				}
 			}
-			if(base.isGrounded)
+
+			if (base.isGrounded)
             {
 				Util.PlaySound("Hit2", base.gameObject);
 				if(base.isAuthority)
@@ -130,11 +138,36 @@ namespace Dancer.SkillStates {
 						scale = 1.25f * d,
 						//networkSoundEventIndex = Modules.Assets.grabGroundSoundEvent.index
 					}, true);
+
+					float f = Mathf.Max(base.fixedAge / this.duration, this.wait);
+					
+
+					if (this.inflictor)
+                    {
+						DamageInfo damageInfo = new DamageInfo
+						{
+							position = base.transform.position,
+							attacker = this.inflictor,
+							inflictor = this.inflictor,
+							damage = damageCoefficient * this.damageStat * f,
+							damageColorIndex = DamageColorIndex.Default,
+							damageType = DamageType.Stun1s,
+							crit = base.RollCrit(),
+							force = Vector3.zero,
+							procChainMask = default(ProcChainMask),
+							procCoefficient = 0f
+						};
+						base.healthComponent.TakeDamage(damageInfo);
+						GlobalEventManager.instance.OnHitEnemy(damageInfo, base.gameObject);
+						GlobalEventManager.instance.OnHitAll(damageInfo, base.gameObject);
+					};
 					this.LaunchEnemy(base.characterBody);
+
+					if(base.characterBody.GetComponent<SetStateOnHurt>() && base.characterBody.GetComponent<SetStateOnHurt>().canBeStunned)
+						this.outer.SetNextState(new StunState { duration = 1f });
+					else
+						this.outer.SetNextStateToMain();
 				}
-				
-				if (base.GetComponent<SetStateOnHurt>().canBeStunned)
-					this.outer.SetNextState(new StunState { stunDuration = 1f });
 				else
 					this.outer.SetNextStateToMain();
 				return;
@@ -150,7 +183,7 @@ namespace Dancer.SkillStates {
 		}
 		public override InterruptPriority GetMinimumInterruptPriority()
 		{
-			return InterruptPriority.Frozen;
+			return InterruptPriority.Pain;
 		}
 
 

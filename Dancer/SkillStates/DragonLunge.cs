@@ -26,6 +26,8 @@ namespace Dancer.SkillStates
 
         private DancerComponent weaponAnimator;
 
+        private bool setState;
+
         private bool hitWorld;
         private float stopwatch;
         private Vector3 hitPoint;
