@@ -22,7 +22,7 @@ namespace Dancer.Modules
             zs.radius = 1.25f;
 
             ProjectileController c = dancerRibbonProjectile.GetComponent<ProjectileController>();
-            GameObject ghostPrefab = PrefabAPI.InstantiateClone(Assets.mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect"), "RibbonProjectileGhost");
+            GameObject ghostPrefab = PrefabAPI.InstantiateClone(Assets.mainAssetBundle.LoadAsset<GameObject>("RibbonBall"), "RibbonProjectileGhost");
             if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
             if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
             c.ghostPrefab = ghostPrefab;

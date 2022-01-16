@@ -17,7 +17,7 @@ namespace Dancer.Modules
             string  outro = "..and so you beat the game with a borken unfinished character ur not even good lol i havent finished the lore because you dont deserver it";
             string  outroFailure = "..and so";
 
-            
+            LanguageAPI.Add(prefix + "DEFAULT_SKIN_NAME", "Default");
 
             LanguageAPI.Add(prefix + "NAME", "Dancer");
             LanguageAPI.Add(prefix + "DESCRIPTION", desc);

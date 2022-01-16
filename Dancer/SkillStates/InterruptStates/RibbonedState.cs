@@ -3,6 +3,7 @@ using EntityStates;
 using UnityEngine;
 using RoR2;
 using EntityStates;
+using UnityEngine.Networking; 
 namespace Dancer.SkillStates
 {
 	internal class RibbonedState : BaseState
@@ -23,18 +24,21 @@ namespace Dancer.SkillStates
 			modelAnimator.Update(0f);
 
 			this.timer = this.duration;
-			if (this.timer > Modules.Buffs.ribbonBossCCDuration && base.characterBody.isChampion)
-				this.timer = Modules.Buffs.ribbonBossCCDuration;
 
-			float time = 0f;
+			float time = Modules.Buffs.ribbonDebuffDuration;
 			foreach (CharacterBody.TimedBuff buff in base.characterBody.timedBuffs)
 			{
 				if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
 					time = buff.timer;
 			}
-			if (this.timer > time)
+			if (this.timer < time)
 				this.timer = time;
 
+
+			if (this.timer > Modules.Buffs.ribbonBossCCDuration && base.characterBody.isChampion)
+				this.timer = Modules.Buffs.ribbonBossCCDuration;
+
+			
 			if (base.rigidbody && !base.rigidbody.isKinematic)
 			{
 				base.rigidbody.velocity = Vector3.zero;
@@ -50,7 +54,7 @@ namespace Dancer.SkillStates
 					e.SetNextStateToMain();
 				}
 			}
-			this.ribbonVfxInstance = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonedEffect, base.transform);// base.characterBody.coreTransform);
+			// base.characterBody.coreTransform);
 		}
 
 		public void SetNewTimer(float newDuration)
@@ -75,9 +79,7 @@ namespace Dancer.SkillStates
 			if (modelAnimator)
 			{
 				modelAnimator.enabled = true;
-			}
-			if (this.ribbonVfxInstance)
-				GameObject.Destroy(this.ribbonVfxInstance);
+			}		
 			base.OnExit();
 		}
 
@@ -111,7 +113,8 @@ namespace Dancer.SkillStates
 			}
 
 
-			if (this.timer <= 0f)
+
+			if (this.timer <= 0f || (NetworkServer.active && !this.characterBody.HasBuff(Modules.Buffs.ribbonDebuff)))
 			{
 				this.outer.SetNextStateToMain();
 				return;

@@ -26,8 +26,6 @@ namespace Dancer.SkillStates
 
         private DancerComponent weaponAnimator;
 
-        private bool setState;
-
         private bool hitWorld;
         private float stopwatch;
         private Vector3 hitPoint;
@@ -70,13 +68,13 @@ namespace Dancer.SkillStates
             base.OnExit();
         }
 
-        
+
 
         private void Fire()
         {
             if (!this.hasFired)
             {
-                
+
                 this.hasFired = true;
 
                 base.characterBody.AddSpreadBloom(1.5f);
@@ -95,7 +93,7 @@ namespace Dancer.SkillStates
                         hitWorld = true;
                         this.hitPoint = raycastHit.point;
                     }
-                    
+
                     var bulletAttack = new BulletAttack
                     {
                         bulletCount = 1,
@@ -127,13 +125,13 @@ namespace Dancer.SkillStates
                         hitEffectPrefab = muzzleEffectPrefab,
                     };
 
-                    
+
 
                     bulletAttack.hitCallback = (ref BulletAttack.BulletHit hitInfo) =>
                     {
                         var result = bulletAttack.DefaultHitCallback(ref hitInfo);
 
-                        if(!hitWorld)
+                        if (!hitWorld)
                             this.hitPoint = hitInfo.point;
 
                         float distance = (base.transform.position - this.hitPoint).magnitude;
@@ -152,11 +150,11 @@ namespace Dancer.SkillStates
                                     if (h.body.GetComponent<SetStateOnHurt>() && h.body.GetComponent<SetStateOnHurt>().canBeFrozen && component)
                                     {
                                         Vector3 d = hitInfo.point - h.body.corePosition;
-                                        if(h.body.characterMotor)
+                                        if (h.body.characterMotor)
                                         {
                                             h.body.characterMotor.AddDisplacement(d);
                                         }
-                                        else if(h.body.rigidbody)
+                                        else if (h.body.rigidbody)
                                         {
                                             h.body.rigidbody.MovePosition(d.normalized + h.body.corePosition);
                                         }
@@ -185,12 +183,12 @@ namespace Dancer.SkillStates
                                             };
                                             component.SetInterruptState(newNextState, InterruptPriority.Death);
                                         }
-                                        
+
                                     }
                                 }
                             }
                         }
-                        
+
                         return result;
                     };
                     bulletAttack.Fire();
@@ -229,14 +227,14 @@ namespace Dancer.SkillStates
             base.FixedUpdate();
 
             this.stopwatch += Time.fixedDeltaTime;
-            if(base.fixedAge < this.fireTime)
+            if (base.fixedAge < this.fireTime)
             {
                 base.characterDirection.forward = base.inputBank.aimDirection;
                 CharacterMotor characterMotor = base.characterMotor;
                 characterMotor.velocity.y = characterMotor.velocity.y + DragonLunge.antigravityStrength * Time.fixedDeltaTime * (1f - this.stopwatch / this.fireTime);
 
             }
-            if(base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.RotationOverride(base.GetAimRay().GetPoint(range));
+            if (base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.RotationOverride(base.GetAimRay().GetPoint(range));
             if (base.fixedAge >= this.fireTime)
             {
                 this.Fire();
@@ -248,11 +246,11 @@ namespace Dancer.SkillStates
                 base.characterMotor.velocity = Vector3.zero;
                 this.animator.SetFloat("DragonLunge.playbackRate", 0f);
             }
-                
+
 
             if (base.fixedAge >= this.duration && base.isAuthority)
             {
-                if(this.hasHit)
+                if (this.hasHit)
                 {
                     Util.PlaySound("LungeDash", base.gameObject);
                     float distance = Mathf.Max((this.hitPoint - base.transform.position).magnitude - 2f, 0);
@@ -266,7 +264,7 @@ namespace Dancer.SkillStates
                     this.weaponAnimator.StopRotationOverride();
                     this.outer.SetNextStateToMain();
                 }
-                    
+
                 return;
             }
         }

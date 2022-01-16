@@ -97,13 +97,7 @@ namespace Dancer.SkillStates
             Vector3 direction = this.target.coreTransform.position - base.transform.position;
             this.weaponAnimator.RotationOverride(direction.normalized * 500f + base.transform.position);
 
-            RibbonController c = this.target.GetComponent<RibbonController>(); // find which direction has more enemies
-            if (c && c.nextRoot)
-            {
-                CharacterBody body = c.nextRoot.GetComponent<CharacterBody>();
-                if (body)
-                    this.nextTarget = body.gameObject; 
-            }
+
 
             //EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
             if(this.isFirst)

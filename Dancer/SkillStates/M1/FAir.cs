@@ -12,7 +12,9 @@ namespace Dancer.SkillStates
 		public bool hop;
 		public override void OnEnter()
 		{
-			Util.PlayAttackSpeedSound("ForwardAirStart", base.gameObject, this.attackSpeedStat);
+			if(base.isAuthority)
+				Util.PlayAttackSpeedSound("ForwardAirStart", base.gameObject, this.attackSpeedStat);
+
 			base.SmallHop(base.characterMotor, 4.5f);
 			this.anim = 1.1f;
 			this.baseDuration = 0.9f;

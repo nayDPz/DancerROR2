@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2081036593
+CRC: 1404552077
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a2f26e9e95e8aeca2d24d86ce208e4f3
+    Hash: c40d33295c455589ae699d55b935d1ea
   TypeTreeHash:
     serializedVersion: 2
     Hash: 01bedbd68d6a37621d186cab09376c2b
@@ -70,17 +70,17 @@ Assets:
 - Assets/DancerAssets/VFX/Materials/texPunchImpactShadow.png
 - Assets/DancerAssets/Animations/DancerArmature_DownAirEnd.anim
 - Assets/DancerAssets/Animations/DancerArmature_DragonLunge.anim
+- Assets/DancerAssets/texMainSkin.png
 - Assets/DancerAssets/VFX/texHenrySwing2.png
 - Assets/DancerAssets/OldVFX/Materials/texEyeTrail.dds
 - Assets/DancerAssets/FBX/texDancer.png
-- Assets/DancerAssets/VFX/RibbonedEffect.prefab
+- Assets/DancerAssets/RibbonController.prefab
 - Assets/DancerAssets/OldVFX/FistBarrageEffect.prefab
 - Assets/DancerAssets/OldVFX/NemrySwordSwingEffect.prefab
 - Assets/DancerAssets/VFX/texFire.tga
 - Assets/DancerAssets/Animations/DancerArmature_IdleIn.anim
 - Assets/DancerAssets/OldVFX/Materials/matNemryLightning.mat
 - Assets/DancerAssets/Animations/DancerArmature_Sprint 1.anim
-- Assets/DancerAssets/texDancerIcon.png
 - Assets/DancerAssets/OldVFX/HenryDustEffect.prefab
 - Assets/DancerAssets/OldVFX/Materials/matSmoke.mat
 - Assets/DancerAssets/OldVFX/ImpactNemrySlash.prefab
@@ -121,6 +121,7 @@ Assets:
 - Assets/DancerAssets/OldVFX/Materials/matHitSpark 1.mat
 - Assets/DancerAssets/OldVFX/Materials/matSpearSwingShadow.mat
 - Assets/DancerAssets/OldVFX/Materials/texHenrySwing3 (7).png
+- Assets/DancerAssets/VFX/RibbonBall.prefab
 - Assets/DancerAssets/OldVFX/Materials/matChargeShadow.mat
 - Assets/DancerAssets/VFX/RibbonClusterMesh.fbx
 - Assets/DancerAssets/VFX/RibbonLine.prefab
@@ -168,6 +169,7 @@ Assets:
 - Assets/DancerAssets/OldVFX/Materials/matRipple 1.mat
 - Assets/DancerAssets/texDancer2.png
 - Assets/DancerAssets/VFX/Materials/texPunchImpact.png
+- Assets/DancerAssets/phat.png
 - Assets/DancerAssets/OldVFX/Materials/texSlash 1.mat
 - Assets/DancerAssets/VFX/DancerDownAirEndEffect.prefab
 - Assets/DancerAssets/Animations/maskAimPitch.mask
@@ -187,6 +189,7 @@ Assets:
 - Assets/DancerAssets/OldVFX/Materials/texNemrySwing.png
 - Assets/DancerAssets/OldVFX/NemrySpearSwingEffect.prefab
 - Assets/DancerAssets/Animations/DancerArmature_DragonLungePull.anim
+- Assets/DancerAssets/texDancerIcon.png
 - Assets/DancerAssets/OldVFX/Materials/matDust.mat
 - Assets/DancerAssets/VFX/Materials/texSmoke.png
 - Assets/DancerAssets/VFX/Mesh/donut4Mesh.asset
@@ -217,7 +220,6 @@ Assets:
 - Assets/DancerAssets/Animations/DancerArmature_DragonLunge 2.anim
 - Assets/DancerAssets/mdlDancer.prefab
 - Assets/DancerAssets/OldVFX/Materials/texChargeCircle.dds
-- Assets/DancerAssets/texMainSkin.png
 - Assets/DancerAssets/VFX/Mesh/donut2Mesh.asset
 - Assets/DancerAssets/Animations/maskAim.mask
 - Assets/DancerAssets/OldVFX/ImpactHenrySlash 1.prefab

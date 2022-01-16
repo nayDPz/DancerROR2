@@ -216,7 +216,7 @@ namespace Dancer.SkillStates
                     Util.PlaySound("DSpecialPull", base.gameObject);
                     if (this.hitEnemy && this.hitTarget)
                     {
-                        this.outer.SetNextState(new PullDamage2 { target = this.hitTarget  });
+                        //this.outer.SetNextState(new PullDamage2 { target = this.hitTarget  });
                         return;
                     }
                     if (this.hitWorld)

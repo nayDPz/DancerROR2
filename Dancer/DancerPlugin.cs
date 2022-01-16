@@ -14,6 +14,7 @@ using Dancer.SkillStates;
 using EntityStates;
 using System;
 using R2API.Networking.Interfaces;
+using R2API.Networking;
 
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
@@ -84,230 +85,76 @@ namespace Dancer
         private void Hook()
         {
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
-            On.RoR2.CharacterBody.Update += CharacterBody_Update;
-            //On.RoR2.CharacterBody.OnTakeDamageServer += CharacterBody_OnTakeDamageServer;
-        }
-
-        private void CharacterBody_OnTakeDamageServer(On.RoR2.CharacterBody.orig_OnTakeDamageServer orig, CharacterBody self, DamageReport damageReport)
-        {
-            orig(self, damageReport);
-
-            if(damageReport.damageInfo != null)
-            {
-                DamageInfo damageInfo = damageReport.damageInfo;
-
-                if (damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "NDP_DANCER_BODY_NAME")
-                {
-                    if (damageInfo.damageType == DamageType.FruitOnHit)
-                    {
-                        damageInfo.damageType = DamageType.Generic;
-                        float duration = Modules.Buffs.ribbonDebuffDuration;
-                        self.AddTimedBuff(Modules.Buffs.ribbonDebuff, duration);
-
-                        EntityStateMachine component = self.GetComponent<EntityStateMachine>();
-                        if (self.GetComponent<SetStateOnHurt>() && self.GetComponent<SetStateOnHurt>().canBeFrozen && component && !self.isChampion)
-                        {
-
-                            RibbonedState newNextState = new RibbonedState
-                            {
-                                duration = duration,
-                            };
-                            component.SetInterruptState(newNextState, InterruptPriority.Death);
-
-
-                        }
-
-                    }
-                }
-                
-
-            }
-            
-        }
-
-        private void CharacterBody_Update(On.RoR2.CharacterBody.orig_Update orig, CharacterBody self)
-        {
-            if(self.HasBuff(Modules.Buffs.ribbonDebuff))
-            {
-                float time = Modules.Buffs.ribbonDebuffDuration;
-                foreach(CharacterBody.TimedBuff buff in self.timedBuffs)
-                {
-                    if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
-                        time = buff.timer;
-                }
-                EntityStateMachine e = self.GetComponent<EntityStateMachine>();
-                if (e)
-                {
-                    if (self.GetComponent<SetStateOnHurt>() && self.GetComponent<SetStateOnHurt>().canBeFrozen && !self.isChampion)
-                    {
-                        if(!(e.state is RibbonedState))
-                        {
-                            RibbonedState newNextState = new RibbonedState
-                            {
-                                duration = time,
-                            };
-                            e.SetInterruptState(newNextState, InterruptPriority.Frozen);
-                        }                    
-                        else
-                        {
-                            RibbonedState ribbonedState = e.state as RibbonedState;
-                            if (ribbonedState.timer < time)
-                            {
-                                ribbonedState.SetNewTimer(time);
-                            }
-                        }
-
-                    }
-                    
-                }
-            }
-
-            orig(self);
 
         }
+
+        
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             if (damageInfo != null && damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>())
             {
                 if (damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "NDP_DANCER_BODY_NAME")
                 {
-                    if(self.body.HasBuff(Modules.Buffs.ribbonDebuff) && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
-                    {                      
-                        damageInfo.attacker.GetComponent<CharacterBody>().healthComponent.HealFraction(.01f * damageInfo.procCoefficient, default(ProcChainMask));
-                        Vector3 position = self.body.corePosition;
-                        RibbonController ribbon = self.GetComponent<RibbonController>();
-                        if(ribbon)
-                        {
-                            #region hasribbon
-                            bool isCrit = damageInfo.crit;
-                            float damageValue = 0f * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage; //dmg co
-                            TeamIndex teamIndex2 = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
-                            if (ribbon.nextRoot) // orbs too damb buggy goddd
-                            {
-                                CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
-                                if(body)
-                                {
-                                    DancerOrb dancerOrb = new DancerOrb();
-                                    dancerOrb.attacker = damageInfo.attacker;
-                                    dancerOrb.bouncedObjects = null;
-                                    dancerOrb.bouncesRemaining = 0;
-                                    dancerOrb.damageCoefficientPerBounce = 1f;
-                                    dancerOrb.damageColorIndex = DamageColorIndex.Item;
-                                    dancerOrb.damageValue = damageValue;
-                                    dancerOrb.isCrit = isCrit;
-                                    dancerOrb.origin = damageInfo.position;
-                                    dancerOrb.procChainMask = default(ProcChainMask);
-                                    dancerOrb.procCoefficient = 0f;
-                                    dancerOrb.range = 0f;
-                                    dancerOrb.teamIndex = teamIndex2;
-                                    dancerOrb.target = body.mainHurtBox;
-                                    dancerOrb.duration = 0.2f; //change to static value
-                                    OrbManager.instance.AddOrb(dancerOrb);
-                                }
-                                
-                            }
-                            else
-                            {
-                                #region searchnewribbon
-                                BullseyeSearch bullseyeSearch = new BullseyeSearch();
-                                bullseyeSearch.searchOrigin = position;
-                                bullseyeSearch.maxDistanceFilter = Modules.Buffs.ribbonSpreadRange;
-                                bullseyeSearch.teamMaskFilter = TeamMask.allButNeutral;
-                                bullseyeSearch.teamMaskFilter.RemoveTeam(damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex);
-                                bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
-                                bullseyeSearch.filterByLoS = true;
-                                bullseyeSearch.RefreshCandidates();
-                                bullseyeSearch.FilterOutGameObject(self.gameObject);
-                                foreach (HurtBox hurtBox in bullseyeSearch.GetResults())
-                                {
-                                    if (hurtBox.healthComponent && hurtBox.healthComponent.body)
-                                    {
-                                        if (hurtBox.healthComponent.body.HasBuff(Modules.Buffs.ribbonDebuff))
-                                            bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
-                                        if (ribbon.previousRoot && ribbon.previousRoot == hurtBox.healthComponent.gameObject)
-                                            bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
-                                    }
-                                }
-                                HurtBox target = bullseyeSearch.GetResults().FirstOrDefault<HurtBox>();
-                                if (target && target.healthComponent && target.healthComponent.body)
-                                {
-                                    
-                                    ribbon.nextRoot = target.healthComponent.body.gameObject;
-                                    ribbon.inflictorRoot = damageInfo.attacker;
 
-                                    //Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
-                                }
-                                #endregion
-                            }
-
-                            #endregion
-                        }
-                        else
-                        {
-                         
-                            #region searchnewribbon
-                            BullseyeSearch bullseyeSearch = new BullseyeSearch();
-                            bullseyeSearch.searchOrigin = position;
-                            bullseyeSearch.maxDistanceFilter = Modules.Buffs.ribbonSpreadRange;
-                            bullseyeSearch.teamMaskFilter = TeamMask.allButNeutral;
-                            bullseyeSearch.teamMaskFilter.RemoveTeam(damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex);
-                            bullseyeSearch.sortMode = BullseyeSearch.SortMode.Distance;
-                            bullseyeSearch.filterByLoS = true;
-                            bullseyeSearch.RefreshCandidates();
-
-                            foreach (HurtBox hurtBox in bullseyeSearch.GetResults())
-                            {
-                                if (hurtBox.healthComponent && hurtBox.healthComponent.body)
-                                {
-                                    if (hurtBox.healthComponent.body.HasBuff(Modules.Buffs.ribbonDebuff))
-                                        bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
-                                    if (hurtBox.healthComponent.gameObject.GetComponent<RibbonController>())
-                                        bullseyeSearch.FilterOutGameObject(hurtBox.healthComponent.gameObject);
-                                }
-                            }
-                            HurtBox target = bullseyeSearch.GetResults().FirstOrDefault<HurtBox>();
-                            if (target && target.healthComponent && target.healthComponent.body)
-                            {
-                                RibbonController newRibbon = self.gameObject.AddComponent<RibbonController>();
-                                newRibbon.nextRoot = target.healthComponent.body.gameObject;
-                                //Debug.Log("Setting " + self.gameObject.name + "'s next to " + target.healthComponent.body.gameObject);
-                                newRibbon.inflictorRoot = damageInfo.attacker;
-                            }
-                            #endregion
-                        }
-                    }
-                    if (damageInfo.damageType == DamageType.FruitOnHit)
+                    RibbonController ribbon = RibbonController.FindRibbonController(self.gameObject);
+                    if (ribbon && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
                     {
-                        RibbonController ribbon = self.gameObject.GetComponent<RibbonController>();
-                        damageInfo.damageType = DamageType.Generic;
-                        float duration = Modules.Buffs.ribbonDebuffDuration;
-                        if(!self.body.HasBuff(Modules.Buffs.ribbonDebuff))
-                            self.body.AddTimedBuff(Modules.Buffs.ribbonDebuff, duration);
+
+                        bool isCrit = damageInfo.crit;
+                        float damageValue = Modules.StaticValues.ribbonChainDamageCoefficient * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage; 
+                        TeamIndex teamIndex = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
+                        if (ribbon.NetworknextRoot)
+                        {
+                            CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
+                            if (body)
+                            {
+                                DancerOrb dancerOrb = new DancerOrb();
+                                dancerOrb.attacker = damageInfo.attacker;
+                                dancerOrb.bouncedObjects = null;
+                                dancerOrb.bouncesRemaining = 0;
+                                dancerOrb.damageCoefficientPerBounce = 1f;
+                                dancerOrb.damageColorIndex = DamageColorIndex.Item;
+                                dancerOrb.damageValue = damageValue;
+                                dancerOrb.isCrit = isCrit;
+                                dancerOrb.origin = damageInfo.position;
+                                dancerOrb.procChainMask = default(ProcChainMask);
+                                dancerOrb.procCoefficient = 0f;
+                                dancerOrb.range = 0f;
+                                dancerOrb.teamIndex = teamIndex;
+                                dancerOrb.target = body.mainHurtBox;
+                                dancerOrb.duration = Modules.StaticValues.ribbonChainTime;
+                                OrbManager.instance.AddOrb(dancerOrb);
+                            }
+
+                        }
                         else
                         {
-                            foreach (CharacterBody.TimedBuff buff in self.body.timedBuffs)
-                            {
-                                if (buff.buffIndex == Modules.Buffs.ribbonDebuff.buffIndex)
-                                    buff.timer = duration;
-                            }
+                            ribbon.SearchNewTarget();
                         }
 
-                        if(ribbon)
+                    }
+                 
+                    if (damageInfo.damageType == DamageType.FruitOnHit) // should figure out custom dmg types eventually
+                    {
+                        damageInfo.damageType = DamageType.Generic;               
+                        float duration = Modules.Buffs.ribbonDebuffDuration;
+                        
+                        if (ribbon)
                         {
                             ribbon.SyncRibbonTimersToNewTime(duration);
                         }
                         else
                         {
-                            RibbonController newRibbon = self.gameObject.AddComponent<RibbonController>();
-                            newRibbon.nextRoot = null;                           
+                            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonController, self.gameObject.transform);
+                            RibbonController newRibbon = gameObject.GetComponent<RibbonController>();
+                            newRibbon.timer = duration;
+                            newRibbon.NetworkownerRoot = self.gameObject;
                             newRibbon.inflictorRoot = damageInfo.attacker;
-                            newRibbon.SyncRibbonTimersToNewTime(duration);
+                            NetworkServer.Spawn(gameObject);
+                            newRibbon.StartRibbon();
                         }
-
-
-                        
-                        
                     }
+
                     if(damageInfo.damageType == DamageType.ApplyMercExpose)
                     {
                         damageInfo.damageType = DamageType.Generic;
@@ -326,5 +173,67 @@ namespace Dancer
 
         }
     }
+    /*
+    public class SyncRibbon : INetMessage
+    {
+        NetworkInstanceId inflictorNetId;
+        NetworkInstanceId targetNetId;
+        float duration;
 
+        public SyncRibbon()
+        {
+
+        }
+        public SyncRibbon(NetworkInstanceId inflictorInstanceId, NetworkInstanceId targetNetId, float duration)
+        {
+            this.inflictorNetId = inflictorInstanceId;
+            this.targetNetId = targetNetId;
+            this.duration = duration;
+
+        }
+
+
+        public void Deserialize(NetworkReader reader)
+        {
+            this.inflictorNetId = reader.ReadNetworkId();
+            this.targetNetId = reader.ReadNetworkId();
+            this.duration = (float)reader.ReadDouble();
+        }
+
+        public void OnReceived()
+        {
+            if(NetworkServer.active)
+            {
+                //Debug.Log("skipping host");
+                return;
+            }
+            Debug.Log("client adding ribbon");
+            GameObject inflictor = Util.FindNetworkObject(inflictorNetId);
+            GameObject target = Util.FindNetworkObject(targetNetId);          
+            if(target && inflictor)
+            {
+                RibbonController r = target.GetComponent<RibbonController>();
+                if(r)
+                {
+                    r.SyncRibbonTimersToNewTime(duration);
+                }
+                else
+                {
+                    r = target.AddComponent<RibbonController>();
+                    r.timer = duration;
+                    r.inflictorRoot = inflictor;
+                    Debug.Log("client added ribbon yipee duration = " +r.timer.ToString());
+                }
+               
+            }
+        }
+
+        public void Serialize(NetworkWriter writer)
+        {
+            writer.Write(inflictorNetId);
+            writer.Write(targetNetId);
+            writer.Write((double)duration);
+        }
+    }
+    */
 }

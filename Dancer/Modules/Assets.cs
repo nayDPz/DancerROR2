@@ -17,6 +17,8 @@ namespace Dancer.Modules
         // the assetbundle to load assets from
         internal static AssetBundle mainAssetBundle;
 
+        internal static GameObject ribbonController;
+
         internal static GameObject spikeGroundEffect;
         // particle effects
         internal static GameObject downAirEffect;
@@ -26,8 +28,6 @@ namespace Dancer.Modules
         internal static GameObject dragonLungeEffect;
         internal static GameObject dragonLungePullEffect;
         internal static GameObject swingEffect;
-        internal static GameObject ribbonLine;
-        internal static GameObject ribbonedEffect;
 
         // networked hit sounds
         internal static NetworkSoundEventDef grabGroundSoundEvent;
@@ -44,6 +44,7 @@ namespace Dancer.Modules
         internal static NetworkSoundEventDef punchHitSoundEvent;
 
         internal static List<NetworkSoundEventDef> networkSoundEventDefs = new List<NetworkSoundEventDef>();
+        internal static List<GameObject> networkedObjectPrefabs = new List<GameObject>();
 
         internal static List<EffectDef> effectDefs = new List<EffectDef>();
 
@@ -117,15 +118,11 @@ namespace Dancer.Modules
             dragonLungePullEffect = LoadEffect("DancerDragonLungePullEffect", true);
             swingEffect = LoadEffect("DancerSwingEffect", true);
 
-            newEffect = mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect");
-            newEffect.AddComponent<NetworkIdentity>();
-            newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
-            ribbonedEffect = newEffect;
-            //ribbonedEffect = mainAssetBundle.LoadAsset<GameObject>("RibbonedEffect");
-
-            ribbonLine = mainAssetBundle.LoadAsset<GameObject>("RibbonLine");
-            ribbonLine.GetComponent<LineRenderer>().useWorldSpace = true;
-
+            ribbonController = mainAssetBundle.LoadAsset<GameObject>("RibbonController");
+            ribbonController.AddComponent<Modules.Components.RibbonController>();
+            ribbonController.RegisterNetworkPrefab();
+            networkedObjectPrefabs.Add(ribbonController);
+            
             /*
             GameObject arti = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/networkedobjects/lockedmage"), "LockedMageNoAchievement");
             if (arti.GetComponent<GameObjectUnlockableFilter>())

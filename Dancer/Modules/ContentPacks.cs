@@ -24,12 +24,13 @@ namespace Dancer.Modules
             contentPack.buffDefs.Add(Buffs.buffDefs.ToArray());
             contentPack.effectDefs.Add(Assets.effectDefs.ToArray());
             contentPack.entityStateTypes.Add(States.entityStates.ToArray());
-            contentPack.masterPrefabs.Add(Prefabs.masterPrefabs.ToArray());
+            contentPack.masterPrefabs.Add(Prefabs.masterPrefabs.ToArray());            
             contentPack.networkSoundEventDefs.Add(Assets.networkSoundEventDefs.ToArray());
             contentPack.projectilePrefabs.Add(Prefabs.projectilePrefabs.ToArray());
             contentPack.skillDefs.Add(Skills.skillDefs.ToArray());
             contentPack.skillFamilies.Add(Skills.skillFamilies.ToArray());
             contentPack.survivorDefs.Add(Prefabs.survivorDefinitions.ToArray());
+            contentPack.networkedObjectPrefabs.Add(Assets.networkedObjectPrefabs.ToArray());
             //contentPack.unlockableDefs.Add(Unlockables.unlockableDefs.ToArray());
 
             args.ReportProgress(1f);
