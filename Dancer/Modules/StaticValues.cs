@@ -26,5 +26,6 @@ namespace Dancer.Modules
         public const float ribbonDamageCoefficient = 2f;
         public const float ribbonChainDamageCoefficient = 0f;
         public const float ribbonChainTime = 0.2f;
+        public const float ribbonBarrierFraction = 0.04f;
     }
 }

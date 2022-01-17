@@ -91,46 +91,59 @@ namespace Dancer
         
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
+            RibbonController ribbon = RibbonController.FindRibbonController(self.gameObject);
+
             if (damageInfo != null && damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>())
             {
                 if (damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "NDP_DANCER_BODY_NAME")
                 {
 
-                    RibbonController ribbon = RibbonController.FindRibbonController(self.gameObject);
-                    if (ribbon && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
+                    
+                    if (ribbon)
                     {
-
-                        bool isCrit = damageInfo.crit;
-                        float damageValue = Modules.StaticValues.ribbonChainDamageCoefficient * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage; 
-                        TeamIndex teamIndex = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
-                        if (ribbon.NetworknextRoot)
+                        if(damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
                         {
-                            CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
-                            if (body)
+                            HealthComponent h = damageInfo.attacker.GetComponent<HealthComponent>();
+                            if (h && damageInfo.damage > 0f)
                             {
-                                DancerOrb dancerOrb = new DancerOrb();
-                                dancerOrb.attacker = damageInfo.attacker;
-                                dancerOrb.bouncedObjects = null;
-                                dancerOrb.bouncesRemaining = 0;
-                                dancerOrb.damageCoefficientPerBounce = 1f;
-                                dancerOrb.damageColorIndex = DamageColorIndex.Item;
-                                dancerOrb.damageValue = damageValue;
-                                dancerOrb.isCrit = isCrit;
-                                dancerOrb.origin = damageInfo.position;
-                                dancerOrb.procChainMask = default(ProcChainMask);
-                                dancerOrb.procCoefficient = 0f;
-                                dancerOrb.range = 0f;
-                                dancerOrb.teamIndex = teamIndex;
-                                dancerOrb.target = body.mainHurtBox;
-                                dancerOrb.duration = Modules.StaticValues.ribbonChainTime;
-                                OrbManager.instance.AddOrb(dancerOrb);
+                                float b = h.fullHealth * Modules.StaticValues.ribbonBarrierFraction * damageInfo.procCoefficient;
+                                h.AddBarrier(b);
                             }
+                            
 
-                        }
-                        else
-                        {
-                            ribbon.SearchNewTarget();
-                        }
+                            bool isCrit = damageInfo.crit;
+                            float damageValue = Modules.StaticValues.ribbonChainDamageCoefficient * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage;
+                            TeamIndex teamIndex = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
+                            if (ribbon.NetworknextRoot)
+                            {
+                                CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
+                                if (body)
+                                {
+                                    DancerOrb dancerOrb = new DancerOrb();
+                                    dancerOrb.attacker = damageInfo.attacker;
+                                    dancerOrb.bouncedObjects = null;
+                                    dancerOrb.bouncesRemaining = 0;
+                                    dancerOrb.damageCoefficientPerBounce = 1f;
+                                    dancerOrb.damageColorIndex = DamageColorIndex.Item;
+                                    dancerOrb.damageValue = damageValue;
+                                    dancerOrb.isCrit = isCrit;
+                                    dancerOrb.origin = damageInfo.position;
+                                    dancerOrb.procChainMask = default(ProcChainMask);
+                                    dancerOrb.procCoefficient = 0f;
+                                    dancerOrb.range = 0f;
+                                    dancerOrb.teamIndex = teamIndex;
+                                    dancerOrb.target = body.mainHurtBox;
+                                    dancerOrb.duration = Modules.StaticValues.ribbonChainTime;
+                                    OrbManager.instance.AddOrb(dancerOrb);
+                                }
+
+                            }
+                            else
+                            {
+                                ribbon.inflictorRoot = damageInfo.attacker;
+                                ribbon.SearchNewTarget();
+                            }
+                        }                     
 
                     }
                  
@@ -170,6 +183,14 @@ namespace Dancer
 
 
             orig(self, damageInfo);
+
+            if(ribbon)
+            {
+                if(!self.alive)
+                {
+                    ribbon.DetachFromOwner();
+                }
+            }
 
         }
     }

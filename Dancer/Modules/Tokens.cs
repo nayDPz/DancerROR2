@@ -33,7 +33,7 @@ namespace Dancer.Modules
             LanguageAPI.Add("KEYWORD_DANCER_DOWNTILT", $"<style=cKeywordName>Down Tilt</style> <style=cIsUtility>Input: ground, aim down.</style> <style=cSub>Knock enemies upwards and deal <style=cIsDamage>{StaticValues.downTiltDamageCoefficient * 100}%</style> damage.</style>");
             LanguageAPI.Add("KEYWORD_DANCER_UPAIR", $"<style=cKeywordName>Up Air</style> <style=cIsUtility>Input: aim up.</style> <style=cSub>Two attacks that deal <style=cIsDamage>{StaticValues.upAir1DamageCoefficient * 100}%</style> and <style=cIsDamage>{StaticValues.upAir2DamageCoefficient * 100}%</style> damage. Second attack is narrow and deals up to <style=cIsDamage>3x</style> damage to low health enemies.</style>");
             LanguageAPI.Add("KEYWORD_DANCER_FORWARDAIR", $"<style=cKeywordName>Forward Air</style> <style=cIsUtility>Input: air, aim forward.</style> <style=cSub>Heavy swing that deals <style=cIsDamage>{StaticValues.forwardAirDamageCoefficient * 100}%</style> damage and spikes enemies to the ground, <style=cIsDamage>stunning</style> and dealing up to <style=cIsDamage>{StaticValues.forwardAirSpikeDamageCoefficient * 100}%</style> damage</style>");
-            LanguageAPI.Add("KEYWORD_DANCER_DOWNAIR", $"<style=cKeywordName>Down Air</style> <style=cIsUtility>Input: air, aim dowm.</style> <style=cSub>Dive downwards and repeatedly deal <style=cIsDamage>{StaticValues.downAirDamageCoefficient * 100}%</style> damage. If you hit the ground, start a <style=cIsDamage>Down Tilt</style></style>");
+            LanguageAPI.Add("KEYWORD_DANCER_DOWNAIR", $"<style=cKeywordName>Down Air</style> <style=cIsUtility>Input: air, aim down.</style> <style=cSub>Dive downwards and repeatedly deal <style=cIsDamage>{StaticValues.downAirDamageCoefficient * 100}%</style> damage. If you hit the ground, start a <style=cIsDamage>Down Tilt</style></style>");
             
             LanguageAPI.Add(prefix + "PRIMARY_SLASH_NAME", "Primary");
             LanguageAPI.Add(prefix + "PRIMARY_SLASH_DESCRIPTION",  $"<style=cIsDamage>Melee attack</style> with effects based on your aim input. <style=cIsUtility>(Hover for more details)</style>");
@@ -55,7 +55,7 @@ namespace Dancer.Modules
             LanguageAPI.Add("KEYWORD_DANCER_RIBBON", $"<color=#611221><style=cKeywordName>Ribbon</style></color><style=cSub>Ribboned enemies bleed for <style=cIsDamage>{StaticValues.ribbonDotDamageCoefficient * 100}%</style> damage per second and are <style=cIsDamage>unable to act.</style>");
             #region Special
             LanguageAPI.Add(prefix + "SPECIAL_RIBBON_NAME", "Special");
-            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_DESCRIPTION", $"Fire a projectile that <color=#b50727>ribbons</color> enemies for <style=cIsDamage>{StaticValues.ribbonDuration}</style> seconds. Attacking <color=#b50727>ribboned</color> enemies <style=cIsHealing>heals you </style>and <style=cIsDamage>extends the ribbon.</style>");
+            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_DESCRIPTION", $"Fire a projectile that <color=#b50727>ribbons</color> enemies for <style=cIsDamage>{StaticValues.ribbonDuration}</style> seconds. Attacking <color=#b50727>ribboned</color> enemies grants a <style=cIsHealing>temporary barrier</style> and <style=cIsDamage>extends</style> the ribbon.");
 
             #endregion
 

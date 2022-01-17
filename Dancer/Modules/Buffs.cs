@@ -17,7 +17,7 @@ namespace Dancer.Modules
 
         internal static float ribbonDebuffDuration = 8f;
         internal static float ribbonBossCCDuration = 4f;
-        internal static float ribbonSpreadRange = 50f;
+        internal static float ribbonSpreadRange = 40f;
         internal static float ribbonDotCoefficient = 1f;
 
         internal static void RegisterBuffs()
