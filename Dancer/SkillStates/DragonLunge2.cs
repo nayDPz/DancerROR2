@@ -10,12 +10,14 @@ namespace Dancer.SkillStates
 {
     public class DragonLunge2 : BaseSkillState
     {
+        public static float popRadius = 4f;
+        public static float cooldownOnMiss = 0.5f;
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
-        public static float damageCoefficient = 5f;
+        public static float damageCoefficient = Modules.StaticValues.dragonLungeDamageCoefficient;
         public static float procCoefficient = 1f;
-        public static float baseDuration = 0.8f;
+        public static float baseDuration = 0.7f;
         public static float force = 0f;
         public static float recoil = 1f;
         public static float range = 62f;
@@ -24,9 +26,7 @@ namespace Dancer.SkillStates
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
         private DancerComponent weaponAnimator;
-        private CharacterBody hitTarget;
 
-        private bool hitEnemy;
         private bool hitWorld;
         private float stopwatch;
         private Vector3 hitPoint;
@@ -42,6 +42,7 @@ namespace Dancer.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
+
             this.weaponAnimator = base.GetComponent<DancerComponent>();
 
             base.StartAimMode(2f);
@@ -85,8 +86,15 @@ namespace Dancer.SkillStates
                 {
                     Ray aimRay = base.GetAimRay();
                     base.AddRecoil(-1f * DragonLunge2.recoil, -2f * DragonLunge2.recoil, -0.5f * DragonLunge2.recoil, 0.5f * DragonLunge2.recoil);
+                    bool hitEnemy = false;
+                    List<GameObject> hitBodies = new List<GameObject>();
 
                     RaycastHit raycastHit;
+                    if (Util.CharacterSpherecast(base.gameObject, aimRay, 1.5f, out raycastHit, DragonLunge2.range, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal))
+                    {
+                        hitWorld = true;
+                        this.hitPoint = raycastHit.point;
+                    }
 
                     var bulletAttack = new BulletAttack
                     {
@@ -95,7 +103,7 @@ namespace Dancer.SkillStates
                         origin = aimRay.origin,
                         damage = DragonLunge2.damageCoefficient * this.damageStat,
                         damageColorIndex = DamageColorIndex.Default,
-                        damageType = DamageType.Stun1s,
+                        damageType = DamageType.Generic,
                         falloffModel = BulletAttack.FalloffModel.DefaultBullet,
                         maxDistance = DragonLunge2.range,
                         force = DragonLunge2.force,
@@ -110,7 +118,7 @@ namespace Dancer.SkillStates
                         procCoefficient = procCoefficient,
                         radius = 2f,
                         sniper = false,
-                        stopperMask = LayerIndex.CommonMasks.bullet, //LayerIndex.CommonMasks.bullet
+                        stopperMask = LayerIndex.world.mask, //LayerIndex.CommonMasks.bullet
                         weapon = null,
                         tracerEffectPrefab = null,
                         spreadPitchScale = 0f,
@@ -119,30 +127,57 @@ namespace Dancer.SkillStates
                         hitEffectPrefab = muzzleEffectPrefab,
                     };
 
+
+                    
                     bulletAttack.hitCallback = (ref BulletAttack.BulletHit hitInfo) =>
                     {
                         var result = bulletAttack.DefaultHitCallback(ref hitInfo);
 
-                        this.hitPoint = hitInfo.point;
-                        if (hitInfo.hitHurtBox && hitInfo.hitHurtBox.healthComponent && hitInfo.hitHurtBox.healthComponent.body)
-                        {
-                            this.hitEnemy = true;
-                        }
-                        else
-                        {
-                            this.hitWorld = true;
-                        }
+                        if (!hitWorld)
+                            this.hitPoint = hitInfo.point;
 
+                        float distance = (base.transform.position - this.hitPoint).magnitude;
+                        Vector3 direction = (this.hitPoint - base.transform.position).normalized;
+                        float duration = Mathf.Lerp(Pull.minDuration, Pull.maxDuration, distance / Pull.maxDistance);
+                        if (hitInfo.hitHurtBox)
+                        {
+                            HurtBox hurtBox = hitInfo.hitHurtBox;
+                            if (hurtBox)
+                            {
+                                HealthComponent h = hurtBox.healthComponent;
+                                if (h && h.body)
+                                {
+                                    hitEnemy = true;
+                                    hitBodies.Add(h.body.gameObject);
+                                    
+                                }
+                            }
+                        }
 
                         return result;
                     };
                     bulletAttack.Fire();
 
                     if (this.hitWorld || hitEnemy)
+                    {
+                        this.outer.SetNextState(new Pull2
+                        {
+                            waitTime = this.duration - this.fireTime,
+                            point = hitPoint,
+                            hitWorld = hitWorld,
+                            hitBodies = hitBodies,
+                        });
                         this.OnHitAnyAuthority();
+                    }                      
+                    else
+                    {
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge2.cooldownOnMiss;
+                        //this.FireLollipop(aimRay.GetPoint(range));
+                        
+                    }
 
                     Vector3 between = this.hitPoint - base.transform.position;
-                    if (this.hitPoint != Vector3.zero && between.magnitude > 0f)
+                    if (this.hitPoint != Vector3.zero && between.magnitude > 5f)
                     {
                         this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
                     }
@@ -150,6 +185,33 @@ namespace Dancer.SkillStates
                         this.weaponAnimator.RotationOverride(aimRay.GetPoint(range));
                 }
             }
+        }
+
+        private void FireLollipop(Vector3 position)
+        {
+            bool hitz = false;
+            List<HealthComponent> hits = new List<HealthComponent>();
+            Collider[] hit = Physics.OverlapSphere(position, DragonLunge2.popRadius, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal);
+            for (int i = 0; i < hit.Length; i++)
+            {
+                HurtBox hurtBox = hit[i].GetComponent<HurtBox>();
+                if (!hurtBox)
+                {
+                    hitz = true;
+                    this.outer.SetNextState(new Pull2
+                    {
+                        waitTime = this.duration - this.fireTime,
+                        point = hit[i].transform.position,
+                        hitWorld = true,
+                        hitBodies = new List<GameObject>(),
+                    });
+                    Debug.Log("popped dlunge");
+                    this.OnHitAnyAuthority();
+                    return;
+                }
+
+            }
+                
         }
 
         private void OnHitAnyAuthority()
@@ -191,40 +253,17 @@ namespace Dancer.SkillStates
 
             if (base.fixedAge >= this.duration && base.isAuthority)
             {
-                if (this.hasHit)
-                {
-                    Util.PlaySound("LungeDash", base.gameObject);
-                    if (this.hitWorld)
-                    {
-                        float distance = Mathf.Max((this.hitPoint - base.transform.position).magnitude - 2f, 0);
-                        Vector3 direction = (this.hitPoint - base.transform.position).normalized;
-                        Vector3 point = distance * direction + base.transform.position;
-                        this.outer.SetNextState(new Pull { point = point, hitWorld = this.hitWorld });
-                        return;
-                    }
-                    else
-                        this.outer.SetNextStateToMain();
+                this.weaponAnimator.StopRotationOverride();
+                this.outer.SetNextStateToMain();
 
-
-                    return;
-                }
-                else
-                {
-                    this.weaponAnimator.StopRotationOverride();
-                    this.outer.SetNextStateToMain();
-                }
 
                 return;
             }
         }
 
-        GameObject netTargetObject;
-
         public override InterruptPriority GetMinimumInterruptPriority()
         {
             return InterruptPriority.Skill;
         }
-
-
     }
 }

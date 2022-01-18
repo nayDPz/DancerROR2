@@ -147,7 +147,7 @@ namespace Dancer
 
                     }
                  
-                    if (damageInfo.damageType == DamageType.FruitOnHit) // should figure out custom dmg types eventually
+                    if (damageInfo.damageType == DamageType.FruitOnHit) // figure out custom dmg types eventually
                     {
                         damageInfo.damageType = DamageType.Generic;               
                         float duration = Modules.Buffs.ribbonDebuffDuration;

@@ -192,7 +192,7 @@ namespace Dancer.Modules.Survivors
 				skillNameToken = str + "_DANCER_BODY_UTILITY_PULL_NAME",
 				skillDescriptionToken = str + "_DANCER_BODY_UTILITY_PULL_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-				activationState = new SerializableEntityStateType(typeof(DragonLunge)),
+				activationState = new SerializableEntityStateType(typeof(DragonLunge2)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
 				baseRechargeInterval = 6f,

@@ -11,7 +11,6 @@ using R2API.Networking;
 using R2API.Networking.Interfaces;
 namespace Dancer.Modules.Components
 {
-	//[RequireComponent(typeof(BezierCurveLine))]
 	public class RibbonController : NetworkBehaviour
 	{
 
@@ -139,8 +138,8 @@ namespace Dancer.Modules.Components
 						procCoefficient = 0.67f
 					};
 					this.nextHealthComponent.TakeDamage(damageInfo);
-					GlobalEventManager.instance.OnHitEnemy(damageInfo, this.inflictorRoot);
-					GlobalEventManager.instance.OnHitAll(damageInfo, this.inflictorRoot);
+					GlobalEventManager.instance.OnHitEnemy(damageInfo, this.nextRoot);
+					GlobalEventManager.instance.OnHitAll(damageInfo, this.nextRoot);
 
 
 					GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonController, this.nextRoot.transform);
