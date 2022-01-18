@@ -188,7 +188,8 @@ namespace Dancer
             {
                 if(!self.alive)
                 {
-                    ribbon.DetachFromOwner();
+                    if(!ribbon.ribbonAttached)
+                        ribbon.DetachFromOwner();
                 }
             }
 

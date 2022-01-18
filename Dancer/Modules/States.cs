@@ -50,7 +50,6 @@ namespace Dancer.Modules
             AddSkill(typeof(DragonLunge));
             AddSkill(typeof(DragonLungeButEpic));
             AddSkill(typeof(Pull));
-            AddSkill(typeof(Pull2));
             AddSkill(typeof(PullDamage));
             AddSkill(typeof(SpinnyMove));
             AddSkill(typeof(FireChainRibbons));

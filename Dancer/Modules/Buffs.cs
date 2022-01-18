@@ -17,7 +17,7 @@ namespace Dancer.Modules
 
         internal static float ribbonDebuffDuration = 8f;
         internal static float ribbonBossCCDuration = 4f;
-        internal static float ribbonSpreadRange = 40f;
+        
         internal static float ribbonDotCoefficient = 1f;
 
         internal static void RegisterBuffs()
@@ -25,7 +25,7 @@ namespace Dancer.Modules
             ribbonDebuffDuration = StaticValues.ribbonDuration;
             ribbonDotCoefficient = StaticValues.ribbonDotDamageCoefficient;
             ribbonDebuff = AddNewBuff("RibbonDebuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.magenta, false, true);
-            ribbonDotIndex = DotAPI.RegisterDotDef(1f, ribbonDotCoefficient, DamageColorIndex.SuperBleed, ribbonDebuff, null, null);
+            ribbonDotIndex = DotAPI.RegisterDotDef(1f, Modules.StaticValues.ribbonDotDamageCoefficient, DamageColorIndex.SuperBleed, ribbonDebuff, null, null);
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

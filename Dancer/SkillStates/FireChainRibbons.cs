@@ -46,6 +46,8 @@ namespace Dancer.SkillStates
 
         public override void OnExit()
         {
+            if (!this.hasFired)
+                this.Fire();
             base.OnExit();
         }
 
