@@ -10,7 +10,7 @@ namespace Dancer.SkillStates
 {
     public class FireChainRibbons : BaseSkillState
     {
-        public static float damageCoefficient = 1f;
+        public static float damageCoefficient = Modules.StaticValues.ribbonDamageCoefficient;
         public static float procCoefficient = 0.5f;
         public static float baseDuration = 0.35f;
         public static float force = 0f;

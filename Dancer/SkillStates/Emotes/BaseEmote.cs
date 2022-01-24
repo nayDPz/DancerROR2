@@ -101,21 +101,7 @@ namespace Dancer.SkillStates.Emotes
             //emote cancels
             if (Util.HasEffectiveAuthority(base.gameObject) && base.characterMotor.isGrounded && !this.localUser.isUIFocused)
             {
-                if (Input.GetKeyDown(Modules.Config.emote1Keybind.Value))
-                {
-                    this.outer.SetInterruptState(new Emote1(), InterruptPriority.Any);
-                    return;
-                }
-                else if (Input.GetKeyDown(Modules.Config.standKeybind.Value))
-                {
-                    this.outer.SetInterruptState(new Stand(), InterruptPriority.Any);
-                    return;
-                }
-                else if (Input.GetKeyDown(Modules.Config.emote2Keybind.Value))
-                {
-                    this.outer.SetInterruptState(new Emote2(), InterruptPriority.Any);
-                    return;
-                }
+
             }
 
             if (this.duration > 0 && base.fixedAge >= this.duration) flag = true;

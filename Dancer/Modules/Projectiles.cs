@@ -37,6 +37,8 @@ namespace Dancer.Modules
             i.enemyHitSoundString = "WhipHit1";
             i.hitSoundString = "LungeHit";
 
+            dancerRibbonProjectile.AddComponent<ProjectileSpawnRibbonController>();
+
             Modules.Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
         }
 

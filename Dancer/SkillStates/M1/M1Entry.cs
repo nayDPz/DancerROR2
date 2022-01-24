@@ -12,19 +12,19 @@ namespace Dancer.SkillStates
 			float y = base.inputBank.aimDirection.y;
 
 			
-			if (y > 0.575f)
+			if (y > Modules.StaticValues.primaryAimUpAngle)
 			{
 				this.outer.SetNextState(new UpAir());
 			}
 			else
 			{
-				if (y < -0.425f)
+				if (y < Modules.StaticValues.primaryAimDownAngle)
 				{
 					if (base.characterMotor.isGrounded)
 					{
 						this.outer.SetNextState(new DownAirLand());
 					}
-					else if (y < -0.74f)
+					else if (y < Modules.StaticValues.primaryAimDownAirAngle)
 					{
 						this.outer.SetNextState(new DownAir());
 					}

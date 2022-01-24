@@ -88,7 +88,7 @@ namespace Dancer.SkillStates
 			this.attack.damage = this.damageCoefficient * this.damageStat;
 			this.attack.procCoefficient = this.procCoefficient;
 			this.attack.hitEffectPrefab = Assets.hitEffect;
-			this.attack.forceVector = Vector3.down * this.pushForce;
+			this.attack.forceVector = Vector3.zero;
 			this.attack.pushAwayForce = 0f;
 			this.attack.hitBoxGroup = hitBoxGroup;
 			this.attack.isCrit = base.RollCrit();
@@ -239,6 +239,7 @@ namespace Dancer.SkillStates
 			{
 				this.outer.SetNextState(new FAir());
 			}
+					
 
 		}
 
@@ -320,7 +321,7 @@ namespace Dancer.SkillStates
 
 		public override InterruptPriority GetMinimumInterruptPriority()
 		{
-			return InterruptPriority.PrioritySkill;
+			return InterruptPriority.Skill;
 		}
 
 		public override void OnExit()

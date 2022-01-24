@@ -261,8 +261,8 @@ namespace Dancer.SkillStates
 		}
 
 		public override InterruptPriority GetMinimumInterruptPriority()
-		{
-			return InterruptPriority.PrioritySkill;
+		{	
+			return InterruptPriority.Skill;
 		}
 
 		public override void OnExit()

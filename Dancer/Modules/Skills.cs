@@ -61,6 +61,7 @@ namespace Dancer.Modules
             component.passiveSkill.skillDescriptionToken = "NDP_DANCER_BODY_PASSIVE_DESCRIPTION";
             component.passiveSkill.icon = Assets.mainAssetBundle.LoadAsset<Sprite>("texBazookaOutIcon");
         }
+
         internal static void AddPrimarySkill(GameObject targetPrefab, SkillDef skillDef)
         {
             SkillLocator skillLocator = targetPrefab.GetComponent<SkillLocator>();

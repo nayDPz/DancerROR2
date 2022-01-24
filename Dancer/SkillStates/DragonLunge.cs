@@ -10,22 +10,25 @@ namespace Dancer.SkillStates
 {
     public class DragonLunge : BaseSkillState
     {
-        public static float cooldownOnMiss = 0.5f;
+        public static float popRadius = 4f;
+        public static float cooldownOnMiss = 1f;
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
+        public static float radius = 1.75f;
         public static float damageCoefficient = Modules.StaticValues.dragonLungeDamageCoefficient;
         public static float procCoefficient = 1f;
-        public static float baseDuration = 0.7f;
+        public static float baseDuration = 0.85f;
         public static float force = 0f;
         public static float recoil = 1f;
-        public static float range = 62f;
+        public static float range = Modules.StaticValues.dragonLungeRange;
         public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCaptainShotgun");
         public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
         public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
         private DancerComponent weaponAnimator;
 
+        private float earlyExitTime = 0.35f;
         private bool hitWorld;
         private float stopwatch;
         private Vector3 hitPoint;
@@ -46,15 +49,20 @@ namespace Dancer.SkillStates
 
             base.StartAimMode(2f);
             this.duration = DragonLunge.baseDuration / this.attackSpeedStat;
-            this.fireTime = 0.4f * this.duration;
+            this.fireTime = 0.45f * this.duration;
             base.characterBody.SetAimTimer(2f);
             this.animator = base.GetModelAnimator();
             this.muzzleString = "LanceBase";
             Util.PlaySound("LungeStart", base.gameObject);
             base.PlayAnimation("FullBody, Override", "DragonLunge", "DragonLunge.playbackRate", this.duration * 0.975f);
+            this.earlyExitTime /= this.attackSpeedStat;
+
             if (base.characterMotor && DragonLunge.smallHopStrength != 0f)
             {
-                base.characterMotor.velocity.y = DragonLunge.smallHopStrength;
+                Vector3 direction = base.inputBank.moveVector;
+
+                characterMotor.Motor.ForceUnground();
+                characterMotor.velocity = new Vector3(smallHopStrength * direction.x, Mathf.Max(characterMotor.velocity.y, smallHopStrength), smallHopStrength * direction.z);
             }
 
             base.characterDirection.forward = base.inputBank.aimDirection;
@@ -63,7 +71,7 @@ namespace Dancer.SkillStates
 
         public override void OnExit()
         {
-            this.weaponAnimator.StopRotationOverride();
+            this.weaponAnimator.StopWeaponOverride();
             this.animator.SetFloat("DragonLunge.playbackRate", 1f);
             base.OnExit();
         }
@@ -74,18 +82,30 @@ namespace Dancer.SkillStates
         {
             if (!this.hasFired)
             {
-
                 this.hasFired = true;
 
+                bool isHeld = base.IsKeyDownAuthority();
+
+                Transform transform = base.characterBody.coreTransform;
+
+                ChildLocator childLocator = base.GetModelChildLocator();
+                if (childLocator)
+                {
+                    transform = childLocator.FindChild(this.muzzleString);
+                }
+
                 base.characterBody.AddSpreadBloom(1.5f);
-                EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungeEffect, base.gameObject, this.muzzleString, false);
+                EffectManager.SimpleEffect(Modules.Assets.dragonLungeEffect, transform.position, transform.rotation, true);
                 Util.PlaySound("LungeFire", base.gameObject);
 
                 if (base.isAuthority)
                 {
+
+
                     Ray aimRay = base.GetAimRay();
                     base.AddRecoil(-1f * DragonLunge.recoil, -2f * DragonLunge.recoil, -0.5f * DragonLunge.recoil, 0.5f * DragonLunge.recoil);
                     bool hitEnemy = false;
+                    List<GameObject> hitBodies = new List<GameObject>();
 
                     RaycastHit raycastHit;
                     if (Util.CharacterSpherecast(base.gameObject, aimRay, 1.5f, out raycastHit, DragonLunge.range, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal))
@@ -101,8 +121,8 @@ namespace Dancer.SkillStates
                         origin = aimRay.origin,
                         damage = DragonLunge.damageCoefficient * this.damageStat,
                         damageColorIndex = DamageColorIndex.Default,
-                        damageType = DamageType.Generic,
-                        falloffModel = BulletAttack.FalloffModel.DefaultBullet,
+                        damageType = DamageType.Stun1s,
+                        falloffModel = BulletAttack.FalloffModel.None,
                         maxDistance = DragonLunge.range,
                         force = DragonLunge.force,
                         hitMask = LayerIndex.CommonMasks.bullet,
@@ -114,7 +134,7 @@ namespace Dancer.SkillStates
                         smartCollision = false,
                         procChainMask = default(ProcChainMask),
                         procCoefficient = procCoefficient,
-                        radius = 2f,
+                        radius = radius,
                         sniper = false,
                         stopperMask = LayerIndex.world.mask, //LayerIndex.CommonMasks.bullet
                         weapon = null,
@@ -122,11 +142,11 @@ namespace Dancer.SkillStates
                         spreadPitchScale = 0f,
                         spreadYawScale = 0f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
-                        hitEffectPrefab = muzzleEffectPrefab,
+                        hitEffectPrefab = Modules.Assets.stabHitEffect,
                     };
 
 
-
+                    
                     bulletAttack.hitCallback = (ref BulletAttack.BulletHit hitInfo) =>
                     {
                         var result = bulletAttack.DefaultHitCallback(ref hitInfo);
@@ -146,45 +166,8 @@ namespace Dancer.SkillStates
                                 if (h && h.body)
                                 {
                                     hitEnemy = true;
-                                    EntityStateMachine component = h.body.GetComponent<EntityStateMachine>();
-                                    if (h.body.GetComponent<SetStateOnHurt>() && h.body.GetComponent<SetStateOnHurt>().canBeFrozen && component)
-                                    {
-                                        Vector3 d = hitInfo.point - h.body.corePosition;
-                                        if (h.body.characterMotor)
-                                        {
-                                            h.body.characterMotor.AddDisplacement(d);
-                                        }
-                                        else if (h.body.rigidbody)
-                                        {
-                                            h.body.rigidbody.MovePosition(d.normalized + h.body.corePosition);
-                                        }
-
-                                        if (h.body.isChampion && !(h.gameObject.name.Contains("Brother")))
-                                        {
-                                            this.hitWorld = true;
-                                            this.hitPoint = hitInfo.point;
-                                        }
-
-                                        if (!hitWorld)
-                                        {
-                                            SuspendedState newNextState = new SuspendedState
-                                            {
-                                                duration = duration + (this.duration - this.fireTime),
-                                            };
-                                            component.SetInterruptState(newNextState, InterruptPriority.Death);
-                                        }
-                                        else
-                                        {
-                                            SkeweredState newNextState = new SkeweredState
-                                            {
-                                                skewerDuration = (this.duration - this.fireTime),
-                                                pullDuration = duration,
-                                                destination = this.hitPoint,
-                                            };
-                                            component.SetInterruptState(newNextState, InterruptPriority.Death);
-                                        }
-
-                                    }
+                                    hitBodies.Add(h.body.gameObject);
+                                    
                                 }
                             }
                         }
@@ -194,29 +177,69 @@ namespace Dancer.SkillStates
                     bulletAttack.Fire();
 
                     if (this.hitWorld || hitEnemy)
-                        this.OnHitAnyAuthority();
-                    else
                     {
-                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge.cooldownOnMiss;
+                        //this.hitPoint = this.hitWorld ? this.hitPoint : aimRay.GetPoint(range);
+                        if(base.IsKeyDownAuthority())
+                        {
+                            this.outer.SetNextState(new Pull
+                            {
+                                waitTime = this.duration - this.fireTime,
+                                point = hitPoint,
+                                hitWorld = hitWorld,
+                                hitBodies = hitBodies,
+                            });
+                        }
+                        
+                        this.OnHitAnyAuthority();
                     }
+
+                    if (this.hitWorld && !hitEnemy && !base.IsKeyDownAuthority())
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge.cooldownOnMiss;
+                    else if (!this.hitWorld && !hitEnemy)
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge.cooldownOnMiss;
 
                     Vector3 between = this.hitPoint - base.transform.position;
                     if (this.hitPoint != Vector3.zero && between.magnitude > 5f)
                     {
-                        this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
+                        this.weaponAnimator.WeaponRotationOverride(between * 500f + base.transform.position);
                     }
                     else
-                        this.weaponAnimator.RotationOverride(aimRay.GetPoint(range));
+                        this.weaponAnimator.WeaponRotationOverride(aimRay.GetPoint(range));
                 }
             }
+        }
+
+        private void FireLollipop(Vector3 position)
+        {
+            bool hitz = false;
+            List<HealthComponent> hits = new List<HealthComponent>();
+            Collider[] hit = Physics.OverlapSphere(position, DragonLunge.popRadius, LayerIndex.world.mask, QueryTriggerInteraction.UseGlobal);
+            for (int i = 0; i < hit.Length; i++)
+            {
+                HurtBox hurtBox = hit[i].GetComponent<HurtBox>();
+                if (!hurtBox)
+                {
+                    hitz = true;
+                    this.outer.SetNextState(new Pull2
+                    {
+                        waitTime = this.duration - this.fireTime,
+                        point = hit[i].transform.position,
+                        hitWorld = true,
+                        hitBodies = new List<GameObject>(),
+                    });
+                    Debug.Log("popped dlunge");
+                    this.OnHitAnyAuthority();
+                    return;
+                }
+
+            }
+                
         }
 
         private void OnHitAnyAuthority()
         {
 
             Util.PlaySound("LungeHit", base.gameObject);
-
-            base.characterMotor.velocity = Vector3.zero;
 
             this.hasHit = true;
 
@@ -234,36 +257,18 @@ namespace Dancer.SkillStates
                 characterMotor.velocity.y = characterMotor.velocity.y + DragonLunge.antigravityStrength * Time.fixedDeltaTime * (1f - this.stopwatch / this.fireTime);
 
             }
-            if (base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.RotationOverride(base.GetAimRay().GetPoint(range));
+            if (base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.WeaponRotationOverride(base.GetAimRay().GetPoint(range));
             if (base.fixedAge >= this.fireTime)
             {
                 this.Fire();
                 base.characterDirection.forward = this.hitPoint != Vector3.zero ? this.hitPoint - base.transform.position : base.characterDirection.forward;
             }
 
-            if (this.hasHit)
-            {
-                base.characterMotor.velocity = Vector3.zero;
-                this.animator.SetFloat("DragonLunge.playbackRate", 0f);
-            }
 
-
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (base.fixedAge >= this.duration - this.earlyExitTime && this.hasFired && base.isAuthority)
             {
-                if (this.hasHit)
-                {
-                    Util.PlaySound("LungeDash", base.gameObject);
-                    float distance = Mathf.Max((this.hitPoint - base.transform.position).magnitude - 2f, 0);
-                    Vector3 direction = (this.hitPoint - base.transform.position).normalized;
-                    Vector3 point = distance * direction + base.transform.position;
-                    this.outer.SetNextState(new Pull { point = point, hitWorld = this.hitWorld });
-                    return;
-                }
-                else
-                {
-                    this.weaponAnimator.StopRotationOverride();
-                    this.outer.SetNextStateToMain();
-                }
+                this.weaponAnimator.StopWeaponOverride();
+                this.outer.SetNextStateToMain();
 
                 return;
             }

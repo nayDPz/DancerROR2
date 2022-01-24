@@ -14,6 +14,10 @@ namespace Dancer.Modules.Components
 	public class RibbonController : NetworkBehaviour
 	{
 
+		private float[] cooldowns;
+		private int[] stocks;
+		private bool skillOverride;
+
 		public float timer;
 		private EntityStateMachine ownerMachine;
 		private float damageCoefficient = StaticValues.ribbonDamageCoefficient;
@@ -21,6 +25,7 @@ namespace Dancer.Modules.Components
 		private float fixedAttachOwnerStopwatch;
 		private SkillLocator ownerSkillLocator;
 
+		public int spreadsRemaining;
 		private RibbonController nextController;
 		private float attachOwnerStopwatch;
 		private float attachOwnerTime = 0.25f;
@@ -42,17 +47,52 @@ namespace Dancer.Modules.Components
 			Destroy(base.gameObject);
         }
 
-		private void OnDestroy()
-		{
+		private void UnsetOverride()
+        {
+			if(this.skillOverride)
+            {
+				this.skillOverride = false;
+				if (!this.ownerSkillLocator) this.ownerSkillLocator = this.ownerRoot.GetComponent<SkillLocator>();
 
-			if (this.ownerSkillLocator)
-			{
-				foreach (GenericSkill skill in this.ownerSkillLocator.allSkills)
+				SkillLocator skillLocator = this.ownerSkillLocator;
+				if (skillLocator)
 				{
-					if (skill)
-						skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+					for (int i = 0; i < skillLocator.allSkills.Length; i++)
+					{
+						GenericSkill skill = skillLocator.allSkills[i];
+						if (skill)
+						{
+							skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+							skill.rechargeStopwatch = cooldowns[i];
+							skill.stock = stocks[i];
+						}
+					}
 				}
 			}
+			
+		}
+
+		private void OnDestroy()
+		{
+			if (!this.ownerSkillLocator) this.ownerSkillLocator = this.ownerRoot.GetComponent<SkillLocator>();
+
+			SkillLocator skillLocator = this.ownerSkillLocator;
+			if (skillLocator)
+			{
+				for (int i = 0; i < skillLocator.allSkills.Length; i++)
+				{
+					GenericSkill skill = skillLocator.allSkills[i];
+					if (skill)
+					{
+						skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+						skill.rechargeStopwatch = cooldowns[i];
+						skill.stock = stocks[i];
+					}
+				}
+			}
+			
+
+
 
 			if (NetworkServer.active)
             {
@@ -107,28 +147,18 @@ namespace Dancer.Modules.Components
 				this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
 				this.ownerMachine = this.ownerRoot.GetComponent<EntityStateMachine>();
 				this.ownerSkillLocator = this.ownerRoot.GetComponent<SkillLocator>();
-
 				if (NetworkServer.active)
-					this.ownerBody.AddTimedBuff(Modules.Buffs.ribbonDebuff, this.timer);
-
-				if (false)//this.ownerBody.isChampion)
-				{
-					if (this.ownerMachine)
-					{
-						RibbonedState newNextState = new RibbonedState
-						{
-							duration = Modules.Buffs.ribbonBossCCDuration,
-						};
-						this.ownerMachine.SetInterruptState(newNextState, InterruptPriority.Death);
-					}
-				}	
-				
-				
+					this.ownerBody.AddTimedBuff(Modules.Buffs.ribbonDebuff, this.timer);							
 			}
-
-			this.ownerAttached = true;
+			this.ownerAttached = this.ownerRoot != null;
 			Util.PlaySound("WhipHit1", this.ownerRoot);
 			this.SyncRibbonTimersToNewTime(this.timer);
+
+			if(this.spreadsRemaining > 0)
+            {
+				this.SearchNewTarget();
+				this.spreadsRemaining -= 1;
+            }
 		}
 
 
@@ -166,6 +196,7 @@ namespace Dancer.Modules.Components
 					newRibbon.timer = this.timer;
 					newRibbon.NetworkownerRoot = this.nextRoot;
 					newRibbon.inflictorRoot = this.inflictorRoot;
+					newRibbon.spreadsRemaining = this.spreadsRemaining;
 					NetworkServer.Spawn(gameObject);
 					newRibbon.StartRibbon();
 
@@ -306,14 +337,7 @@ namespace Dancer.Modules.Components
 				if (!this.ownerBody) this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
 				if (this.timer < Buffs.ribbonDebuffDuration - Buffs.ribbonBossCCDuration && this.ownerBody && this.ownerBody.isChampion)
 				{
-					if (this.ownerSkillLocator)
-					{
-						foreach (GenericSkill skill in this.ownerSkillLocator.allSkills)
-						{
-							if (skill)
-								skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
-						}
-					}
+					this.UnsetOverride();					
 				}
 			}
 
@@ -449,10 +473,20 @@ namespace Dancer.Modules.Components
 						SkillLocator skillLocator = gameObject.GetComponent<SkillLocator>();
 						if (skillLocator)
 						{
-							foreach (GenericSkill skill in skillLocator.allSkills)
-							{
+							this.skillOverride = true;
+							this.cooldowns = new float[skillLocator.allSkills.Length];
+							this.stocks = new int[skillLocator.allSkills.Length];
+							for (int i = 0; i < skillLocator.allSkills.Length; i++)
+                            {
+								GenericSkill skill = skillLocator.allSkills[i];
+								cooldowns[i] = 0;
+								stocks[i] = 0;
 								if (skill)
+								{
+									cooldowns[i] = skill.rechargeStopwatch;
+									stocks[i] = skill.stock;
 									skill.SetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+								}
 							}
 						}
 						/*

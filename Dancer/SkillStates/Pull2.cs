@@ -90,20 +90,21 @@ namespace Dancer.SkillStates
                 base.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
             }
 
-            this.weaponAnimator.RotationOverride(direction.normalized * 500f + base.transform.position);
+            this.weaponAnimator.WeaponRotationOverride(direction.normalized * 500f + base.transform.position);
 
-            base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1f);
+            base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 0.8f);
             this.animator.SetFloat("DragonLunge.playbackRate", 1f);
         }
 
         public override void OnExit()
         {
+            base.PlayAnimation("Body", "Jump");
             this.animator.SetFloat("DragonLunge.playbackRate", 1f);
             if (NetworkServer.active)
             {
                 base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             }
-            this.weaponAnimator.StopRotationOverride();
+            this.weaponAnimator.StopWeaponOverride();
             base.OnExit();
         }
 
@@ -137,13 +138,13 @@ namespace Dancer.SkillStates
                 }      
                 if (this.stopwatch >= duration)
                 {
+                    this.animator.SetFloat("DragonLunge.playbackRate", 0f);
                     if (base.inputBank.skill3.down)
                     {
                         base.characterMotor.velocity = Vector3.zero;
                         if (base.inputBank.jump.justPressed)
                         {
-                            base.PlayAnimation("FullBody, Override", "BufferEmpty");
-                            base.PlayAnimation("Body", "Jump");
+                            base.PlayAnimation("FullBody, Override", "BufferEmpty");                          
                             base.SmallHop(base.characterMotor, base.characterBody.jumpPower);
                             this.outer.SetNextStateToMain();
                             return;

@@ -7,6 +7,7 @@ using System.IO;
 using RoR2.Audio;
 using System.Collections.Generic;
 using RoR2.UI;
+using Dancer.Modules.Components;
 using RoR2.Projectile;
 using System.Linq;
 
@@ -20,6 +21,9 @@ namespace Dancer.Modules
         internal static GameObject ribbonController;
 
         internal static GameObject spikeGroundEffect;
+        internal static GameObject crosshairPrefab;
+
+        internal static GameObject mageFriendPrefab;
         // particle effects
         internal static GameObject stabHitEffect;
         internal static GameObject hitEffect;
@@ -89,6 +93,11 @@ namespace Dancer.Modules
                 SoundAPI.SoundBanks.Add(array);
             }
 
+            crosshairPrefab = mainAssetBundle.LoadAsset<GameObject>("DancerCrosshair");
+            crosshairPrefab.AddComponent<HudElement>();
+            crosshairPrefab.AddComponent<CrosshairController>();
+            crosshairPrefab.AddComponent<DancerCrosshairController>();
+
             grabGroundSoundEvent = CreateNetworkSoundEventDef("GrabHitGround");
             sword1HitSoundEvent = CreateNetworkSoundEventDef("SwordHit1");
             sword2HitSoundEvent = CreateNetworkSoundEventDef("SwordHit2");
@@ -101,14 +110,14 @@ namespace Dancer.Modules
             hit2SoundEvent = CreateNetworkSoundEventDef("Hit2");
             punchHitSoundEvent = CreateNetworkSoundEventDef("PunchHit");
             lungeHitSoundEvent = CreateNetworkSoundEventDef("LungeHit");
-
+            /*
             GameObject effect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam"), "DancerSpikeEffect");
             ShakeEmitter s = effect.GetComponent<ShakeEmitter>();
             GameObject.Destroy(effect.transform.Find("Spikes, Small"));
             GameObject.Destroy(effect.transform.Find("Spikes, Large"));
             if (s) GameObject.Destroy(s);
             spikeGroundEffect = effect;
-
+            */
             GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>("DancerDAirEffect");
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
@@ -130,16 +139,6 @@ namespace Dancer.Modules
             ribbonController.AddComponent<Modules.Components.RibbonController>();
             ribbonController.RegisterNetworkPrefab();
             networkedObjectPrefabs.Add(ribbonController);
-            
-            /*
-            GameObject arti = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/networkedobjects/lockedmage"), "LockedMageNoAchievement");
-            if (arti.GetComponent<GameObjectUnlockableFilter>())
-            {
-                arti.GetComponent<GameObjectUnlockableFilter>().requiredUnlockableDef = arti.GetComponent<GameObjectUnlockableFilter>().forbiddenUnlockableDef;
-                arti.GetComponent<GameObjectUnlockableFilter>().forbiddenUnlockableDef = null;
-            }
-            */
-
 
 
 

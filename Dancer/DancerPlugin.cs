@@ -15,7 +15,7 @@ using EntityStates;
 using System;
 using R2API.Networking.Interfaces;
 using R2API.Networking;
-
+using RoR2.CharacterAI;
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
@@ -56,6 +56,7 @@ namespace Dancer
 
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
 
+            
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
             Modules.States.RegisterStates();
@@ -65,6 +66,10 @@ namespace Dancer
             Modules.ItemDisplays.PopulateDisplays();
             Modules.CameraParams.InitializeParams();
             Modules.Survivors.Dancer.CreateCharacter();
+
+            Modules.Unlockables.RegisterUnlockables();
+
+            new LockedMageTracker();
             new Modules.ContentPacks().Initialize();
 
             RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
@@ -74,11 +79,12 @@ namespace Dancer
 
 
 
+
+
         private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
             Modules.Survivors.Dancer.SetItemDisplays();
-
-            
+            Resources.Load<GameObject>("prefabs/networkedobjects/lockedmage").GetComponent<GameObjectUnlockableFilter>().enabled = false;
         }
 
         private void Hook()
@@ -173,6 +179,7 @@ namespace Dancer
                             newRibbon.timer = duration;
                             newRibbon.NetworkownerRoot = self.gameObject;
                             newRibbon.inflictorRoot = damageInfo.attacker;
+                            newRibbon.spreadsRemaining = Modules.StaticValues.ribbonExtraTargets;
                             NetworkServer.Spawn(gameObject);
                             newRibbon.StartRibbon();
                         }

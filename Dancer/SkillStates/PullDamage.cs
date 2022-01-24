@@ -95,7 +95,7 @@ namespace Dancer.SkillStates
             }
 
             Vector3 direction = this.target.coreTransform.position - base.transform.position;
-            this.weaponAnimator.RotationOverride(direction.normalized * 500f + base.transform.position);
+            this.weaponAnimator.WeaponRotationOverride(direction.normalized * 500f + base.transform.position);
 
 
 
@@ -138,7 +138,7 @@ namespace Dancer.SkillStates
             {
                 base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             }
-            this.weaponAnimator.StopRotationOverride();
+            this.weaponAnimator.StopWeaponOverride();
             base.OnExit();
         }
 

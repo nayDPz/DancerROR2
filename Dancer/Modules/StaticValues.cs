@@ -6,6 +6,10 @@ namespace Dancer.Modules
 {
     public class StaticValues
     {
+        public const float primaryAimUpAngle = 0.575f;
+        public const float primaryAimDownAngle = -0.425f;
+        public const float primaryAimDownAirAngle = -0.74f;
+
         public const float jab1DamageCoefficient = 2.5f;
         public const float jab2DamageCoefficient = 2.5f;
         public const float dashAttackDamageCoefficient = 3.5f;
@@ -17,6 +21,16 @@ namespace Dancer.Modules
 
         public const float forwardAirSpikeDamageCoefficient = 4f;
 
+
+        public const float directionalForwardDamageCoefficient = 2f;
+        public const float directionalBackDamageCoefficient = 2f;
+        public const float directionalRightDamageCoefficient = 2f;
+        public const float directionalLeftDamageCoefficient = 2f;
+        public const float directionalSprintDamageCoefficient = 2f;
+        public const float directionalJumpDamageCoefficient = 2f;
+        public const float directionalDownDamageCoefficient = 2f;
+
+
         public const float parryPerfectDamageCoefficient = 24f;
         public const float parryMaxDamageCoefficient = 18f;
         public const float parryMinDamageCoefficient = 12f;
@@ -24,8 +38,12 @@ namespace Dancer.Modules
         public const float parryInvincibilityDuration = 1.5f;
 
         public const float secondaryDamageCoefficient = 3.5f;
+        
 
-        public const float dragonLungeDamageCoefficient = 6f;
+        public const float dragonLungeDamageCoefficient = 6.5f;
+        public const float dragonLungeRange = 70f;
+
+        public const float spinDashDamageCoefficient = 5.4f;
 
         public const float ribbonDuration = 8f;
         public const float ribbonDotDamageCoefficient = 0.5f;
@@ -34,5 +52,7 @@ namespace Dancer.Modules
         public const float ribbonChainTime = 0.25f;
         public const float ribbonBarrierFraction = 0.04f;
         public const float ribbonSpreadRange = 50f;
+        public const int ribbonExtraTargets = 2;
+
     }
 }

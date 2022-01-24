@@ -141,4 +141,8 @@
     <Resource Include="assetbundle" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="SkillStates\BaseStates\" />
+  </ItemGroup>
+
 </Project>

@@ -62,7 +62,7 @@ namespace Dancer.SkillStates
 
         public override void OnExit()
         {
-            this.weaponAnimator.StopRotationOverride();
+            this.weaponAnimator.StopWeaponOverride();
             this.animator.SetFloat("DragonLunge.playbackRate", 1f);
             base.OnExit();
         }
@@ -160,14 +160,14 @@ namespace Dancer.SkillStates
                     if(this.hitEnemy && this.hitTarget.coreTransform.position != Vector3.zero)
                     {
                         between = this.hitTarget.coreTransform.position - base.transform.position;
-                        this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
+                        this.weaponAnimator.WeaponRotationOverride(between * 500f + base.transform.position);
                     }
                     else if (this.hitPoint != Vector3.zero && between.magnitude > 0f)
                     {
-                        this.weaponAnimator.RotationOverride(between * 500f + base.transform.position);
+                        this.weaponAnimator.WeaponRotationOverride(between * 500f + base.transform.position);
                     }
                     else
-                        this.weaponAnimator.RotationOverride(aimRay.GetPoint(range));
+                        this.weaponAnimator.WeaponRotationOverride(aimRay.GetPoint(range));
                 }
             }
         }
@@ -195,7 +195,7 @@ namespace Dancer.SkillStates
                 characterMotor.velocity.y = characterMotor.velocity.y + DragonLungeButEpic.antigravityStrength * Time.fixedDeltaTime * (1f - this.stopwatch / this.fireTime);
 
             }
-            if (base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.RotationOverride(base.GetAimRay().GetPoint(range));
+            if (base.fixedAge >= this.fireTime * 0.85f && !this.hasFired) this.weaponAnimator.WeaponRotationOverride(base.GetAimRay().GetPoint(range));
             if (base.fixedAge >= this.fireTime)
             {
                 this.Fire();
@@ -235,7 +235,7 @@ namespace Dancer.SkillStates
                 }
                 else
                 {
-                    this.weaponAnimator.StopRotationOverride();
+                    this.weaponAnimator.StopWeaponOverride();
                     this.outer.SetNextStateToMain();
                 }
 

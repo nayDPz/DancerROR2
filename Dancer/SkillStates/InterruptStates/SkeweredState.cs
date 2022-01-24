@@ -82,7 +82,7 @@ namespace Dancer.SkillStates
 				{
 					float num2 = vector.magnitude / num;
 					Vector3 normalized = vector.normalized;
-					float num3 = Mathf.Lerp(1.5f, .5f, this.stopwatch / this.pullDuration);
+					float num3 = Mathf.Lerp(2f, 0f, this.stopwatch / this.pullDuration);
 					if (base.characterBody.isChampion)
 					{
 						num3 /= 2f;

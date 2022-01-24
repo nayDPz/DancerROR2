@@ -10,70 +10,73 @@ namespace Dancer.Modules.Survivors
 {
     public static class Dancer
 	{
-		internal static SkillDef lockedSkillDef;
+		public static SkillDef lockedSkillDef;
+		public static SkillDef directionalSkillDef;
+		public static SkillDef primarySkillDef;
+		public static SkillDef lungeSkillDef;
+		public static SkillDef secondarySkillDef;
+		public static SkillDef spinLungeSkillDef;
+		public static SkillDef chainRibbonSkillDef;
 		internal static void CreateCharacter()
 		{
-			Dancer.characterEnabled = Config.CharacterEnableConfig("Dancer");
-			bool value = Dancer.characterEnabled.Value;
-			if (value)
+			
+			Dancer.characterPrefab = Prefabs.CreatePrefab("DancerBody", "mdlDancer", new BodyInfo
 			{
-				Dancer.characterPrefab = Prefabs.CreatePrefab("DancerBody", "mdlDancer", new BodyInfo
-				{
-					armor = 20f,
-					armorGrowth = 0f,
-					bodyName = "DancerBody",
-					bodyNameToken = "NDP_DANCER_BODY_NAME",
-					bodyColor = Color.magenta,
-					characterPortrait = Assets.LoadCharacterIcon("Dancer"),
-					crosshair = Assets.LoadCrosshair("Standard"),
-					damage = 12f,
-					healthGrowth = 48f,
-					healthRegen = 2.5f,
-					jumpCount = 1,
-					jumpPower = 17f,
-					acceleration = 80f,
-					moveSpeed = 7f,
-					maxHealth = 160f,
-					subtitleNameToken = "NDP_DANCER_BODY_SUBTITLE",
-					podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
-				});
-				Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_treeBot_step";
-				//Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericLargeFootstepDust");
-				//Dancer.characterPrefab.GetComponent<SfxLocator>().fallDamageSound = "RidleyLandFallDamage";
-				Dancer.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 5f;
-				Dancer.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
-				Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "DancerLand";
-				Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
-				characterPrefab.AddComponent<DancerComponent>();
+				armor = 20f,
+				armorGrowth = 0f,
+				bodyName = "DancerBody",
+				bodyNameToken = "NDP_DANCER_BODY_NAME",
+				bodyColor = Color.magenta,
+				characterPortrait = null,//Assets.LoadCharacterIcon("Dancer"),
+				crosshair = Assets.crosshairPrefab,
+				damage = 12f,
+				healthGrowth = 48f,
+				healthRegen = 2.5f,
+				jumpCount = 1,
+				jumpPower = 17f,
+				acceleration = 80f,
+				moveSpeed = 7f,
+				maxHealth = 160f,
+				subtitleNameToken = "NDP_DANCER_BODY_SUBTITLE",
+				podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+			});
+			Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_treeBot_step";
+			//Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericLargeFootstepDust");
+			//Dancer.characterPrefab.GetComponent<SfxLocator>().fallDamageSound = "RidleyLandFallDamage";
+			Dancer.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 5f;
+			Dancer.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
+			Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "DancerLand";
+			Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
+			characterPrefab.AddComponent<DancerComponent>();
 
-				Material material = Assets.CreateMaterial("matDancer");
-				Dancer.bodyRendererIndex = 0;
-				Prefabs.SetupCharacterModel(Dancer.characterPrefab, new CustomRendererInfo[]
+			Material material = Assets.CreateMaterial("matDancer");
+			Dancer.bodyRendererIndex = 0;
+			Prefabs.SetupCharacterModel(Dancer.characterPrefab, new CustomRendererInfo[]
+			{
+				new CustomRendererInfo
 				{
-					new CustomRendererInfo
-					{
-						childName = "Body",
-						material = material
-					},
-					new CustomRendererInfo
-					{
-						childName = "Ribbons",
-						material = material
-					},
-					new CustomRendererInfo
-					{
-						childName = "Lance",
-						material = material
-					}
-				}, Dancer.bodyRendererIndex);
-				Dancer.displayPrefab = Prefabs.CreateDisplayPrefab("mdlDancer", Dancer.characterPrefab);
-				Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, Color.magenta, "DANCER");
-				Dancer.CreateHitboxes();
-				Dancer.CreateSkills();
-				Dancer.CreateSkins();
-				Dancer.InitializeItemDisplays();
-				Dancer.CreateDoppelganger();
-			}
+					childName = "Body",
+					material = material
+				},
+				new CustomRendererInfo
+				{
+					childName = "Ribbons",
+					material = material
+				},
+				new CustomRendererInfo
+				{
+					childName = "Lance",
+					material = material
+				}
+			}, Dancer.bodyRendererIndex);
+			Dancer.displayPrefab = Prefabs.CreateDisplayPrefab("mdlDancer", Dancer.characterPrefab);
+			Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, Color.magenta, "DANCER");
+			Dancer.CreateHitboxes();
+			Dancer.CreateSkills();
+			Dancer.CreateSkins();
+			Dancer.InitializeItemDisplays();
+			Dancer.CreateDoppelganger();
+			
 		}
 
 		private static void CreateDoppelganger()
@@ -101,6 +104,8 @@ namespace Dancer.Modules.Survivors
 			Prefabs.SetupHitbox(gameObject, hitboxTransform, "NAir");
 			hitboxTransform = componentInChildren.FindChild("FAir");
 			Prefabs.SetupHitbox(gameObject, hitboxTransform, "FAir");
+			hitboxTransform = componentInChildren.FindChild("SpinLunge");
+			Prefabs.SetupHitbox(gameObject, hitboxTransform, "SpinLunge");
 		}
 
 		private static void CreateSkills()
@@ -108,7 +113,7 @@ namespace Dancer.Modules.Survivors
 			Skills.CreateSkillFamilies(Dancer.characterPrefab);
 			string str = "NDP";
 			//Skills.AddPassiveSkill(Dancer.characterPrefab);
-			SkillDef skillDef = Skills.CreateSkillDef(new SkillDefInfo
+			primarySkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_PRIMARY_SLASH_NAME",
 				skillNameToken = str + "_DANCER_BODY_PRIMARY_SLASH_NAME",
@@ -133,13 +138,13 @@ namespace Dancer.Modules.Survivors
 				keywordTokens = new string[] { "KEYWORD_DANCER_CANCELS","KEYWORD_DANCER_JAB","KEYWORD_DANCER_DASH","KEYWORD_DANCER_DOWNTILT","KEYWORD_DANCER_UPAIR","KEYWORD_DANCER_FORWARDAIR","KEYWORD_DANCER_DOWNAIR"  }
 			});
 
-			SkillDef easySkillDef = Skills.CreateSkillDef(new SkillDefInfo
+			directionalSkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_PRIMARY_SLASH2_NAME",
 				skillNameToken = str + "_DANCER_BODY_PRIMARY_SLASH2_NAME",
 				skillDescriptionToken = str + "_DANCER_BODY_PRIMARY_SLASH2_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
-				activationState = new SerializableEntityStateType(typeof(EasyM1Entry)),
+				activationState = new SerializableEntityStateType(typeof(EnterDirectionalAttack)),
 				activationStateMachineName = "Weapon",
 				baseMaxStock = 1,
 				baseRechargeInterval = 0f,
@@ -154,13 +159,14 @@ namespace Dancer.Modules.Survivors
 				cancelSprintingOnActivation = true,
 				rechargeStock = 1,
 				requiredStock = 1,
-				stockToConsume = 1
+				stockToConsume = 1,
+				keywordTokens = new string[] { "KEYWORD_DANCER_INPUTS" }
 			});
 
-			Skills.AddPrimarySkill(Dancer.characterPrefab, skillDef);
-			//Skills.AddPrimarySkill(Dancer.characterPrefab, easySkillDef);
+			Skills.AddPrimarySkill(Dancer.characterPrefab, primarySkillDef);
+			Skills.AddPrimarySkill(Dancer.characterPrefab, directionalSkillDef);
 
-			SkillDef skillDef2 = Skills.CreateSkillDef(new SkillDefInfo
+			secondarySkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_SECONDARY_SLASH_NAME",
 				skillNameToken = str + "_DANCER_BODY_SECONDARY_SLASH_NAME",
@@ -174,7 +180,7 @@ namespace Dancer.Modules.Survivors
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
 				fullRestockOnAssign = true,
-				interruptPriority = InterruptPriority.PrioritySkill,
+				interruptPriority = InterruptPriority.Skill,
 				resetCooldownTimerOnUse = false,
 				isCombatSkill = true,
 				mustKeyPress = false,
@@ -208,16 +214,16 @@ namespace Dancer.Modules.Survivors
 			});
 			Skills.AddSecondarySkills(Dancer.characterPrefab, new SkillDef[]
 			{
-				skillDef2,
+				secondarySkillDef,
 				//skillDef22
 			});
-			SkillDef skillDef3 = Skills.CreateSkillDef(new SkillDefInfo
+			lungeSkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_UTILITY_PULL_NAME",
 				skillNameToken = str + "_DANCER_BODY_UTILITY_PULL_NAME",
 				skillDescriptionToken = str + "_DANCER_BODY_UTILITY_PULL_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-				activationState = new SerializableEntityStateType(typeof(DragonLunge2)),
+				activationState = new SerializableEntityStateType(typeof(DragonLunge)),
 				activationStateMachineName = "Body",
 				baseMaxStock = 1,
 				baseRechargeInterval = 6f,
@@ -234,21 +240,21 @@ namespace Dancer.Modules.Survivors
 				requiredStock = 1,
 				stockToConsume = 1
 			});
-			SkillDef skillDef32 = Skills.CreateSkillDef(new SkillDefInfo
+			spinLungeSkillDef= Skills.CreateSkillDef(new SkillDefInfo
 			{
-				skillName = str + "_DANCER_BODY_UTILITY_PULL2_NAME",
-				skillNameToken = str + "_DANCER_BODY_UTILITY_PULL2_NAME",
-				skillDescriptionToken = str + "_DANCER_BODY_UTILITY_PULL2_DESCRIPTION",
+				skillName = str + "_DANCER_BODY_UTILITY_DRILL_NAME",
+				skillNameToken = str + "_DANCER_BODY_UTILITY_DRILL_NAME",
+				skillDescriptionToken = str + "_DANCER_BODY_UTILITY_DRILL_DESCRIPTION",
 				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon"),
-				activationState = new SerializableEntityStateType(typeof(DragonLunge2)),
-				activationStateMachineName = "Body",
-				baseMaxStock = 1,
-				baseRechargeInterval = 6f,
-				beginSkillCooldownOnSkillEnd = true,
+				activationState = new SerializableEntityStateType(typeof(SpinDash)),
+				activationStateMachineName = "Weapon",
+				baseMaxStock = 2,
+				baseRechargeInterval = 5f,
+				beginSkillCooldownOnSkillEnd = false,
 				canceledFromSprinting = false,
-				forceSprintDuringState = false,
+				forceSprintDuringState = true,
 				fullRestockOnAssign = true,
-				interruptPriority = InterruptPriority.PrioritySkill,
+				interruptPriority = InterruptPriority.Skill,
 				resetCooldownTimerOnUse = false,
 				isCombatSkill = true,
 				mustKeyPress = false,
@@ -259,9 +265,10 @@ namespace Dancer.Modules.Survivors
 			});
 			Skills.AddUtilitySkills(Dancer.characterPrefab, new SkillDef[]
 			{
-				skillDef3,
+				lungeSkillDef,
+				spinLungeSkillDef,
 			});
-			SkillDef skillDef4 = Skills.CreateSkillDef(new SkillDefInfo
+			chainRibbonSkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
 				skillName = str + "_DANCER_BODY_SPECIAL_RIBBON_NAME",
 				skillNameToken = str + "_DANCER_BODY_SPECIAL_RIBBON_NAME",
@@ -287,7 +294,7 @@ namespace Dancer.Modules.Survivors
 			});
 			Skills.AddSpecialSkills(Dancer.characterPrefab, new SkillDef[]
 			{
-				skillDef4
+				chainRibbonSkillDef
 			});
 			lockedSkillDef = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -414,7 +421,7 @@ namespace Dancer.Modules.Survivors
 				},
 			};
 
-			skins.Add(bugSkin);
+			//skins.Add(bugSkin);
 
 			skinController.skins = skins.ToArray();
         }
