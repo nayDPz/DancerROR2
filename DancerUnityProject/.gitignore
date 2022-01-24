@@ -9,6 +9,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+#Shaders
+Assets/Shaders
+
 #local asset bundle builds
 AssetBundles
 
