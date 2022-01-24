@@ -52,12 +52,12 @@ namespace Dancer.Modules.Components
 							if (this.previousRoot)
 							{
 								next.NetworkpreviousRoot = this.previousRoot;
-								Debug.Log("RibbonController.OnDestroy()- Setting " + nextRoot.name + "'s previous to " + previousRoot.name);
+								//Debug.Log("RibbonController.OnDestroy()- Setting " + nextRoot.name + "'s previous to " + previousRoot.name);
 							}
 							else
 							{
 								next.NetworkpreviousRoot = null;
-								Debug.Log("RibbonController.OnDestroy()- Setting " + nextRoot.name + "'s previous to null");
+								//Debug.Log("RibbonController.OnDestroy()- Setting " + nextRoot.name + "'s previous to null");
 							}
 						}
 					}
@@ -69,12 +69,12 @@ namespace Dancer.Modules.Components
 							if (this.nextRoot)
 							{
 								previous.NetworknextRoot = this.nextRoot;
-								Debug.Log("RibbonController.OnDestroy()- Setting " + previousRoot.name + "'s next to " + nextRoot.name);
+								//Debug.Log("RibbonController.OnDestroy()- Setting " + previousRoot.name + "'s next to " + nextRoot.name);
 							}
 							else
 							{
 								previous.NetworknextRoot = null;
-								Debug.Log("RibbonController.OnDestroy()- Setting " + previousRoot.name + "'s next to null");
+								//Debug.Log("RibbonController.OnDestroy()- Setting " + previousRoot.name + "'s next to null");
 							}
 						}
 					}
@@ -324,7 +324,7 @@ namespace Dancer.Modules.Components
 				}
 				if (this.ownerAttached && !this.ownerBody.HasBuff(Modules.Buffs.ribbonDebuff) && this.ownerBody.healthComponent.alive)
 				{
-					Debug.LogError("RibbonController.FixedUpdate()- Ribbon debuff expired, destroying");
+					//Debug.LogError("RibbonController.FixedUpdate()- Ribbon debuff expired, destroying");
 					NetworkServer.Destroy(base.gameObject);
 					return;
 				}

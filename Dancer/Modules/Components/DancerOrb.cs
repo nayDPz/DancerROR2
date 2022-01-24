@@ -38,47 +38,7 @@ namespace Dancer.Modules.Components
 					healthComponent.TakeDamage(damageInfo);
 					GlobalEventManager.instance.OnHitEnemy(damageInfo, healthComponent.gameObject);
 					GlobalEventManager.instance.OnHitAll(damageInfo, healthComponent.gameObject);
-				}
-				this.failedToKill |= (!healthComponent || healthComponent.alive);
-				if (this.bouncesRemaining > 0)
-				{
-					for (int i = 0; i < this.targetsToFindPerBounce; i++)
-					{
-						if (this.bouncedObjects != null)
-						{
-							if (this.canBounceOnSameTarget)
-							{
-								this.bouncedObjects.Clear();
-							}
-							this.bouncedObjects.Add(this.target.healthComponent);
-						}
-						HurtBox hurtBox = this.PickNextTarget(this.target.transform.position);
-						if (hurtBox)
-						{
-							DancerOrb dancerOrb = new DancerOrb();
-							dancerOrb.search = this.search;
-							dancerOrb.origin = this.target.transform.position;
-							dancerOrb.target = hurtBox;
-							dancerOrb.attacker = this.attacker;
-							dancerOrb.inflictor = this.inflictor;
-							dancerOrb.teamIndex = this.teamIndex;
-							dancerOrb.damageValue = this.damageValue * this.damageCoefficientPerBounce;
-							dancerOrb.bouncesRemaining = this.bouncesRemaining - 1;
-							dancerOrb.isCrit = this.isCrit;
-							dancerOrb.bouncedObjects = this.bouncedObjects;
-							dancerOrb.procChainMask = this.procChainMask;
-							dancerOrb.procCoefficient = this.procCoefficient;
-							dancerOrb.damageColorIndex = this.damageColorIndex;
-							dancerOrb.damageCoefficientPerBounce = this.damageCoefficientPerBounce;
-							dancerOrb.speed = this.speed;
-							dancerOrb.range = this.range;
-							dancerOrb.damageType = this.damageType;
-							dancerOrb.failedToKill = this.failedToKill;
-							OrbManager.instance.AddOrb(dancerOrb);
-						}
-					}
-					return;
-				}
+				}			
 			}
 		}
 

@@ -80,10 +80,12 @@ namespace Dancer.SkillStates
 
             if (Util.HasEffectiveAuthority(base.gameObject))
             {
-                
-                
 
-                
+                this.attacksFired++;
+
+                if (this.attacksFired >= this.numAttacks)
+                    this.pushForce = 1100f;
+
 
 
 
@@ -91,11 +93,11 @@ namespace Dancer.SkillStates
                 {
                     attacker = this.gameObject,
                     procChainMask = default(ProcChainMask),
-                    impactEffect = EffectIndex.Invalid,
+                    impactEffect = Modules.Assets.bigHitEffect.GetComponent<EffectComponent>().effectIndex,
                     losType = BlastAttack.LoSType.NearestHit,
                     damageColorIndex = DamageColorIndex.Default,
                     damageType = DamageType.Generic,
-                    procCoefficient = this.procCoefficient,
+                    procCoefficient = this.procCoefficient,                   
                     bonusForce = Vector3.zero,
                     baseForce = 0f,
                     baseDamage = this.damageCoefficient * this.damageStat,
@@ -113,7 +115,7 @@ namespace Dancer.SkillStates
                 }
             }
 
-            this.attacksFired++;
+            
 
             if (NetworkServer.active)
             {
@@ -159,19 +161,19 @@ namespace Dancer.SkillStates
             switch (attacksFired)
             {
                 case 0:
-                    EffectManager.SimpleMuzzleFlash(Modules.Assets.downTiltEffect, base.gameObject, "eJab1", false);
+                    EffectManager.SimpleMuzzleFlash(Modules.Assets.bigSwingEffect, base.gameObject, "eJab1", false);
                     s = "PunchSwing";
                     break;
                 case 1:
-                    EffectManager.SimpleMuzzleFlash(Modules.Assets.downTiltEffect, base.gameObject, "eSecondary2", false);
+                    EffectManager.SimpleMuzzleFlash(Modules.Assets.bigSwingEffect, base.gameObject, "eSecondary2", false);
                     s = "SwordSwing2";
                     break;
                 case 2:
-                    EffectManager.SimpleMuzzleFlash(Modules.Assets.downTiltEffect, base.gameObject, "eFAir", false);
+                    EffectManager.SimpleMuzzleFlash(Modules.Assets.bigSwingEffect, base.gameObject, "eFAir", false);
                     s = "SwordSwing3";
                     break;
                 default:
-                    EffectManager.SimpleMuzzleFlash(Modules.Assets.downTiltEffect, base.gameObject, "eJab1", false);
+                    EffectManager.SimpleMuzzleFlash(Modules.Assets.bigSwingEffect, base.gameObject, "eJab1", false);
                     break;
             }
             Util.PlayAttackSpeedSound(s, base.gameObject, base.attackSpeedStat);

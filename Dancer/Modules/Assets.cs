@@ -21,10 +21,13 @@ namespace Dancer.Modules
 
         internal static GameObject spikeGroundEffect;
         // particle effects
+        internal static GameObject stabHitEffect;
+        internal static GameObject hitEffect;
+        internal static GameObject bigHitEffect;
         internal static GameObject downAirEffect;
         internal static GameObject downAirEndEffect;
         internal static GameObject dashAttackEffect;
-        internal static GameObject downTiltEffect;
+        internal static GameObject bigSwingEffect;
         internal static GameObject dragonLungeEffect;
         internal static GameObject dragonLungePullEffect;
         internal static GameObject swingEffect;
@@ -55,8 +58,9 @@ namespace Dancer.Modules
 
         public static Dictionary<string, string> ShaderLookup = new Dictionary<string, string>()
         {
-            {"stubbed hopoo games/deferred/standard", "shaders/deferred/hgstandard"},
-
+            {"stubbedshader/deferred/standard", "shaders/deferred/hgstandard"},
+            {"stubbedshader/fx/hgcloudremap", "shaders/fx/hgcloudremap"},
+            {"stubbedshader/fx/hgopaquecloudremap", "shaders/fx/hgopaquecloudremap"},
         };
         internal static void PopulateAssets()
         {
@@ -68,8 +72,8 @@ namespace Dancer.Modules
                 }
             }
 
-            //ShaderConversion(mainAssetBundle);
-            //AttachControllerFinderToObjects(mainAssetBundle);
+            ShaderConversion(mainAssetBundle);
+            AttachControllerFinderToObjects(mainAssetBundle);
 
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("Dancer.RidleyBank.bnk"))
             {
@@ -111,9 +115,13 @@ namespace Dancer.Modules
             newEffect.AddComponent<VFXAttributes>().vfxPriority = VFXAttributes.VFXPriority.Always;
             downAirEffect = newEffect;
 
+            stabHitEffect = LoadEffect("DancerStabHitEffect", true);
+            bigHitEffect = LoadEffect("DancerBigHitEffect", true);
+            hitEffect = LoadEffect("DancerHitEffect", true);
+
             downAirEndEffect = LoadEffect("DancerDownAirEndEffect", true);
             dashAttackEffect = LoadEffect("DancerDashAttackEffect", true);
-            downTiltEffect = LoadEffect("DancerDownTiltEffect", true);
+            bigSwingEffect = LoadEffect("DancerBigSwingEffect", true);
             dragonLungeEffect = LoadEffect("DancerDragonLungeEffect", true);
             dragonLungePullEffect = LoadEffect("DancerDragonLungePullEffect", true);
             swingEffect = LoadEffect("DancerSwingEffect", true);

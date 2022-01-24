@@ -13,11 +13,17 @@ namespace Dancer.Modules
         public const float downAirDamageCoefficient = 2.1f;
         public const float forwardAirDamageCoefficient = 3f;
         public const float upAir1DamageCoefficient = 2.5f;
-        public const float upAir2DamageCoefficient = 3.25f;
+        public const float upAir2DamageCoefficient = 3f;
 
         public const float forwardAirSpikeDamageCoefficient = 5f;
 
-        public const float secondaryDamageCoefficient = 3f;
+        public const float parryPerfectDamageCoefficient = 24f;
+        public const float parryMaxDamageCoefficient = 18f;
+        public const float parryMinDamageCoefficient = 12f;
+        public const float perfectParryTime = 0.25f;
+        public const float parryInvincibilityDuration = 1.5f;
+
+        public const float secondaryDamageCoefficient = 3.5f;
 
         public const float dragonLungeDamageCoefficient = 6f;
 

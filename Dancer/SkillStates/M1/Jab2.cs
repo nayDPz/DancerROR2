@@ -30,7 +30,7 @@ namespace Dancer.SkillStates
 			this.cancelledFromSprinting = true;
 			this.earlyExitJump = true;
 			this.swingEffectPrefab = Assets.swingEffect;
-			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
+			this.hitEffectPrefab = Assets.hitEffect;
 			this.impactSound = Assets.jab2HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
 			{

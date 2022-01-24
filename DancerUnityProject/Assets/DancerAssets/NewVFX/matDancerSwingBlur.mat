@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: matDancerSwingBlur
+  m_Shader: {fileID: 4800000, guid: dd1d4042297d53449ac1ae522dc73d2a, type: 3}
+  m_ShaderKeywords: USE_CLOUDS VERTEXCOLOR _ALPHATEST_ON _EMISSION
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - ALWAYS
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Cloud1Tex:
+        m_Texture: {fileID: 2800000, guid: 1a2bd4bc998e4a94b8d4c75e6c1d057a, type: 3}
+        m_Scale: {x: 0.19, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cloud2Tex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 60f6dac70f6880149a18aa857fff26af, type: 3}
+        m_Scale: {x: 1.62, y: 1}
+        m_Offset: {x: -0.01, y: 0}
+    - _RemapTex:
+        m_Texture: {fileID: 2800000, guid: 2398aba4ea81dad429f9d7f14d3eb070, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _AlphaBias: 0
+    - _AlphaBoost: 1.03
+    - _Boost: 1
+    - _CalcTextureAlphaOn: 0
+    - _CloudOffsetOn: 0
+    - _CloudsOn: 1
+    - _Cull: 0
+    - _DepthOffset: 0
+    - _DisableRemapOn: 0
+    - _DistortionStrength: 0.19
+    - _DstBlend: 1
+    - _ExternalAlpha: 1
+    - _Fade: 1
+    - _FadeCloseDistance: 0.5
+    - _FadeCloseOn: 0
+    - _FresnelOn: 0
+    - _FresnelPower: 0
+    - _InternalSimpleBlendMode: 0
+    - _InvFade: 0.1
+    - _OffsetAmount: 0
+    - _SkyboxOnly: 0
+    - _SrcBlend: 1
+    - _UseUV1On: 0
+    - _VertexAlphaOn: 0
+    - _VertexColorOn: 1
+    - _VertexOffsetOn: 0
+    - _ZTest: 4
+    m_Colors:
+    - _CutoffScroll: {r: -30, g: 1, b: 1, a: 0}
+    - _TintColor: {r: 0.9873004, g: 0.740566, b: 1, a: 1}

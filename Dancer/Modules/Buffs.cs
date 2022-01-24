@@ -12,6 +12,9 @@ namespace Dancer.Modules
         internal static List<BuffDef> buffDefs = new List<BuffDef>();
 
         internal static BuffDef ribbonDebuff;
+
+        internal static BuffDef parryBuff;
+
         public static DotController.DotIndex ribbonDotIndex;
 
 
@@ -26,6 +29,8 @@ namespace Dancer.Modules
             ribbonDotCoefficient = StaticValues.ribbonDotDamageCoefficient;
             ribbonDebuff = AddNewBuff("RibbonDebuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.magenta, false, true);
             ribbonDotIndex = DotAPI.RegisterDotDef(1f, Modules.StaticValues.ribbonDotDamageCoefficient, DamageColorIndex.SuperBleed, ribbonDebuff, null, null);
+            parryBuff = AddNewBuff("ParryBuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
+
         }
 
         internal static BuffDef AddNewBuff(string buffName, Sprite buffIcon, Color buffColor, bool canStack, bool isDebuff)

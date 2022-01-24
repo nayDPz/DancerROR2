@@ -95,7 +95,6 @@ namespace Dancer.SkillStates
 			this.attack.teamIndex = base.GetTeam();
 			this.attack.damage = this.damageCoefficient * this.damageStat;
 			this.attack.procCoefficient = this.procCoefficient;
-			this.attack.hitEffectPrefab = this.hitEffectPrefab;
 
 			this.attack.forceVector = Vector3.zero;
 			this.attack.pushAwayForce = 0f;
@@ -105,7 +104,8 @@ namespace Dancer.SkillStates
 			this.attack.impactSound = Modules.Assets.sword2HitSoundEvent.index;
 
 			this.swingSoundString = "DancerSwing1";
-			this.swingEffectPrefab = Modules.Assets.downTiltEffect;
+			this.swingEffectPrefab = Modules.Assets.swingEffect;
+			this.hitEffectPrefab = Assets.hitEffect;
 		}
 		private void StartAttack()
 		{
@@ -318,7 +318,7 @@ namespace Dancer.SkillStates
 					this.attack.teamIndex = base.GetTeam();
 					this.attack.damage = this.damageCoefficient * this.damageStat;
 					this.attack.procCoefficient = this.procCoefficient;
-					this.attack.hitEffectPrefab = this.hitEffectPrefab;
+					this.hitEffectPrefab = Assets.stabHitEffect;
 					this.attack.impactSound = Modules.Assets.sword3HitSoundEvent.index;
 					this.attack.forceVector = Vector3.zero;
 					this.attack.pushAwayForce = 0f;

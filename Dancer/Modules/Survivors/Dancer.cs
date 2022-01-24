@@ -182,9 +182,33 @@ namespace Dancer.Modules.Survivors
 				requiredStock = 1,
 				stockToConsume = 1,
 			});
+			SkillDef skillDef22 = Skills.CreateSkillDef(new SkillDefInfo
+			{
+				skillName = str + "_DANCER_BODY_SECONDARY_PARRY_NAME",
+				skillNameToken = str + "_DANCER_BODY_SECONDARY_PARRY_NAME",
+				skillDescriptionToken = str + "_DANCER_BODY_SECONDARY_PARRY_DESCRIPTION",
+				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
+				activationState = new SerializableEntityStateType(typeof(ChargeParry)),
+				activationStateMachineName = "Body",
+				baseMaxStock = 1,
+				baseRechargeInterval = 5f,
+				beginSkillCooldownOnSkillEnd = true,
+				canceledFromSprinting = true,
+				forceSprintDuringState = false,
+				fullRestockOnAssign = true,
+				interruptPriority = InterruptPriority.PrioritySkill,
+				resetCooldownTimerOnUse = false,
+				isCombatSkill = true,
+				mustKeyPress = true,
+				cancelSprintingOnActivation = true,
+				rechargeStock = 1,
+				requiredStock = 1,
+				stockToConsume = 1,
+			});
 			Skills.AddSecondarySkills(Dancer.characterPrefab, new SkillDef[]
 			{
-				skillDef2
+				skillDef2,
+				skillDef22
 			});
 			SkillDef skillDef3 = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -307,7 +331,66 @@ namespace Dancer.Modules.Survivors
 
 
 			skins.Add(defaultSkin);
-            #endregion
+			#endregion
+
+			Material hornetMat = Modules.Assets.CreateMaterial("matHornet");
+			Material capeMat = Modules.Assets.CreateMaterial("matHornetCape");
+
+			CharacterModel.RendererInfo[] rendererInfos = new CharacterModel.RendererInfo[]
+			{
+                
+                new CharacterModel.RendererInfo
+				{
+					defaultMaterial = hornetMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[0].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = capeMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[1].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = hornetMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+                    //Which renderer(mesh) to replace.
+                    renderer = defaultRenderers[2].renderer
+				},
+			};
+
+			SkinDef bugSkin = Modules.Skins.CreateSkinDef(DancerPlugin.developerPrefix + "_DANCER_HORNET_SKIN_NAME",
+				Assets.mainAssetBundle.LoadAsset<Sprite>("texHornetSkin"),
+				rendererInfos,
+				mainRenderer,
+				model);
+
+			bugSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			{
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugBody"),
+					renderer = defaultRenderers[0].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugCape"),
+					renderer = defaultRenderers[1].renderer
+				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugNeedle"),
+					renderer = defaultRenderers[2].renderer
+				},
+			};
+
+			skins.Add(bugSkin);
 
 			skinController.skins = skins.ToArray();
         }

@@ -101,7 +101,7 @@ namespace Dancer
                     
                     if (ribbon)
                     {
-                        if(damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
+                        if(damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.AOE && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
                         {
                             HealthComponent h = damageInfo.attacker.GetComponent<HealthComponent>();
                             if (h && damageInfo.damage > 0f)
@@ -175,6 +175,15 @@ namespace Dancer
 
                 }
 
+                if(self.body.baseNameToken == "NDP_DANCER_BODY_NAME")
+                {
+                    if(self.body.HasBuff(Modules.Buffs.parryBuff))
+                    {
+                        damageInfo.rejected = true;
+                        self.body.RemoveBuff(Modules.Buffs.parryBuff);
+                        self.body.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, Modules.StaticValues.parryInvincibilityDuration);
+                    }
+                }
             }
 
             

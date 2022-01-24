@@ -28,8 +28,8 @@ namespace Dancer.SkillStates
 			this.swingSoundString = "DownTilt";
 			this.hitSoundString = "SwordHit";
 			this.critHitSoundString = "SwordHit2";
-			this.swingEffectPrefab = Assets.downTiltEffect;
-			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
+			this.swingEffectPrefab = Assets.bigSwingEffect;
+			this.hitEffectPrefab = Assets.hitEffect;
 			this.impactSound = Assets.sword1HitSoundEvent.index;
 			this.animString = "DownTilt";
 			this.muzzleString = "eDownTilt";

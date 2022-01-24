@@ -124,7 +124,7 @@ namespace Dancer.SkillStates
                         spreadPitchScale = 0f,
                         spreadYawScale = 0f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
-                        hitEffectPrefab = muzzleEffectPrefab,
+                        hitEffectPrefab = Modules.Assets.stabHitEffect,
                     };
 
 

@@ -108,7 +108,7 @@ namespace Dancer.SkillStates
 			this.attack.teamIndex = base.GetTeam();
 			this.attack.damage = this.damageCoefficient * this.damageStat;
 			this.attack.procCoefficient = this.procCoefficient;
-			this.attack.hitEffectPrefab = this.hitEffectPrefab;
+			this.attack.hitEffectPrefab = Assets.stabHitEffect;
 			this.attack.forceVector = Vector3.down * this.pushForce;
 			this.attack.pushAwayForce = 0f;
 			this.attack.hitBoxGroup = hitBoxGroup;

@@ -116,7 +116,7 @@ namespace Dancer.SkillStates
                 {
                     this.animator.SetFloat("DragonLunge.playbackRate", 1f);
                     this.pullStarted = true;
-                    EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
+                    //EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
                     base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1f);
                     Util.PlaySound("LungeDash", base.gameObject);
                 }

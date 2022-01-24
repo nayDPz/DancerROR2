@@ -29,7 +29,7 @@ namespace Dancer.SkillStates
 			this.critHitSoundString = "SwordHit3";
 			this.muzzleString = "eDashAttack";
 			this.swingEffectPrefab = Assets.dashAttackEffect;
-			this.hitEffectPrefab = GroundLight.finisherHitEffectPrefab;
+			this.hitEffectPrefab = Assets.stabHitEffect;
 			this.impactSound = Assets.jab3HitSoundEvent.index;
 			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
 			{
