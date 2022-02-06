@@ -51,43 +51,11 @@ AvatarMask:
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L
     m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004/BackRibbon.L.005
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004/BackRibbon.L.005/BackRibbon.L.006
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004/BackRibbon.L.005/BackRibbon.L.006/BackRibbon.L.007
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004/BackRibbon.L.005/BackRibbon.L.006/BackRibbon.L.007/BackRibbon.L.008
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L.001/BackRibbon.L.002/BackRibbon.L.003/BackRibbon.L.004/BackRibbon.L.005/BackRibbon.L.006/BackRibbon.L.007/BackRibbon.L.008/BackRibbon.L.008_end
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.L/BackRibbon.L_end
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R
     m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004/BackRibbon.R.005
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004/BackRibbon.R.005/BackRibbon.R.006
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004/BackRibbon.R.005/BackRibbon.R.006/BackRibbon.R.007
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004/BackRibbon.R.005/BackRibbon.R.006/BackRibbon.R.007/BackRibbon.R.008
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R.001/BackRibbon.R.002/BackRibbon.R.003/BackRibbon.R.004/BackRibbon.R.005/BackRibbon.R.006/BackRibbon.R.007/BackRibbon.R.008/BackRibbon.R.008_end
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/BackRibbon.R/BackRibbon.R_end
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Neck
     m_Weight: 1
@@ -101,19 +69,7 @@ AvatarMask:
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L
     m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002/ArmRibbon.L.003
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002/ArmRibbon.L.003/ArmRibbon.L.004
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002/ArmRibbon.L.003/ArmRibbon.L.004/ArmRibbon.L.005
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002/ArmRibbon.L.003/ArmRibbon.L.004/ArmRibbon.L.005/ArmRibbon.L.006
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L.001/ArmRibbon.L.002/ArmRibbon.L.003/ArmRibbon.L.004/ArmRibbon.L.005/ArmRibbon.L.006/ArmRibbon.L.006_end
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/ArmRibbon.L/ArmRibbon.L_end
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L
     m_Weight: 0
@@ -158,6 +114,12 @@ AvatarMask:
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/Lance
       1/Lance.001/Lance.002/Lance.003/Lance.004/Lance.005/Lance.006/Lance.007/Lance.008/LanceExtension/LanceExtension_end
     m_Weight: 0
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/Lance
+      1/Lance.001/Lance.002/Lance.003/Lance.004/Lance.005/Lance.006/Lance.007/Lance.008/LanceExtension2
+    m_Weight: 0
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/Lance
+      1/Lance.001/Lance.002/Lance.003/Lance.004/Lance.005/Lance.006/Lance.007/Lance.008/LanceExtension2/LanceExtension2_end
+    m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/MiddleFinger1.L
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.L/UpperArm.L/LowerArm.L/Hand.L/MiddleFinger1.L/MiddleFinger2.L
@@ -188,19 +150,7 @@ AvatarMask:
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R
     m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002/ArmRibbon.R.003
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002/ArmRibbon.R.003/ArmRibbon.R.004
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002/ArmRibbon.R.003/ArmRibbon.R.004/ArmRibbon.R.005
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002/ArmRibbon.R.003/ArmRibbon.R.004/ArmRibbon.R.005/ArmRibbon.R.006
-    m_Weight: 0
-  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R.001/ArmRibbon.R.002/ArmRibbon.R.003/ArmRibbon.R.004/ArmRibbon.R.005/ArmRibbon.R.006/ArmRibbon.R.006_end
+  - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/ArmRibbon.R/ArmRibbon.R_end
     m_Weight: 0
   - m_Path: DancerArmature/ROOT/HipsControl/Hips/Spine/Chest/Shoulder.R/UpperArm.R/LowerArm.R
     m_Weight: 0

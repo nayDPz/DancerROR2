@@ -56,14 +56,13 @@ namespace Dancer
 
             if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
 
-            // load assets and read config
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
-            Modules.States.RegisterStates(); // register states for networking
-            Modules.Buffs.RegisterBuffs(); // add and register custom buffs/debuffs
-            Modules.Projectiles.RegisterProjectiles(); // add and register custom projectiles
-            Modules.Tokens.AddTokens(); // register name tokens
-            Modules.ItemDisplays.PopulateDisplays(); // collect item display prefabs for use in our display rules
+            Modules.States.RegisterStates();
+            Modules.Buffs.RegisterBuffs();
+            Modules.Projectiles.RegisterProjectiles();
+            Modules.Tokens.AddTokens(); 
+            Modules.ItemDisplays.PopulateDisplays();
             Modules.CameraParams.InitializeParams();
             Modules.Survivors.Dancer.CreateCharacter();
             new Modules.ContentPacks().Initialize();
@@ -85,10 +84,21 @@ namespace Dancer
         private void Hook()
         {
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+            On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
 
         }
 
-        
+        private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
+        {
+            
+            orig(self);
+
+            if (self.HasBuff(Modules.Buffs.ribbonDebuff))
+            {
+                self.moveSpeed /= 2f;
+            }
+        }
+
         private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             RibbonController ribbon = RibbonController.FindRibbonController(self.gameObject);
@@ -204,67 +214,5 @@ namespace Dancer
 
         }
     }
-    /*
-    public class SyncRibbon : INetMessage
-    {
-        NetworkInstanceId inflictorNetId;
-        NetworkInstanceId targetNetId;
-        float duration;
-
-        public SyncRibbon()
-        {
-
-        }
-        public SyncRibbon(NetworkInstanceId inflictorInstanceId, NetworkInstanceId targetNetId, float duration)
-        {
-            this.inflictorNetId = inflictorInstanceId;
-            this.targetNetId = targetNetId;
-            this.duration = duration;
-
-        }
-
-
-        public void Deserialize(NetworkReader reader)
-        {
-            this.inflictorNetId = reader.ReadNetworkId();
-            this.targetNetId = reader.ReadNetworkId();
-            this.duration = (float)reader.ReadDouble();
-        }
-
-        public void OnReceived()
-        {
-            if(NetworkServer.active)
-            {
-                //Debug.Log("skipping host");
-                return;
-            }
-            Debug.Log("client adding ribbon");
-            GameObject inflictor = Util.FindNetworkObject(inflictorNetId);
-            GameObject target = Util.FindNetworkObject(targetNetId);          
-            if(target && inflictor)
-            {
-                RibbonController r = target.GetComponent<RibbonController>();
-                if(r)
-                {
-                    r.SyncRibbonTimersToNewTime(duration);
-                }
-                else
-                {
-                    r = target.AddComponent<RibbonController>();
-                    r.timer = duration;
-                    r.inflictorRoot = inflictor;
-                    Debug.Log("client added ribbon yipee duration = " +r.timer.ToString());
-                }
-               
-            }
-        }
-
-        public void Serialize(NetworkWriter writer)
-        {
-            writer.Write(inflictorNetId);
-            writer.Write(targetNetId);
-            writer.Write((double)duration);
-        }
-    }
-    */
+ 
 }

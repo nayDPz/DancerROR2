@@ -268,8 +268,8 @@ namespace Dancer.SkillStates
 		public override void OnExit()
 		{
 			if (this.swingEffect) GameObject.Destroy(this.swingEffect);
-			if(!this.hitGround)
-				PlayAnimation("FullBody, Override", "BufferEmpty");
+			//if(!this.hitGround)
+			//	PlayAnimation("FullBody, Override", "BufferEmpty");
 			base.GetAimAnimator().enabled = true;
 			this.animator.SetFloat("Slash.playbackRate", 1f);
 			base.OnExit();

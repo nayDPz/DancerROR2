@@ -57,7 +57,10 @@ namespace Dancer.Modules
             LanguageAPI.Add(prefix + "SPECIAL_RIBBON_NAME", "Special");
             LanguageAPI.Add(prefix + "SPECIAL_RIBBON_DESCRIPTION", $"Fire a projectile that <color=#b50727>ribbons</color> enemies for <style=cIsDamage>{StaticValues.ribbonDuration}</style> seconds. Attacking <color=#b50727>ribboned</color> enemies grants a <style=cIsHealing>temporary barrier</style> and <style=cIsDamage>extends</style> the ribbon.");
 
+            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_LOCK_NAME", "Ribboned");
+            LanguageAPI.Add(prefix + "SPECIAL_RIBBON_LOCK_DESCRIPTION", $"You cannot use this skill.");
             #endregion
+
 
         }
     }

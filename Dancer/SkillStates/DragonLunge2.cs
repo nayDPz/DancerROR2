@@ -11,7 +11,7 @@ namespace Dancer.SkillStates
     public class DragonLunge2 : BaseSkillState
     {
         public static float popRadius = 4f;
-        public static float cooldownOnMiss = 0.5f;
+        public static float cooldownOnMiss = 1f;
         public static float smallHopStrength = 12f;
         public static float antiGravityStrength = 30f;
         public static float pullForce = 3f;
@@ -27,6 +27,7 @@ namespace Dancer.SkillStates
 
         private DancerComponent weaponAnimator;
 
+        private float earlyExitTime = 0.25f;
         private bool hitWorld;
         private float stopwatch;
         private Vector3 hitPoint;
@@ -55,7 +56,10 @@ namespace Dancer.SkillStates
             base.PlayAnimation("FullBody, Override", "DragonLunge", "DragonLunge.playbackRate", this.duration * 0.975f);
             if (base.characterMotor && DragonLunge2.smallHopStrength != 0f)
             {
-                base.characterMotor.velocity.y = DragonLunge2.smallHopStrength;
+                Vector3 direction = base.inputBank.moveVector;
+
+                characterMotor.Motor.ForceUnground();
+                characterMotor.velocity = new Vector3(smallHopStrength * direction.x, Mathf.Max(characterMotor.velocity.y, smallHopStrength), smallHopStrength * direction.z);
             }
 
             base.characterDirection.forward = base.inputBank.aimDirection;
@@ -75,8 +79,11 @@ namespace Dancer.SkillStates
         {
             if (!this.hasFired)
             {
-
                 this.hasFired = true;
+
+                bool isHeld = base.IsKeyDownAuthority();
+
+                
 
                 base.characterBody.AddSpreadBloom(1.5f);
                 EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungeEffect, base.gameObject, this.muzzleString, false);
@@ -84,6 +91,8 @@ namespace Dancer.SkillStates
 
                 if (base.isAuthority)
                 {
+
+
                     Ray aimRay = base.GetAimRay();
                     base.AddRecoil(-1f * DragonLunge2.recoil, -2f * DragonLunge2.recoil, -0.5f * DragonLunge2.recoil, 0.5f * DragonLunge2.recoil);
                     bool hitEnemy = false;
@@ -103,8 +112,8 @@ namespace Dancer.SkillStates
                         origin = aimRay.origin,
                         damage = DragonLunge2.damageCoefficient * this.damageStat,
                         damageColorIndex = DamageColorIndex.Default,
-                        damageType = DamageType.Generic,
-                        falloffModel = BulletAttack.FalloffModel.DefaultBullet,
+                        damageType = DamageType.Stun1s,
+                        falloffModel = BulletAttack.FalloffModel.None,
                         maxDistance = DragonLunge2.range,
                         force = DragonLunge2.force,
                         hitMask = LayerIndex.CommonMasks.bullet,
@@ -160,21 +169,25 @@ namespace Dancer.SkillStates
 
                     if (this.hitWorld || hitEnemy)
                     {
-                        this.outer.SetNextState(new Pull2
+                        this.hitPoint = this.hitWorld ? this.hitPoint : aimRay.GetPoint(range);
+                        if(base.IsKeyDownAuthority())
                         {
-                            waitTime = this.duration - this.fireTime,
-                            point = hitPoint,
-                            hitWorld = hitWorld,
-                            hitBodies = hitBodies,
-                        });
-                        this.OnHitAnyAuthority();
-                    }                      
-                    else
-                    {
-                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge2.cooldownOnMiss;
-                        //this.FireLollipop(aimRay.GetPoint(range));
+                            this.outer.SetNextState(new Pull2
+                            {
+                                waitTime = this.duration - this.fireTime,
+                                point = hitPoint,
+                                hitWorld = hitWorld,
+                                hitBodies = hitBodies,
+                            });
+                        }
                         
+                        this.OnHitAnyAuthority();
                     }
+
+                    if (this.hitWorld && !hitEnemy && !base.IsKeyDownAuthority())
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge2.cooldownOnMiss;
+                    else if (!this.hitWorld && !hitEnemy)
+                        base.activatorSkillSlot.rechargeStopwatch += base.activatorSkillSlot.CalculateFinalRechargeInterval() - DragonLunge2.cooldownOnMiss;
 
                     Vector3 between = this.hitPoint - base.transform.position;
                     if (this.hitPoint != Vector3.zero && between.magnitude > 5f)
@@ -219,8 +232,6 @@ namespace Dancer.SkillStates
 
             Util.PlaySound("LungeHit", base.gameObject);
 
-            base.characterMotor.velocity = Vector3.zero;
-
             this.hasHit = true;
 
         }
@@ -244,18 +255,11 @@ namespace Dancer.SkillStates
                 base.characterDirection.forward = this.hitPoint != Vector3.zero ? this.hitPoint - base.transform.position : base.characterDirection.forward;
             }
 
-            if (this.hasHit)
-            {
-                base.characterMotor.velocity = Vector3.zero;
-                this.animator.SetFloat("DragonLunge.playbackRate", 0f);
-            }
 
-
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (base.fixedAge >= this.duration - this.earlyExitTime && this.hasFired && base.isAuthority)
             {
                 this.weaponAnimator.StopRotationOverride();
                 this.outer.SetNextStateToMain();
-
 
                 return;
             }

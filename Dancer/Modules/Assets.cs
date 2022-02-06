@@ -58,7 +58,7 @@ namespace Dancer.Modules
 
         public static Dictionary<string, string> ShaderLookup = new Dictionary<string, string>()
         {
-            {"stubbedshader/deferred/standard", "shaders/deferred/hgstandard"},
+            {"stubbedshader/deferred/hgstandard", "shaders/deferred/hgstandard"},
             {"stubbedshader/fx/hgcloudremap", "shaders/fx/hgcloudremap"},
             {"stubbedshader/fx/hgopaquecloudremap", "shaders/fx/hgopaquecloudremap"},
         };

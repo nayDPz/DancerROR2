@@ -19,6 +19,10 @@ namespace Dancer.SkillStates
 		public override void OnEnter()
 		{
 			base.OnEnter();
+
+			if (base.characterBody && NetworkServer.active) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+
+
 			Animator modelAnimator = base.GetModelAnimator();
 			int layerIndex = modelAnimator.GetLayerIndex("Body");
 			modelAnimator.CrossFadeInFixedTime((UnityEngine.Random.Range(0, 2) == 0) ? "Hurt1" : "Hurt2", 0.1f);
@@ -42,6 +46,12 @@ namespace Dancer.SkillStates
 		}
 		public override void OnExit()
 		{
+
+			if (NetworkServer.active)
+			{
+				base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
+			}
+
 			Animator modelAnimator = base.GetModelAnimator();
 			if (modelAnimator)
 			{
@@ -72,7 +82,7 @@ namespace Dancer.SkillStates
 				{
 					float num2 = vector.magnitude / num;
 					Vector3 normalized = vector.normalized;
-					float num3 = Mathf.Lerp(2f, 0f, this.stopwatch / this.pullDuration);
+					float num3 = Mathf.Lerp(1.5f, .5f, this.stopwatch / this.pullDuration);
 					if (base.characterBody.isChampion)
 					{
 						num3 /= 2f;
@@ -84,8 +94,8 @@ namespace Dancer.SkillStates
 						{
 							base.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
 						}
-						base.characterMotor.rootMotion += normalized * num2 * Time.fixedDeltaTime;
-						base.characterMotor.velocity.y = 0f;
+						base.characterMotor.velocity = normalized * num2;
+						//base.characterMotor.velocity.y = 0f;
 					}
 					else
 					{

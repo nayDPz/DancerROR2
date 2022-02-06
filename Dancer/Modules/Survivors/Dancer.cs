@@ -10,6 +10,7 @@ namespace Dancer.Modules.Survivors
 {
     public static class Dancer
 	{
+		internal static SkillDef lockedSkillDef;
 		internal static void CreateCharacter()
 		{
 			Dancer.characterEnabled = Config.CharacterEnableConfig("Dancer");
@@ -45,7 +46,7 @@ namespace Dancer.Modules.Survivors
 				Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
 				characterPrefab.AddComponent<DancerComponent>();
 
-				Material material = Assets.CreateMaterial("matDancer", 0.005f, Color.magenta);
+				Material material = Assets.CreateMaterial("matDancer");
 				Dancer.bodyRendererIndex = 0;
 				Prefabs.SetupCharacterModel(Dancer.characterPrefab, new CustomRendererInfo[]
 				{
@@ -208,7 +209,7 @@ namespace Dancer.Modules.Survivors
 			Skills.AddSecondarySkills(Dancer.characterPrefab, new SkillDef[]
 			{
 				skillDef2,
-				skillDef22
+				//skillDef22
 			});
 			SkillDef skillDef3 = Skills.CreateSkillDef(new SkillDefInfo
 			{
@@ -287,6 +288,29 @@ namespace Dancer.Modules.Survivors
 			Skills.AddSpecialSkills(Dancer.characterPrefab, new SkillDef[]
 			{
 				skillDef4
+			});
+			lockedSkillDef = Skills.CreateSkillDef(new SkillDefInfo
+			{
+				skillName = str + "_DANCER_BODY_SPECIAL_RIBBON_LOCK_NAME",
+				skillNameToken = str + "_DANCER_BODY_SPECIAL_RIBBON_LOCK_NAME",
+				skillDescriptionToken = str + "_DANCER_BODY_SPECIAL_RIBBON_LOCK_DESCRIPTION",
+				skillIcon = Assets.mainAssetBundle.LoadAsset<Sprite>("texSpecialIcon"),
+				activationState = new SerializableEntityStateType(typeof(LockSkill)),
+				activationStateMachineName = "Weapon",
+				baseMaxStock = 0,
+				baseRechargeInterval = 0f,
+				beginSkillCooldownOnSkillEnd = false,
+				canceledFromSprinting = false,
+				forceSprintDuringState = false,
+				fullRestockOnAssign = false,
+				interruptPriority = InterruptPriority.Any,
+				resetCooldownTimerOnUse = false,
+				isCombatSkill = false,
+				mustKeyPress = false,
+				cancelSprintingOnActivation = false,
+				rechargeStock = 0,
+				requiredStock = 999,
+				stockToConsume = 0,
 			});
 		}
 

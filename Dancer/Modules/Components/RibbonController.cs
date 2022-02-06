@@ -19,6 +19,7 @@ namespace Dancer.Modules.Components
 		private float damageCoefficient = StaticValues.ribbonDamageCoefficient;
 
 		private float fixedAttachOwnerStopwatch;
+		private SkillLocator ownerSkillLocator;
 
 		private RibbonController nextController;
 		private float attachOwnerStopwatch;
@@ -36,11 +37,24 @@ namespace Dancer.Modules.Components
 			RibbonController.instancesList.Add(this);
 
 		}
+		private void OnDisable()
+        {
+			Destroy(base.gameObject);
+        }
+
 		private void OnDestroy()
 		{
-			
 
-			if(NetworkServer.active)
+			if (this.ownerSkillLocator)
+			{
+				foreach (GenericSkill skill in this.ownerSkillLocator.allSkills)
+				{
+					if (skill)
+						skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+				}
+			}
+
+			if (NetworkServer.active)
             {
 				if(this.timer > 0)
                 {
@@ -92,10 +106,12 @@ namespace Dancer.Modules.Components
             {
 				this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
 				this.ownerMachine = this.ownerRoot.GetComponent<EntityStateMachine>();
+				this.ownerSkillLocator = this.ownerRoot.GetComponent<SkillLocator>();
+
 				if (NetworkServer.active)
 					this.ownerBody.AddTimedBuff(Modules.Buffs.ribbonDebuff, this.timer);
 
-				if (this.ownerBody.isChampion)
+				if (false)//this.ownerBody.isChampion)
 				{
 					if (this.ownerMachine)
 					{
@@ -105,7 +121,9 @@ namespace Dancer.Modules.Components
 						};
 						this.ownerMachine.SetInterruptState(newNextState, InterruptPriority.Death);
 					}
-				}			
+				}	
+				
+				
 			}
 
 			this.ownerAttached = true;
@@ -243,6 +261,7 @@ namespace Dancer.Modules.Components
 		private void FixedUpdate()
 		{
 			this.timer -= Time.fixedDeltaTime;
+						
 
 			if (this.nextRoot)
 			{
@@ -285,22 +304,19 @@ namespace Dancer.Modules.Components
             {
 				if (!this.ownerMachine) this.ownerMachine = this.ownerRoot.GetComponent<EntityStateMachine>();
 				if (!this.ownerBody) this.ownerBody = this.ownerRoot.GetComponent<CharacterBody>();
-				if (this.ownerMachine && this.ownerBody && !this.ownerBody.isChampion)
+				if (this.timer < Buffs.ribbonDebuffDuration - Buffs.ribbonBossCCDuration && this.ownerBody && this.ownerBody.isChampion)
 				{
-					if (!(this.ownerMachine.state is RibbonedState))
+					if (this.ownerSkillLocator)
 					{
-						RibbonedState newNextState = new RibbonedState
+						foreach (GenericSkill skill in this.ownerSkillLocator.allSkills)
 						{
-							duration = this.timer,
-						};
-						this.ownerMachine.SetInterruptState(newNextState, InterruptPriority.Frozen);
+							if (skill)
+								skill.UnsetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+						}
 					}
-
 				}
 			}
 
-					
-			
 			if(!this.nextRoot)
 			{
 				this.nextHealthComponent = null;
@@ -385,11 +401,14 @@ namespace Dancer.Modules.Components
 
 		private void SetRibbonTimer(GameObject gameObject, float timeToSet)
 		{
+			
 			RibbonController controller = RibbonController.FindRibbonController(gameObject);
 			if (controller)
 			{
 				controller.timer = timeToSet;
 			}
+			
+
 			CharacterBody body = gameObject.GetComponent<CharacterBody>();
 			if (body)
 			{
@@ -427,6 +446,16 @@ namespace Dancer.Modules.Components
 								}
 							}
 						}
+						SkillLocator skillLocator = gameObject.GetComponent<SkillLocator>();
+						if (skillLocator)
+						{
+							foreach (GenericSkill skill in skillLocator.allSkills)
+							{
+								if (skill)
+									skill.SetSkillOverride(skill, Modules.Survivors.Dancer.lockedSkillDef, GenericSkill.SkillOverridePriority.Replacement);
+							}
+						}
+						/*
 						EntityStateMachine e = gameObject.GetComponent<EntityStateMachine>();
 						if (e && !body.isChampion)
 						{
@@ -447,6 +476,7 @@ namespace Dancer.Modules.Components
 								}
 							}
 						}
+						*/
 					}
 				}
 			}

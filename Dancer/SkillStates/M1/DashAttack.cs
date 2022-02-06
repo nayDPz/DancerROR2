@@ -18,7 +18,7 @@ namespace Dancer.SkillStates
 			this.attackRecoil = 2f;
 			this.hitHopVelocity = 2f;
 			this.damageCoefficient = StaticValues.dashAttackDamageCoefficient;
-			this.damageType = RoR2.DamageType.BonusToLowHealth;
+			this.damageType = RoR2.DamageType.Generic;
 			this.hitStopDuration = 0.0f;
 			this.pushForce = 1800f;
 			this.launchVectorOverride = true;
@@ -50,20 +50,6 @@ namespace Dancer.SkillStates
 
 			base.characterDirection.forward = this.slideVector;
         }
-        public override void OnHitEnemyAuthority(List<HurtBox> list)
-		{
-			foreach (HurtBox hurtBox in list)
-			{
-				HealthComponent h = hurtBox.healthComponent;
-				if (h && h.combinedHealthFraction < 0.45f)
-				{
-					this.hitSoundString = "SwordHit3";
-					break;
-				}
-
-			}
-			base.OnHitEnemyAuthority(list);
-		}
 
 		public override void LaunchEnemy(CharacterBody body)
 		{

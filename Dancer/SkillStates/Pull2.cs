@@ -50,8 +50,8 @@ namespace Dancer.SkillStates
             this.direction = (point - base.transform.position).normalized;
             this.duration = Mathf.Lerp(minDuration, maxDuration, this.distance / maxDistance);
             this.speed = this.distance / this.duration;
-            this.startSpeed = this.speed * 2f;
-            this.endSpeed = this.speed * 0.0f;
+            this.startSpeed = this.speed * 1.5f;
+            this.endSpeed = this.speed * 0.5f;
 
 
             foreach(GameObject body in this.hitBodies)
@@ -61,7 +61,7 @@ namespace Dancer.SkillStates
                     EntityStateMachine component = body.GetComponent<EntityStateMachine>();
                     if (component && body.GetComponent<SetStateOnHurt>() && body.GetComponent<SetStateOnHurt>().canBeFrozen)
                 {
-                        if (!hitWorld)
+                        if (false)//!hitWorld)
                         {
                             SuspendedState newNextState = new SuspendedState
                             {
@@ -92,7 +92,8 @@ namespace Dancer.SkillStates
 
             this.weaponAnimator.RotationOverride(direction.normalized * 500f + base.transform.position);
 
-            
+            base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1f);
+            this.animator.SetFloat("DragonLunge.playbackRate", 1f);
         }
 
         public override void OnExit()
@@ -110,34 +111,49 @@ namespace Dancer.SkillStates
         {
             base.FixedUpdate();
 
+            
+
             if (base.fixedAge >= this.waitTime)
             {
-                if(!this.pullStarted)
+                
+
+                if (!this.pullStarted)
                 {
                     this.animator.SetFloat("DragonLunge.playbackRate", 1f);
                     this.pullStarted = true;
                     //EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
-                    base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 1f);
+                    
                     Util.PlaySound("LungeDash", base.gameObject);
                 }
+
+                
+
                 this.stopwatch += Time.fixedDeltaTime;
-                this.speed = Mathf.Lerp(this.startSpeed, this.endSpeed, this.stopwatch / this.duration);
-                base.characterDirection.forward = this.direction;
-                base.characterMotor.velocity = this.direction * this.speed;
+                if(this.stopwatch < duration)
+                {
+                    this.speed = Mathf.Lerp(this.startSpeed, this.endSpeed, this.stopwatch / this.duration);
+                    base.characterDirection.forward = this.direction;
+                    base.characterMotor.velocity = this.direction * this.speed;
+                }      
                 if (this.stopwatch >= duration)
                 {
-                    base.characterMotor.velocity = Vector3.zero;
-                    if (base.inputBank.jump.justPressed)
+                    if (base.inputBank.skill3.down)
                     {
-                        base.PlayAnimation("Body", "Jump");
-                        base.SmallHop(base.characterMotor, base.characterBody.jumpPower);
-                        this.outer.SetNextStateToMain();
-                        return;
-                    }
-                    else if (!this.hitWorld)
+                        base.characterMotor.velocity = Vector3.zero;
+                        if (base.inputBank.jump.justPressed)
+                        {
+                            base.PlayAnimation("FullBody, Override", "BufferEmpty");
+                            base.PlayAnimation("Body", "Jump");
+                            base.SmallHop(base.characterMotor, base.characterBody.jumpPower);
+                            this.outer.SetNextStateToMain();
+                            return;
+                        }
+                    }                                      
+                    if (!this.hitWorld)
                         this.outer.SetNextStateToMain();
                     else if (!base.inputBank.skill3.down)
                         this.outer.SetNextStateToMain();
+
                     return;
                 }
             }
