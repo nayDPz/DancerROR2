@@ -2,7 +2,6 @@
 using EntityStates;
 using UnityEngine;
 using RoR2;
-using EntityStates;
 using UnityEngine.Networking; 
 namespace Dancer.SkillStates
 {

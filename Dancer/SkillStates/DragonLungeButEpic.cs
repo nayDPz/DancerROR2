@@ -19,9 +19,6 @@ namespace Dancer.SkillStates
         public static float force = 0f;
         public static float recoil = 1f;
         public static float range = 62f;
-        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCaptainShotgun");
-        public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
-        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
 
         private DancerComponent weaponAnimator;
         private CharacterBody hitTarget;
@@ -115,12 +112,12 @@ namespace Dancer.SkillStates
                         spreadPitchScale = 0f,
                         spreadYawScale = 0f,
                         queryTriggerInteraction = QueryTriggerInteraction.UseGlobal,
-                        hitEffectPrefab = muzzleEffectPrefab,
+                        hitEffectPrefab = null,
                     };
 
-                    bulletAttack.hitCallback = (ref BulletAttack.BulletHit hitInfo) =>
+                    bulletAttack.hitCallback = (BulletAttack bullet, ref BulletAttack.BulletHit hitInfo) =>
                     {
-                        var result = bulletAttack.DefaultHitCallback(ref hitInfo);
+                        bool result = BulletAttack.defaultHitCallback(bullet, ref hitInfo);
 
 
                         if (hitInfo.hitHurtBox)

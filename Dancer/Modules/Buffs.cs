@@ -27,8 +27,10 @@ namespace Dancer.Modules
         {
             ribbonDebuffDuration = StaticValues.ribbonDuration;
             ribbonDotCoefficient = StaticValues.ribbonDotDamageCoefficient;
-            ribbonDebuff = AddNewBuff("RibbonDebuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.magenta, false, true);
-            ribbonDotIndex = DotAPI.RegisterDotDef(1f, Modules.StaticValues.ribbonDotDamageCoefficient, DamageColorIndex.SuperBleed, ribbonDebuff, null, null);
+
+
+            ribbonDebuff = AddNewBuff("RibbonDebuff", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texRibbonDebuffIcon"), Color.magenta, false, true);
+            //ribbonDotIndex = DotAPI.RegisterDotDef(1f, Modules.StaticValues.ribbonDotDamageCoefficient, DamageColorIndex.SuperBleed, ribbonDebuff, null, null);
             parryBuff = AddNewBuff("ParryBuff", Resources.Load<Sprite>("Textures/BuffIcons/texBuffGenericShield"), Color.white, false, false);
 
         }

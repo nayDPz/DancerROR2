@@ -2,3 +2,6 @@
 
 # CS1566: Error reading resource 'Dancer.DancerBank.bnk' -- 'Could not find file 'C:\Users\natep\source\repos\Dancer\Dancer\DancerBank.bnk'.'
 Ribbonnet_diagnostic.CS1566.severity = none
+
+# Publicizer001: Accessing a member that was not originally public
+dotnet_diagnostic.Publicizer001.severity = none

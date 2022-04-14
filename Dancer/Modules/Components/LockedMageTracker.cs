@@ -1,22 +1,11 @@
-﻿using BepInEx;
+﻿using MonoMod.RuntimeDetour;
 using R2API.Utils;
 using RoR2;
-using System.Security;
-using System.Security.Permissions;
-using UnityEngine;
-using UnityEngine.Networking;
-using RoR2.Projectile;
-using RoR2.Orbs;
-using Dancer.Modules.Components;
+using RoR2.CharacterAI;
 using System.Collections.Generic;
 using System.Linq;
-using Dancer.SkillStates;
-using EntityStates;
-using System;
-using R2API.Networking.Interfaces;
-using R2API.Networking;
-using RoR2.CharacterAI;
-using MonoMod.RuntimeDetour;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Dancer.Modules.Components
 {
@@ -38,7 +27,7 @@ namespace Dancer.Modules.Components
             RoR2.Run.onRunStartGlobal += Run_onRunStartGlobal;
             EntityStates.LockedMage.UnlockingMage.onOpened += SpawnArtificerBuddy;
             RoR2.Stage.onStageStartGlobal += Stage_onStageStartGlobal;
-            On.RoR2.GenericPickupController.GrantItem += GenericPickupController_GrantItem;
+            //On.RoR2.GenericPickupController.GrantItem += GenericPickupController_GrantItem;
 
             var getLivingPlayerCountHook = new Hook(typeof(Run).GetMethodCached("get_livingPlayerCount"),
                 typeof(LockedMageTracker).GetMethodCached(nameof(GetLivingPlayerCountHook)));
@@ -63,7 +52,7 @@ namespace Dancer.Modules.Components
         }
 
 
-        private static int GetLivingPlayerCountHook(Run self) => origLivingPlayerCountGetter(self) + (mageFreed ? 1 : 0);
+        private static int GetLivingPlayerCountHook(Run self) => origLivingPlayerCountGetter(self);// + (mageFreed ? 1 : 0);
         private static int GetParticipatingPlayerCountHook(Run self) => origParticipatingPlayerCountGetter(self) + (mageFreed ? 1 : 0);
 
         private void SpawnArtificerBuddy(Interactor interactor)
@@ -82,10 +71,11 @@ namespace Dancer.Modules.Components
                 useAmbientLevel = new bool?(true),
                 position = interactor.transform.position + Vector3.up,
                 rotation = Quaternion.identity,
-                preSpawnSetupCallback = (master) => {
+                preSpawnSetupCallback = (master) =>
+                {
                     List<AISkillDriver> ai = master.aiComponents[0].skillDrivers.ToList();
                     master.gameObject.AddComponent<AIOwnership>().ownerMaster = this.mageOwnerBody.master;
-                    ai.AddRange(Resources.Load<GameObject>("prefabs/charactermasters/engiwalkerturretmaster").GetComponents<AISkillDriver>().Where(ai2 => ai2.moveTargetType == AISkillDriver.TargetType.CurrentLeader).ToList());
+                    ai.AddRange(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiWalkerTurretMaster.prefab").WaitForCompletion().GetComponents<AISkillDriver>().Where(ai2 => ai2.moveTargetType == AISkillDriver.TargetType.CurrentLeader).ToList());
                     master.aiComponents[0].skillDrivers = ai.ToArray();
                     UnityEngine.Object.DontDestroyOnLoad(master);
                     master.destroyOnBodyDeath = false;
@@ -101,7 +91,7 @@ namespace Dancer.Modules.Components
             if (this.mageOwnerMaster)
                 this.mageOwnerBody = this.mageOwnerMaster.GetBody();
 
-            if(mageFreed && this.mageBuddy && !stage.sceneDef.suppressPlayerEntry && stage.sceneDef.suppressNpcEntry)
+            if (mageFreed && this.mageBuddy && !stage.sceneDef.suppressPlayerEntry && stage.sceneDef.suppressNpcEntry)
             {
                 this.mageBuddy.Respawn(stage.GetPlayerSpawnTransform().position, Quaternion.identity);
             }

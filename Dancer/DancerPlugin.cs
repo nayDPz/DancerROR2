@@ -5,36 +5,22 @@ using System.Security;
 using System.Security.Permissions;
 using UnityEngine;
 using UnityEngine.Networking;
-using RoR2.Projectile;
 using RoR2.Orbs;
 using Dancer.Modules.Components;
-using System.Collections.Generic;
-using System.Linq;
-using Dancer.SkillStates;
-using EntityStates;
-using System;
-using R2API.Networking.Interfaces;
-using R2API.Networking;
-using RoR2.CharacterAI;
+using R2API;
 [module: UnverifiableCode]
 [assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
 
 namespace Dancer
 {
-    [BepInDependency("com.TeamMoonstorm.Starstorm2", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInDependency("com.KingEnderBrine.ScrollableLobbyUI", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
-    [R2APISubmoduleDependency(new string[]
-    {
-        "PrefabAPI",
-        "LanguageAPI",
-        "SoundAPI",
-        "NetworkingAPI",
-        "DotAPI",
-    })]
+    [R2APISubmoduleDependency(nameof(DotAPI))]
+    [R2APISubmoduleDependency(nameof(LanguageAPI))]
+    [R2APISubmoduleDependency(nameof(SoundAPI))]
+    [R2APISubmoduleDependency(nameof(PrefabAPI))]
+    [R2APISubmoduleDependency(nameof(LoadoutAPI))]
 
     public class DancerPlugin : BaseUnityPlugin
     {
@@ -54,8 +40,6 @@ namespace Dancer
         {
             instance = this;
 
-            if (BepInEx.Bootstrap.Chainloader.PluginInfos.ContainsKey("com.DestroyedClone.AncientScepter")) scepterInstalled = true;
-
             
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
@@ -65,6 +49,7 @@ namespace Dancer
             Modules.Tokens.AddTokens(); 
             Modules.ItemDisplays.PopulateDisplays();
             Modules.CameraParams.InitializeParams();
+
             Modules.Survivors.Dancer.CreateCharacter();
 
             Modules.Unlockables.RegisterUnlockables();
@@ -84,7 +69,7 @@ namespace Dancer
         private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
         {
             Modules.Survivors.Dancer.SetItemDisplays();
-            Resources.Load<GameObject>("prefabs/networkedobjects/lockedmage").GetComponent<GameObjectUnlockableFilter>().enabled = false;
+            UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/LockedMage.prefab").WaitForCompletion().GetComponent<GameObjectUnlockableFilter>().enabled = false;
         }
 
         private void Hook()
@@ -101,7 +86,7 @@ namespace Dancer
 
             if (self.HasBuff(Modules.Buffs.ribbonDebuff))
             {
-                self.moveSpeed /= 2f;
+                self.moveSpeed *= Modules.StaticValues.ribbonMovespeedCoefficient;
             }
         }
 
@@ -156,8 +141,13 @@ namespace Dancer
                             }
                             else
                             {
+                                if (RibbonController.naturalSpread)
+                                    ribbon.SpeedUpRibbon(Modules.StaticValues.ribbonChainTime);
+                                else
+                                    ribbon.SearchNewTarget();
+
                                 ribbon.inflictorRoot = damageInfo.attacker;
-                                ribbon.SearchNewTarget();
+                                
                             }
                         }                     
 
@@ -179,7 +169,7 @@ namespace Dancer
                             newRibbon.timer = duration;
                             newRibbon.NetworkownerRoot = self.gameObject;
                             newRibbon.inflictorRoot = damageInfo.attacker;
-                            newRibbon.spreadsRemaining = Modules.StaticValues.ribbonExtraTargets;
+                            newRibbon.spreadsRemaining = Modules.StaticValues.ribbonInitialTargets;
                             NetworkServer.Spawn(gameObject);
                             newRibbon.StartRibbon();
                         }
@@ -187,7 +177,7 @@ namespace Dancer
 
                     if(damageInfo.damageType == DamageType.ApplyMercExpose)
                     {
-                        damageInfo.damageType = DamageType.Generic;
+                        damageInfo.damageType = DamageType.Stun1s;
                     }
 
                 }

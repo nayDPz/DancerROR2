@@ -128,7 +128,8 @@ namespace Dancer.SkillStates {
                 {
 					float d = (this.duration - base.fixedAge) / this.duration;
 
-					GameObject effect = Resources.Load<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam");
+					/*
+					GameObject effect = Addressables.LoadAssetAsync<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam");
 					ShakeEmitter s = effect.GetComponent<ShakeEmitter>();
 					GameObject.Destroy(effect.transform.Find("Spikes, Small"));
 					GameObject.Destroy(effect.transform.Find("Spikes, Large"));
@@ -138,6 +139,7 @@ namespace Dancer.SkillStates {
 						scale = 1.25f * d,
 						//networkSoundEventIndex = Modules.Assets.grabGroundSoundEvent.index
 					}, true);
+					*/
 
 					float f = Mathf.Max(base.fixedAge / this.duration, this.wait);
 					

@@ -88,6 +88,7 @@ namespace Dancer.SkillStates
 
 			this.moveVector = base.inputBank.aimDirection;
 			this.moveVector.y = Mathf.Clamp(this.moveVector.y, -0.2f, 0.2f);
+			this.moveVector = this.moveVector.normalized;
 
 			//if (this.dancerComponent)
 			//	this.dancerComponent.BodyRotationOverride(this.moveVector);

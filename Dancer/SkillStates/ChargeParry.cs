@@ -43,13 +43,13 @@ namespace Dancer.SkillStates
 			this.childLocator = base.GetModelChildLocator();
 			this.PlayChargeAnimation();
 			Util.PlayAttackSpeedSound("FireballCharge", base.gameObject, this.attackSpeedStat);
-			this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
+			//this.defaultCrosshairPrefab = base.characterBody.crosshairPrefab;
 
 			if (NetworkServer.active)
 				base.characterBody.AddBuff(Modules.Buffs.parryBuff);
 			if (this.crosshairOverridePrefab)
 			{
-				base.characterBody.crosshairPrefab = this.crosshairOverridePrefab;
+				//base.characterBody.crosshairPrefab = this.crosshairOverridePrefab;
 			}
 			base.StartAimMode(this.duration + 2f, false);
 		}
@@ -60,7 +60,7 @@ namespace Dancer.SkillStates
 				base.characterBody.RemoveBuff(Modules.Buffs.parryBuff);
 			if (base.characterBody)
 			{
-				base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
+				//base.characterBody.crosshairPrefab = this.defaultCrosshairPrefab;
 			}
 			base.OnExit();
 		}

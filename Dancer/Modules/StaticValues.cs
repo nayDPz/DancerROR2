@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using BepInEx.Configuration;
 namespace Dancer.Modules
 {
     public class StaticValues
@@ -46,13 +46,18 @@ namespace Dancer.Modules
         public const float spinDashDamageCoefficient = 5.4f;
 
         public const float ribbonDuration = 8f;
-        public const float ribbonDotDamageCoefficient = 0.5f;
-        public const float ribbonDamageCoefficient = 0.5f;
+        public const float ribbonDotDamageCoefficient = 0.0f;
+        public const float ribbonDamageCoefficient = 0.75f;
         public const float ribbonChainDamageCoefficient = 0f;
+        
         public const float ribbonChainTime = 0.25f;
         public const float ribbonBarrierFraction = 0.04f;
         public const float ribbonSpreadRange = 50f;
-        public const int ribbonExtraTargets = 2;
+        public const int ribbonInitialTargets = 2;
+        public const float ribbonPullForce = 800f;
+        public const float ribbonMovespeedCoefficient = 0.75f;
 
+        public const float ribbonNaturalChainTime = 2f;
+        public const bool ribbonNaturalSpread = false;
     }
 }

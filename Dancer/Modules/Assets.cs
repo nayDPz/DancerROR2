@@ -10,6 +10,7 @@ using RoR2.UI;
 using Dancer.Modules.Components;
 using RoR2.Projectile;
 using System.Linq;
+using UnityEngine.AddressableAssets;
 
 namespace Dancer.Modules
 {
@@ -62,9 +63,9 @@ namespace Dancer.Modules
 
         public static Dictionary<string, string> ShaderLookup = new Dictionary<string, string>()
         {
-            {"stubbedshader/deferred/hgstandard", "shaders/deferred/hgstandard"},
-            {"stubbedshader/fx/hgcloudremap", "shaders/fx/hgcloudremap"},
-            {"stubbedshader/fx/hgopaquecloudremap", "shaders/fx/hgopaquecloudremap"},
+            {"stubbedshader/deferred/hgstandard", "RoR2/Base/Shaders/HGStandard.shader"},
+            {"stubbedshader/fx/hgcloudremap", "RoR2/Base/Shaders/HGCloudRemap.shader"},
+            {"stubbedshader/fx/hgopaquecloudremap", "RoR2/Base/Shaders/HGOpaqueCloudRemap.shader"},
         };
         internal static void PopulateAssets()
         {
@@ -77,7 +78,7 @@ namespace Dancer.Modules
             }
 
             ShaderConversion(mainAssetBundle);
-            AttachControllerFinderToObjects(mainAssetBundle);
+            //AttachControllerFinderToObjects(mainAssetBundle);
 
             using (Stream manifestResourceStream2 = Assembly.GetExecutingAssembly().GetManifestResourceStream("Dancer.RidleyBank.bnk"))
             {
@@ -93,10 +94,13 @@ namespace Dancer.Modules
                 SoundAPI.SoundBanks.Add(array);
             }
 
+
             crosshairPrefab = mainAssetBundle.LoadAsset<GameObject>("DancerCrosshair");
             crosshairPrefab.AddComponent<HudElement>();
             crosshairPrefab.AddComponent<CrosshairController>();
             crosshairPrefab.AddComponent<DancerCrosshairController>();
+
+            
 
             grabGroundSoundEvent = CreateNetworkSoundEventDef("GrabHitGround");
             sword1HitSoundEvent = CreateNetworkSoundEventDef("SwordHit1");
@@ -110,14 +114,8 @@ namespace Dancer.Modules
             hit2SoundEvent = CreateNetworkSoundEventDef("Hit2");
             punchHitSoundEvent = CreateNetworkSoundEventDef("PunchHit");
             lungeHitSoundEvent = CreateNetworkSoundEventDef("LungeHit");
-            /*
-            GameObject effect = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("prefabs/effects/impacteffects/beetleguardgroundslam"), "DancerSpikeEffect");
-            ShakeEmitter s = effect.GetComponent<ShakeEmitter>();
-            GameObject.Destroy(effect.transform.Find("Spikes, Small"));
-            GameObject.Destroy(effect.transform.Find("Spikes, Large"));
-            if (s) GameObject.Destroy(s);
-            spikeGroundEffect = effect;
-            */
+            
+
             GameObject newEffect = mainAssetBundle.LoadAsset<GameObject>("DancerDAirEffect");
             newEffect.AddComponent<DestroyOnTimer>().duration = 12;
             newEffect.AddComponent<NetworkIdentity>();
@@ -132,7 +130,6 @@ namespace Dancer.Modules
             dashAttackEffect = LoadEffect("DancerDashAttackEffect", true);
             bigSwingEffect = LoadEffect("DancerBigSwingEffect", true);
             dragonLungeEffect = LoadEffect("DancerDragonLungeEffect", true);
-            dragonLungePullEffect = LoadEffect("DancerDragonLungePullEffect", true);
             swingEffect = LoadEffect("DancerSwingEffect", true);
 
             ribbonController = mainAssetBundle.LoadAsset<GameObject>("RibbonController");
@@ -141,7 +138,7 @@ namespace Dancer.Modules
             networkedObjectPrefabs.Add(ribbonController);
 
 
-
+            
 
         }
 
@@ -151,7 +148,7 @@ namespace Dancer.Modules
             foreach (Material material in materialAssets)
             {
                 //Debug.Log("replacing " + material.shader.name.ToLowerInvariant());
-                var replacementShader = Resources.Load<Shader>(ShaderLookup[material.shader.name.ToLowerInvariant()]);
+                var replacementShader = Addressables.LoadAssetAsync<Shader>(ShaderLookup[material.shader.name.ToLowerInvariant()]).WaitForCompletion();
                 if (replacementShader) { material.shader = replacementShader; }
             }
         }
@@ -196,7 +193,7 @@ namespace Dancer.Modules
             {
                 if (i)
                 {
-                    if (i.material)
+                    if (i.material) 
                     {
                         i.material.shader = hotpoo;
                     }
@@ -237,11 +234,6 @@ namespace Dancer.Modules
         internal static Texture LoadCharacterIcon(string characterName)
         {
             return mainAssetBundle.LoadAsset<Texture>("tex" + characterName + "Icon");
-        }
-
-        internal static GameObject LoadCrosshair(string crosshairName)
-        {
-            return Resources.Load<GameObject>("Prefabs/Crosshair/" + crosshairName + "Crosshair");
         }
 
         private static GameObject LoadEffect(string resourceName)
@@ -299,7 +291,7 @@ namespace Dancer.Modules
 
         public static Material CreateMaterial(string materialName, float emission, Color emissionColor, float normalStrength)
         {
-            if (!commandoMat) commandoMat = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
+            if (!commandoMat) commandoMat = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<CharacterModel>().baseRendererInfos[0].defaultMaterial;
 
             Material mat = UnityEngine.Object.Instantiate<Material>(commandoMat);
             Material tempMat = Assets.mainAssetBundle.LoadAsset<Material>(materialName);

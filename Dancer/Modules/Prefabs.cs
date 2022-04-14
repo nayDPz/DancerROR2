@@ -2,7 +2,7 @@
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.AddressableAssets;
 namespace Dancer.Modules
 {
     internal static class Prefabs
@@ -39,7 +39,7 @@ namespace Dancer.Modules
 
         internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), modelName + "Prefab");
+            GameObject newPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), modelName + "Prefab");
 
             GameObject model = CreateModel(newPrefab, modelName);
             Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
@@ -53,7 +53,7 @@ namespace Dancer.Modules
 
         internal static GameObject CreatePrefab(string bodyName, string modelName, BodyInfo bodyInfo)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody"), bodyName);
+            GameObject newPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), bodyName);
 
             GameObject model = CreateModel(newPrefab, modelName);
             Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
@@ -65,7 +65,8 @@ namespace Dancer.Modules
             bodyComponent.baseNameToken = bodyInfo.bodyNameToken;
             bodyComponent.subtitleNameToken = bodyInfo.subtitleNameToken;
             bodyComponent.portraitIcon = bodyInfo.characterPortrait;
-            bodyComponent.crosshairPrefab = bodyInfo.crosshair;
+
+            bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
 
             bodyComponent.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
             bodyComponent.rootMotionInMainState = false;
@@ -131,7 +132,7 @@ namespace Dancer.Modules
 
         internal static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
-            GameObject newMaster = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/CharacterMasters/" + masterToCopy + "MonsterMaster"), masterName, true);
+            GameObject newMaster = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/" + masterToCopy + "/" + masterToCopy + "MonsterMaster.prefab").WaitForCompletion(), masterName, true);
             newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
 
             masterPrefabs.Add(newMaster);
@@ -210,6 +211,16 @@ namespace Dancer.Modules
             characterModel.temporaryOverlays = new List<TemporaryOverlay>();
 
             characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[mainRendererIndex].renderer.GetComponent<SkinnedMeshRenderer>();
+
+
+            var foundRenderers = characterModel.GetComponentsInChildren<Renderer>();
+
+            /*
+            foreach (Renderer renderer in foundRenderers)
+            {
+                var controller = renderer.gameObject.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
+            }
+            */
         }
         #endregion
 
@@ -228,11 +239,9 @@ namespace Dancer.Modules
         private static void SetupCameraTargetParams(GameObject prefab)
         {
             CameraTargetParams cameraTargetParams = prefab.GetComponent<CameraTargetParams>();
-            cameraTargetParams.cameraParams = Resources.Load<GameObject>("Prefabs/CharacterBodies/MercBody").GetComponent<CameraTargetParams>().cameraParams;
+            cameraTargetParams.cameraParams = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercBody.prefab").WaitForCompletion().GetComponent<CameraTargetParams>().cameraParams;
             cameraTargetParams.cameraPivotTransform = prefab.transform.Find("ModelBase").Find("CameraPivot");
-            cameraTargetParams.aimMode = CameraTargetParams.AimType.Standard;
             cameraTargetParams.recoil = Vector2.zero;
-            cameraTargetParams.idealLocalCameraPos = Vector3.zero;
             cameraTargetParams.dontRaycastToPivot = false;
         }
 
@@ -263,12 +272,6 @@ namespace Dancer.Modules
             HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
             ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
-            if (!childLocator.FindChild("MainHurtbox"))
-            {
-                Debug.LogError("Could not set up main hurtbox: make sure you have a transform pair in your prefab's ChildLocator component called 'MainHurtbox'");
-                return;
-            }
-
             HurtBox mainHurtbox = childLocator.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
             mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
             mainHurtbox.healthComponent = prefab.GetComponent<HealthComponent>();
@@ -292,7 +295,7 @@ namespace Dancer.Modules
             footstepHandler.baseFootstepString = "Play_player_footstep";
             footstepHandler.sprintFootstepOverrideString = "";
             footstepHandler.enableFootstepDust = true;
-            footstepHandler.footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericFootstepDust");
+            footstepHandler.footstepDustPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Common/VFX/GenericFootstepDust.prefab").WaitForCompletion();
         }
 
         private static void SetupRagdoll(GameObject model)
@@ -301,7 +304,7 @@ namespace Dancer.Modules
 
             if (!ragdollController) return;
 
-            if (ragdollMaterial == null) ragdollMaterial = Resources.Load<GameObject>("Prefabs/CharacterBodies/CommandoBody").GetComponentInChildren<RagdollController>().bones[1].GetComponent<Collider>().material;
+            if (ragdollMaterial == null) ragdollMaterial = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<RagdollController>().bones[1].GetComponent<Collider>().material;
 
             foreach (Transform i in ragdollController.bones)
             {

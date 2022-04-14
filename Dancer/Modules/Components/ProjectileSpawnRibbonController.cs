@@ -26,7 +26,7 @@ namespace Dancer.Modules.Components
                 RibbonController newRibbon = gameObject.GetComponent<RibbonController>();
                 newRibbon.timer = Modules.Buffs.ribbonDebuffDuration;
                 newRibbon.inflictorRoot = this.controller.owner;
-                newRibbon.spreadsRemaining = Modules.StaticValues.ribbonExtraTargets + 1;
+                newRibbon.spreadsRemaining = Modules.StaticValues.ribbonInitialTargets + 1;
                 NetworkServer.Spawn(gameObject);
                 newRibbon.StartRibbon();
             }

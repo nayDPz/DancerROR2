@@ -21,6 +21,7 @@ namespace Dancer.Modules.Components
 		{
 			if (this.target)
 			{
+				//Vector3 direction = this.search.searchOrigin - this.target.transform.position;
 				HealthComponent healthComponent = this.target.healthComponent;
 				if (healthComponent)
 				{
@@ -28,7 +29,7 @@ namespace Dancer.Modules.Components
 					damageInfo.damage = this.damageValue;
 					damageInfo.attacker = this.attacker;
 					damageInfo.inflictor = this.inflictor;
-					damageInfo.force = Vector3.zero;
+					damageInfo.force = Vector3.zero;// direction * this.pullForce;
 					damageInfo.crit = this.isCrit;
 					damageInfo.procChainMask = this.procChainMask;
 					damageInfo.procCoefficient = this.procCoefficient;
@@ -92,6 +93,8 @@ namespace Dancer.Modules.Components
 		public float damageCoefficientPerBounce = 1f;
 
 		public int targetsToFindPerBounce = 1;
+
+		public float pullForce;
 
 		public DamageType damageType;
 

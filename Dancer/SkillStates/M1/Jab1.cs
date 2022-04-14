@@ -60,37 +60,20 @@ namespace Dancer.SkillStates
 
 			CharacterMotor m = body.characterMotor;
 
-			float force = 0.25f;
 			if (m)
 			{
 				float f = Mathf.Max(100f, m.mass);
-				force = f / 100f;
+				float force = f / 100f;
 				launchVector *= force;
 				m.ApplyForce(launchVector);
 			}
 			else if (body.rigidbody)
 			{
 				float f = Mathf.Max(50f, body.rigidbody.mass);
-				force = f / 200f;
+				float force = f / 200f;
 				launchVector *= force;
 				body.rigidbody.AddForce(launchVector, ForceMode.Impulse);
 			}
-
-			DamageInfo info = new DamageInfo
-			{
-				attacker = base.gameObject,
-				inflictor = base.gameObject,
-				damage = 0,
-				damageColorIndex = DamageColorIndex.Default,
-				damageType = DamageType.Generic,
-				crit = false,
-				dotIndex = DotController.DotIndex.None,
-				force = launchVector,
-				position = base.transform.position,
-				procChainMask = default(ProcChainMask),
-				procCoefficient = 0
-			};
-			//body.healthComponent.TakeDamageForce(info, true, true);
 
 
 		}

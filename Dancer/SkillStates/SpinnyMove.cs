@@ -104,7 +104,7 @@ namespace Dancer.SkillStates
                     falloffModel = BlastAttack.FalloffModel.None,
                     radius = this.attackRadius,
                     position = attackPosition,
-                    attackerFiltering = AttackerFiltering.NeverHit,
+                    attackerFiltering = AttackerFiltering.NeverHitSelf,
                     teamIndex = base.GetTeam(),
                     inflictor = base.gameObject,
                     crit = base.RollCrit(),

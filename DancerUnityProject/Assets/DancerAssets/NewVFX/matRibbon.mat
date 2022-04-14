@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: matDancerSwing
+  m_Name: matRibbon
   m_Shader: {fileID: 4800000, guid: dd1d4042297d53449ac1ae522dc73d2a, type: 3}
   m_ShaderKeywords: USE_CLOUDS VERTEXCOLOR _ALPHATEST_ON _EMISSION
   m_LightmapFlags: 0

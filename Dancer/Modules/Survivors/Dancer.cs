@@ -5,6 +5,8 @@ using RoR2;
 using RoR2.Skills;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using System;
 
 namespace Dancer.Modules.Survivors
 {
@@ -22,7 +24,7 @@ namespace Dancer.Modules.Survivors
 			
 			Dancer.characterPrefab = Prefabs.CreatePrefab("DancerBody", "mdlDancer", new BodyInfo
 			{
-				armor = 20f,
+				armor = 8f,
 				armorGrowth = 0f,
 				bodyName = "DancerBody",
 				bodyNameToken = "NDP_DANCER_BODY_NAME",
@@ -38,24 +40,27 @@ namespace Dancer.Modules.Survivors
 				moveSpeed = 7f,
 				maxHealth = 160f,
 				subtitleNameToken = "NDP_DANCER_BODY_SUBTITLE",
-				podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod"),
+				podPrefab = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/SurvivorPod/SurvivorPod.prefab").WaitForCompletion(),
 			});
 			Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().baseFootstepString = "Play_treeBot_step";
-			//Dancer.characterPrefab.GetComponent<ModelLocator>().modelTransform.gameObject.GetComponent<FootstepHandler>().footstepDustPrefab = Resources.Load<GameObject>("Prefabs/GenericLargeFootstepDust");
-			//Dancer.characterPrefab.GetComponent<SfxLocator>().fallDamageSound = "RidleyLandFallDamage";
 			Dancer.characterPrefab.GetComponent<Interactor>().maxInteractionDistance = 5f;
 			Dancer.characterPrefab.GetComponent<CameraTargetParams>().cameraParams = CameraParams.defaultCameraParams;
 			Dancer.characterPrefab.GetComponent<SfxLocator>().landingSound = "DancerLand";
 			Dancer.characterPrefab.GetComponent<EntityStateMachine>().mainStateType = new SerializableEntityStateType(typeof(GenericCharacterMain));
 			characterPrefab.AddComponent<DancerComponent>();
 
-			Material material = Assets.CreateMaterial("matDancer");
+			Material material = Assets.mainAssetBundle.LoadAsset<Material>("matDancer");
 			Dancer.bodyRendererIndex = 0;
 			Prefabs.SetupCharacterModel(Dancer.characterPrefab, new CustomRendererInfo[]
 			{
 				new CustomRendererInfo
 				{
 					childName = "Body",
+					material = material
+				},
+				new CustomRendererInfo
+				{
+					childName = "HeadMesh",
 					material = material
 				},
 				new CustomRendererInfo
@@ -69,6 +74,9 @@ namespace Dancer.Modules.Survivors
 					material = material
 				}
 			}, Dancer.bodyRendererIndex);
+
+			
+
 			Dancer.displayPrefab = Prefabs.CreateDisplayPrefab("mdlDancer", Dancer.characterPrefab);
 			Prefabs.RegisterNewSurvivor(Dancer.characterPrefab, Dancer.displayPrefab, Color.magenta, "DANCER");
 			Dancer.CreateHitboxes();
@@ -249,7 +257,7 @@ namespace Dancer.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(SpinDash)),
 				activationStateMachineName = "Weapon",
 				baseMaxStock = 2,
-				baseRechargeInterval = 5f,
+				baseRechargeInterval = 5.5f,
 				beginSkillCooldownOnSkillEnd = false,
 				canceledFromSprinting = false,
 				forceSprintDuringState = true,
@@ -277,7 +285,7 @@ namespace Dancer.Modules.Survivors
 				activationState = new SerializableEntityStateType(typeof(FireChainRibbons)),
 				activationStateMachineName = "Weapon",
 				baseMaxStock = 1,
-				baseRechargeInterval = 12f,
+				baseRechargeInterval = 13f,
 				beginSkillCooldownOnSkillEnd = true,
 				canceledFromSprinting = false,
 				forceSprintDuringState = false,
@@ -285,7 +293,7 @@ namespace Dancer.Modules.Survivors
 				interruptPriority = InterruptPriority.PrioritySkill,
 				resetCooldownTimerOnUse = false,
 				isCombatSkill = true,
-				mustKeyPress = false,
+				mustKeyPress = true,
 				cancelSprintingOnActivation = true,
 				rechargeStock = 1,
 				requiredStock = 1,
@@ -327,14 +335,15 @@ namespace Dancer.Modules.Survivors
             CharacterModel characterModel = model.GetComponent<CharacterModel>();
 
             ModelSkinController skinController = model.AddComponent<ModelSkinController>();
-            ChildLocator childLocator = model.GetComponent<ChildLocator>();
 
             SkinnedMeshRenderer mainRenderer = characterModel.mainSkinnedMeshRenderer;
 
             CharacterModel.RendererInfo[] defaultRenderers = characterModel.baseRendererInfos;
 
             List<SkinDef> skins = new List<SkinDef>();
+
             #region DefaultSkin
+
             SkinDef defaultSkin = Modules.Skins.CreateSkinDef(DancerPlugin.developerPrefix + "_DANCER_BODY_DEFAULT_SKIN_NAME",
                 Assets.mainAssetBundle.LoadAsset<Sprite>("texMainSkin"),
                 defaultRenderers,
@@ -343,6 +352,7 @@ namespace Dancer.Modules.Survivors
 
 			defaultSkin.meshReplacements = new SkinDef.MeshReplacement[]
 			{
+				
 				new SkinDef.MeshReplacement
 				{
 					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerBody"),
@@ -350,81 +360,121 @@ namespace Dancer.Modules.Survivors
 				},
 				new SkinDef.MeshReplacement
 				{
-					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerRibbons"),
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerHead"),
 					renderer = defaultRenderers[1].renderer
 				},
 				new SkinDef.MeshReplacement
 				{
-					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerLance"),
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerWeapon"),
 					renderer = defaultRenderers[2].renderer
 				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshDancerRibbons"),
+					renderer = defaultRenderers[3].renderer
+				},
+				
 			};
 
 
 			skins.Add(defaultSkin);
-			#endregion
+            #endregion
 
-			Material hornetMat = Modules.Assets.CreateMaterial("matHornet");
-			Material capeMat = Modules.Assets.CreateMaterial("matHornetCape");
+			
 
-			CharacterModel.RendererInfo[] rendererInfos = new CharacterModel.RendererInfo[]
+            #region GoldSkin
+            Material goldMat = Assets.mainAssetBundle.LoadAsset<Material>("matDancerGold");
+
+
+			CharacterModel.RendererInfo[] goldRendererInfos = new CharacterModel.RendererInfo[]
 			{
-                
                 new CharacterModel.RendererInfo
 				{
-					defaultMaterial = hornetMat,
+					defaultMaterial = goldMat,
 					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
 					ignoreOverlays = false,
-                    //Which renderer(mesh) to replace.
                     renderer = defaultRenderers[0].renderer
 				},
 				new CharacterModel.RendererInfo
 				{
-					defaultMaterial = capeMat,
+					defaultMaterial = goldMat,
 					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
 					ignoreOverlays = false,
-                    //Which renderer(mesh) to replace.
                     renderer = defaultRenderers[1].renderer
 				},
 				new CharacterModel.RendererInfo
 				{
-					defaultMaterial = hornetMat,
+					defaultMaterial = goldMat,
 					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
 					ignoreOverlays = false,
-                    //Which renderer(mesh) to replace.
                     renderer = defaultRenderers[2].renderer
+				},
+				new CharacterModel.RendererInfo
+				{
+					defaultMaterial = goldMat,
+					defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On,
+					ignoreOverlays = false,
+					renderer = defaultRenderers[3].renderer
 				},
 			};
 
-			SkinDef bugSkin = Modules.Skins.CreateSkinDef(DancerPlugin.developerPrefix + "_DANCER_HORNET_SKIN_NAME",
-				Assets.mainAssetBundle.LoadAsset<Sprite>("texHornetSkin"),
-				rendererInfos,
-				mainRenderer,
-				model);
-
-			bugSkin.meshReplacements = new SkinDef.MeshReplacement[]
+			SkinDef.MeshReplacement[] goldMeshReplacements = new SkinDef.MeshReplacement[]
 			{
 				new SkinDef.MeshReplacement
 				{
-					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugBody"),
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshGoldBody"),
 					renderer = defaultRenderers[0].renderer
-				},
+				},				
 				new SkinDef.MeshReplacement
 				{
-					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugCape"),
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshGoldHead"),
 					renderer = defaultRenderers[1].renderer
 				},
 				new SkinDef.MeshReplacement
 				{
-					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshBugNeedle"),
+					mesh = Modules.Assets.mainAssetBundle.LoadAsset<Mesh>("meshGoldWeapon"),
 					renderer = defaultRenderers[2].renderer
 				},
+				new SkinDef.MeshReplacement
+				{
+					mesh = null,
+					renderer = defaultRenderers[3].renderer
+				},
+
 			};
 
-			//skins.Add(bugSkin);
 
-			skinController.skins = skins.ToArray();
+			On.RoR2.SkinDef.Awake += DoNothing;
+
+			SkinDef goldSkinDef = ScriptableObject.CreateInstance<RoR2.SkinDef>();
+			goldSkinDef.baseSkins = Array.Empty<SkinDef>();
+			goldSkinDef.icon = Assets.mainAssetBundle.LoadAsset<Sprite>("texGoldSkin");
+			goldSkinDef.unlockableDef = null;
+			goldSkinDef.rootObject = model;
+			goldSkinDef.rendererInfos = goldRendererInfos;
+			goldSkinDef.gameObjectActivations = new SkinDef.GameObjectActivation[0];
+			goldSkinDef.meshReplacements = goldMeshReplacements;
+			goldSkinDef.projectileGhostReplacements = new SkinDef.ProjectileGhostReplacement[0];
+			goldSkinDef.minionSkinReplacements = new SkinDef.MinionSkinReplacement[0];
+			goldSkinDef.nameToken = DancerPlugin.developerPrefix + "_DANCER_GOLD_SKIN_NAME";
+			goldSkinDef.name = DancerPlugin.developerPrefix + "_DANCER_GOLD_SKIN_NAME";
+
+			On.RoR2.SkinDef.Awake -= DoNothing;
+
+
+			R2API.LanguageAPI.Add(DancerPlugin.developerPrefix + "_DANCER_GOLD_SKIN_NAME", "gold");
+
+
+
+			skins.Add(goldSkinDef);
+            #endregion
+
+            skinController.skins = skins.ToArray();
         }
+
+		private static void DoNothing(On.RoR2.SkinDef.orig_Awake orig, RoR2.SkinDef self)
+		{
+		}
 
 		private static void InitializeItemDisplays()
 		{
@@ -437,7 +487,7 @@ namespace Dancer.Modules.Survivors
 		{
 			Dancer.itemDisplayRules = new List<ItemDisplayRuleSet.KeyAssetRuleGroup>();
 			Dancer.itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
-			{
+			{	
 				keyAsset = RoR2Content.Equipment.Jetpack,
 				displayRuleGroup = new DisplayRuleGroup
 				{
@@ -1928,26 +1978,6 @@ localScale = new Vector3(0.4F, 0.4F, 0.4F),
 			});
 			Dancer.itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
 			{
-				keyAsset = RoR2Content.Items.CooldownOnCrit,
-				displayRuleGroup = new DisplayRuleGroup
-				{
-					rules = new ItemDisplayRule[]
-					{
-						new ItemDisplayRule
-						{
-							ruleType = ItemDisplayRuleType.ParentedPrefab,
-							followerPrefab = ItemDisplays.LoadDisplay("DisplaySkull"),
-							childName = "Chest",
-							localPos = new Vector3(0f, 0.3997f, 0f),
-							localAngles = new Vector3(270f, 0f, 0f),
-							localScale = new Vector3(0.2789f, 0.2789f, 0.2789f),
-							limbMask = LimbFlags.None
-						}
-					}
-				}
-			});
-			Dancer.itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
-			{
 				keyAsset = RoR2Content.Items.Phasing,
 				displayRuleGroup = new DisplayRuleGroup
 				{
@@ -2301,26 +2331,6 @@ localScale = new Vector3(0.25F, 0.25F, 0.25F),
 							localPos = new Vector3(-0.0554f, -1.6605f, -0.3314f),
 							localAngles = new Vector3(0f, 0f, 0f),
 							localScale = new Vector3(0.1f, 0.1f, 0.1f),
-							limbMask = LimbFlags.None
-						}
-					}
-				}
-			});
-			Dancer.itemDisplayRules.Add(new ItemDisplayRuleSet.KeyAssetRuleGroup
-			{
-				keyAsset = RoR2Content.Items.Incubator,
-				displayRuleGroup = new DisplayRuleGroup
-				{
-					rules = new ItemDisplayRule[]
-					{
-						new ItemDisplayRule
-						{
-							ruleType = ItemDisplayRuleType.ParentedPrefab,
-							followerPrefab = ItemDisplays.LoadDisplay("DisplayAncestralIncubator"),
-							childName = "UpperArmL",
-localPos = new Vector3(0.03967F, 0.23859F, 0.00643F),
-localAngles = new Vector3(353.0521F, 317.2421F, 263.0239F),
-localScale = new Vector3(0.03F, 0.03F, 0.03F),
 							limbMask = LimbFlags.None
 						}
 					}

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2036943991
+CRC: 3512196878
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 987842e141b8c2f4529c1b2581e574f1
+    Hash: a34f98c754c66ca61d3b8d8b1f6b7193
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 080b6d6a68ab46e2e44044590187e2fd
+    Hash: 71db3a968e5240d0485041b35c9b26e2
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -15,11 +15,7 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
-- Class: 23
-  Script: {instanceID: 0}
 - Class: 28
-  Script: {instanceID: 0}
-- Class: 33
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
@@ -27,16 +23,12 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 74
   Script: {instanceID: 0}
-- Class: 90
-  Script: {instanceID: 0}
 - Class: 91
   Script: {instanceID: 0}
 - Class: 95
   Script: {instanceID: 0}
-- Class: 108
-  Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: 9a68da65c907acb4eb4dbcd042f172e7, type: 3}
 - Class: 114
@@ -65,437 +57,136 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 319
   Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/DancerAssets/NewVFX/DancerSwingEffect.prefab
-- Assets/DancerAssets/OldVFX/Materials/texRipple.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampShadowcloneAura.png
-- Assets/DancerAssets/Animations/spinlunge.anim
-- Assets/DancerAssets/OldVFX/Materials/texSmoke.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudWaterRipples.png
-- Assets/DancerAssets/VFX/Mesh/donut3Mesh.asset
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLoaderSwing.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGateway.png
-- Assets/DancerAssets/mesh/meshBugNeedle.mesh
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse (1).png
 - Assets/DancerAssets/NewVFX/texRampTritone 1 (1).png
-- Assets/DancerAssets/Animations/DancerArmature_RunLeft.anim
-- Assets/DancerAssets/VFX/Materials/textures/texPunchImpactShadow.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGrey.png
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse (2).png
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldWeapon.mesh
 - Assets/DancerAssets/texMainSkin.png
-- Assets/DancerAssets/VFX/texHenrySwing2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGenericBluetint.png
-- Assets/DancerAssets/OldVFX/Materials/texEyeTrail.dds
-- Assets/DancerAssets/Animations/DancerArmature_JumpAttack.anim
 - Assets/DancerAssets/RibbonController.prefab
 - Assets/StubbedShaders/fx/hgforwardplanet.shader
-- Assets/DancerAssets/Animations/DancerArmature_DragonLunge.anim
 - Assets/DancerAssets/NewVFX/texOmniRadialSlash2Mask.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampAncientWisp.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudColor2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHealingVariant.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampArchWisp.png
-- Assets/DancerAssets/OldVFX/FistBarrageEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampPlanetAtmosphere2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampThermite.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampStealthkit.png
-- Assets/DancerAssets/OldVFX/NemrySwordSwingEffect.prefab
-- Assets/DancerAssets/VFX/texFire.tga
 - Assets/StubbedShaders/CalmWaterCalm Water [Single Sided].shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampRedToWhite.png
 - Assets/StubbedShaders/deferred/hgstandard.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMysterySpacePortal.png
-- Assets/DancerAssets/mesh/meshBugBody.mesh
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampEngiOffset.png
-- Assets/DancerAssets/OldVFX/Materials/matNemryLightning.mat
-- Assets/DancerAssets/OldVFX/HenryDustEffect.prefab
-- Assets/DancerAssets/OldVFX/Materials/matSmoke.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampRedToGreen.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSlowDownTime2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampElitePoison.png
-- Assets/DancerAssets/OldVFX/ImpactNemrySlash.prefab
-- Assets/DancerAssets/VFX/texSwingEffect.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBell.png
-- Assets/DancerAssets/Animations/DancerArmature_ForwardAir.anim
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampThermite2.png
-- Assets/DancerAssets/OldVFX/Materials/matHitSpark 2.mat
-- Assets/DancerAssets/VFX/rib.mesh
-- Assets/DancerAssets/Animations/DancerArmature_AltUtil2.001.anim
+- Assets/DancerAssets/NewVFX/rib.mesh
 - Assets/StubbedShaders/deferred/hgsnowtopped.shader
-- Assets/DancerAssets/OldVFX/GrabHandEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampParentTeleportIndicator.png
 - Assets/StubbedShaders/fx/hgcloudremap.shader
 - Assets/StubbedShaders/DecaliciousDeferred Decal.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGrandparent.png
-- Assets/DancerAssets/OldVFX/Materials/matHenrySwing2.mat
 - Assets/DancerAssets/NewVFX/DancerStabHitEffect.prefab
-- Assets/DancerAssets/OldVFX/Materials/matEyeTrail.mat
-- Assets/DancerAssets/OldVFX/NemrySwordStabSwingEffect.prefab
-- Assets/DancerAssets/OldVFX/Materials/texSlash.mat
-- Assets/DancerAssets/OldVFX/ImpactHenrySlash.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWhiteToGreen.png
 - Assets/StubbedShaders/ui/hguioverbrighten.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTritoneReversed.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTeslaCoil.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrosshair2.png
-- Assets/DancerAssets/OldVFX/Materials/matChargeHalo.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBanditSplatter.png
-- Assets/DancerAssets/Animations/DancerArmature_JabLeft.anim
 - Assets/DancerAssets/Crosshair/texCrosshairTriangle.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudWhitenoiseNormal.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texUIAnimateRampHighlights.png
-- Assets/DancerAssets/Animations/DancerArmature_RunRight.anim
-- Assets/DancerAssets/Animations/DancerArmature_JabBack.anim
-- Assets/DancerAssets/NewVFX/matDancerStab2.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudOrganic1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampFallboots.png
-- Assets/DancerAssets/OldVFX/meshSwing.asset
 - Assets/DancerAssets/Animations/DancerArmature_IdleIn.anim
+- Assets/DancerAssets/NewVFX/matDancerStab2.mat
+- Assets/DancerAssets/NewVFX/meshSwing.asset
 - Assets/DancerAssets/Crosshair/texCrosshairDotCropped.png
-- Assets/DancerAssets/VFX/rib2.mesh
+- Assets/DancerAssets/NewVFX/rib2.mesh
 - Assets/DancerAssets/texUtilityIcon.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDefault.png
-- Assets/DancerAssets/OldVFX/HenryBazookaMuzzleFlash.prefab
-- Assets/DancerAssets/OldVFX/HenryFistSwingEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMissileTrail.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBanditAlt.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTritone 1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDefault 1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHealingMedkit.png
-- Assets/DancerAssets/OldVFX/Materials/texSwingEffect.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudDifferenceBW2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBanditSlash.png
-- Assets/DancerAssets/VFX/Materials/textures/texFistSwing.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texUIAnimateRamp.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWaterFoam.png
-- Assets/DancerAssets/OldVFX/Materials/matNemrySlash.mat
-- Assets/DancerAssets/OldVFX/Materials/matChargeCircle.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTritone.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWhite.png
+- Assets/FBX/DANCER.fbx
+- Assets/DancerAssets/NewVFX/texRampTritone.png
+- Assets/DancerAssets/Animations/DancerArmature_Sprint.anim
 - Assets/DancerAssets/Animations/animDancer.controller
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWarbanner2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeamLightning 1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampJellyLightning.png
 - Assets/DancerAssets/Crosshair/texDancerCrosshairSquare.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudStroke1.png
+- Assets/DancerAssets/mesh/meshDancerBody.mesh
 - Assets/DancerAssets/Materials/matHornet.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHelfire.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMoonAbyss.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampArtifactShellSoft.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCaptainAirstrike.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTreebot.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMoonLighting.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texHippoRezRamp.png
-- Assets/DancerAssets/OldVFX/Materials/matPunchImpact.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrowbar.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudOrganicNormal.png
-- Assets/DancerAssets/VFX/RibbonClusterMesh 2.fbx
+- Assets/DancerAssets/Materials/texDancerDiffuse.png
+- Assets/DancerAssets/Animations/DancerArmature_RunBack.anim
 - Assets/DancerAssets/NewVFX/texOmniShockwave2Mask.png
-- Assets/DancerAssets/Animations/DancerArmature_JabRight.anim
-- Assets/DancerAssets/OldVFX/Materials/matDust 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampIce.png
-- Assets/DancerAssets/VFX/Mesh/donut8Mesh.asset
-- Assets/DancerAssets/VFX/Materials/crm/texCloudDifferenceBW1.png
-- Assets/DancerAssets/OldVFX/Materials/texNemryHitSpark.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMetal.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTimeCrystalReverse.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTimeCrystal.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeamSphere 1.png
-- Assets/DancerAssets/OldVFX/Materials/matHitSpark 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDroneFire2.png
-- Assets/DancerAssets/OldVFX/Materials/matSpearSwingShadow.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampShinymetal.png
-- Assets/DancerAssets/Animations/DancerArmature_JabForward.anim
-- Assets/DancerAssets/OldVFX/Materials/texHenrySwing3 (7).png
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldHead.mesh
+- Assets/DancerAssets/NewVFX/texRampIce.png
+- Assets/DancerAssets/NewVFX/texCloudDifferenceBW1.png
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse (2).png
 - Assets/DancerAssets/NewVFX/matDancerSwingHeavy.mat
-- Assets/DancerAssets/VFX/RibbonBall.prefab
+- Assets/DancerAssets/NewVFX/RibbonBall.prefab
 - Assets/DancerAssets/NewVFX/texRampTritone 1.png
-- Assets/DancerAssets/OldVFX/Materials/matChargeShadow.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampElites.png
-- Assets/DancerAssets/VFX/RibbonClusterMesh.fbx
-- Assets/DancerAssets/VFX/RibbonLine.prefab
-- Assets/DancerAssets/OldVFX/BombExplosionEffect.prefab
-- Assets/DancerAssets/mesh/meshDancerRibbons.mesh
+- Assets/DancerAssets/NewVFX/RibbonLine.prefab
 - Assets/StubbedShaders/fx/hgvertexonly.shader
 - Assets/StubbedShaders/fx/hgintersectioncloudremap.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBrotherPillar.png
-- Assets/DancerAssets/OldVFX/Materials/texSpearSwingEffect.png
-- Assets/DancerAssets/FBX/fbxDancer.fbx
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLightning2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampEngi.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTeleporterLunar.png
-- Assets/DancerAssets/OldVFX/Materials/texFistSwing.mat
-- Assets/DancerAssets/VFX/New Project (32) (2).png
-- Assets/DancerAssets/OldVFX/Materials/matNemrySwordSwing.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudOrganic3.png
-- Assets/DancerAssets/OldVFX/Materials/matNemryHitSpark.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudPixel.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSporeGrenadeGas.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampOrbitalLaser.png
+- Assets/DancerAssets/NewVFX/texCloudOrganic3.png
 - Assets/DancerAssets/NewVFX/matRibbon.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCaptainDefenseMatrix.png
-- Assets/DancerAssets/VFX/Materials/textures/texDust.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeetleQueen.png
-- Assets/DancerAssets/OldVFX/Materials/New Project (31).png
-- Assets/DancerAssets/VFX/Materials/textures/texHitSpark.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMoonPreBoss.png
+- Assets/DancerAssets/Animations/DancerArmature_RunRight.anim
+- Assets/DancerAssets/NewVFX/texRampMoonPreBoss.png
 - Assets/DancerAssets/Materials/texDancerEmission.png
-- Assets/DancerAssets/OldVFX/SwordChargeFinishEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSquidInk.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampParentTeleport.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCloth.png
-- Assets/DancerAssets/Animations/DancerArmature_RunF.anim
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGreaterWisp.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLaserTurbine.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudWhitenoise.png
-- Assets/DancerAssets/OldVFX/Materials/texHitSpark.mat
 - Assets/DancerAssets/NewVFX/texRampTritoneSmoothed.png
-- Assets/DancerAssets/OldVFX/Materials/matPunchImpactShadow.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGenericFire.png
 - Assets/DancerAssets/NewVFX/matOmniHitspark2Generic.mat
-- Assets/DancerAssets/OldVFX/Materials/texHenrySwing2.mat
 - Assets/DancerAssets/Materials/texHornet.png
 - Assets/StubbedShaders/CalmWaterCalm Water [DX11] [Double Sided].shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDiamondLaser.png
 - Assets/DancerAssets/NewVFX/DancerHitEffect.prefab
-- Assets/DancerAssets/OldVFX/RidleyNairEffect.prefab
-- Assets/DancerAssets/VFX/Mesh/SpearSwingEffect.fbx
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMagmaWorm.png
-- Assets/DancerAssets/OldVFX/Materials/matEnergyMuzzleFlash.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampAntler.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudPixel2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampNullifier.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampFlamingSmoke.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampAreaIndicator.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampShadowClone.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGolemElectric.png
+- Assets/FBX/DANCERGOLD.fbx
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse (1).png
+- Assets/DancerAssets/texGoldSkin.png
 - Assets/DancerAssets/NewVFX/matDancerSwingBlur.mat
 - Assets/DancerAssets/Crosshair/texCrosshairTridant.png
 - Assets/DancerAssets/Materials/matHornetCape.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texBehemothRamp.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLunarWardDecal.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSporeGrenade.png
-- Assets/DancerAssets/OldVFX/Materials/matFistSwing.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampPotMobile.png
-- Assets/DancerAssets/VFX/RibbonClusterMesh 1.fbx
-- Assets/DancerAssets/OldVFX/Materials/matTrail.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWhiteAlphaOnlyFlipped.png
+- Assets/DancerAssets/mesh/meshDancerHead.mesh
 - Assets/DancerAssets/NewVFX/matDancerSwing.mat
 - Assets/DancerAssets/NewVFX/texOmniMeleeBluntMask.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampRoboBall.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTritoneSmoothed.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHuntressSoftCrit.png
-- Assets/DancerAssets/OldVFX/Materials/matDust 2.mat
 - Assets/DancerAssets/NewVFX/DancerDragonLungeEffect.prefab
-- Assets/DancerAssets/OldVFX/PunchMesh.mesh
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWilloWispExplosion2.png
-- Assets/DancerAssets/OldVFX/Materials/texNemryRipple.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudDirtyFire.png
+- Assets/DancerAssets/NewVFX/PunchMesh.mesh
 - Assets/DancerAssets/NewVFX/DancerDownAirEndEffect.prefab
-- Assets/DancerAssets/OldVFX/RidleySwingEffect.prefab
 - Assets/StubbedShaders/postprocess/hgscreendamage.shader
-- Assets/DancerAssets/VFX/Mesh/donut1Mesh.asset
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampRJMushroom.png
 - Assets/StubbedShaders/ui/hguicustomblend.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWhiteAlphaOnly.png
+- Assets/DancerAssets/mesh/meshDancerWeapon.mesh
 - Assets/StubbedShaders/ui/hguianimatealpha.shader
-- Assets/DancerAssets/OldVFX/Materials/matDistortion.mat
-- Assets/DancerAssets/OldVFX/SwordChargeEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWisp.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTeleporterPrint.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrocoDisease.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLightningYellowOffset.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWilloWispExplosion.png
-- Assets/DancerAssets/OldVFX/Materials/matNemryRipple.mat
 - Assets/StubbedShaders/fx/hgdamagenumber.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampItemInfection.png
-- Assets/DancerAssets/VFX/Mesh/donut7Mesh.asset
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMaulingRockHit.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampArmorReduction.png
-- Assets/DancerAssets/Animations/DancerArmature_RunBack.anim
-- Assets/DancerAssets/OldVFX/Materials/texHitSpark 1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGenericDust.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrocoDiseaseDark.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudCrackedIce.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLightning.png
 - Assets/StubbedShaders/hgintersectioncloudremap.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHook.png
 - Assets/StubbedShaders/fx/hgopaquecloudremap.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampArcaneCircle.png
-- Assets/DancerAssets/VFX/Mesh/donut6Mesh.asset
-- Assets/DancerAssets/VFX/Mesh/SwordSwingMesh.fbx
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampClaySwordSwing.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTeleporter.png
-- Assets/DancerAssets/OldVFX/Materials/texDust.mat
 - Assets/DancerAssets/NewVFX/DancerBigSwingEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGalaxy.png
+- Assets/DancerAssets/Animations/DancerArmature_RunF.anim
 - Assets/DancerAssets/NewVFX/texOmniHitspark3Mask.png
-- Assets/DancerAssets/OldVFX/Materials/matSwingShadow.mat
-- Assets/DancerAssets/VFX/New Project (32).png
-- Assets/DancerAssets/mesh/meshBugCape.mesh
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSlowDownTime.png
+- Assets/DancerAssets/Materials/matDancerGold.mat
 - Assets/DancerAssets/NewVFX/texOmniHitspark2Mask.png
-- Assets/DancerAssets/VFX/New Project (32) (1).png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGasoline.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampPoison.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudWhitenoisePointFiltered.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTritone2.png
+- Assets/DancerAssets/NewVFX/texRampTritone2.png
 - Assets/StubbedShaders/postprocess/hgoutlinehighlight.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampReverse.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampJellyfish.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeetleBreath.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDeathmark.png
-- Assets/DancerAssets/OldVFX/Materials/matPunchEffect.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLunarElectric.png
-- Assets/DancerAssets/OldVFX/Materials/matRipple 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLightningYellow.png
-- Assets/DancerAssets/VFX/Materials/textures/texPunchImpact.png
-- Assets/DancerAssets/VFX/Materials/crm/texLightning2Mask.png
-- Assets/DancerAssets/OldVFX/Materials/texSlash 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeamLightning.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHuntressSoft.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampFogBlackbeach.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHealingAura.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloud1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHuntressSoft2.png
+- Assets/DancerAssets/Animations/DancerArmature_RunLeft.anim
+- Assets/DancerAssets/NewVFX/texPunchImpact.png
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse.png
+- Assets/DancerAssets/texRibbonDebuffIcon.png
 - Assets/DancerAssets/Animations/maskAimPitch.mask
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGenericBluetint 1.png
 - Assets/DancerAssets/NewVFX/DancerDAirEffect.prefab
 - Assets/DancerAssets/texPrimaryIcon.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texClayGooSiphonRamp.png
 - Assets/StubbedShaders/environment/hggrass.shader
-- Assets/DancerAssets/Animations/DancerArmature_DragonLungePull.anim
 - Assets/DancerAssets/Crosshair/texDancerUtilCrosshair.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCaptainDefenseMatrixSoft.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampParentEyes.png
 - Assets/DancerAssets/NewVFX/matOmniHitspark3Generic.mat
-- Assets/DancerAssets/OldVFX/Materials/matSwingEffect.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLunarSmoke.png
 - Assets/DancerAssets/NewVFX/DancerDashAttackEffect.prefab
 - Assets/DancerAssets/Crosshair/texArrow.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampEliteLunar.png
-- Assets/DancerAssets/OldVFX/NemryMinibossIndicator.prefab
-- Assets/DancerAssets/VFX/Materials/crm/texCloudLightning1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampWispSoul.png
+- Assets/DancerAssets/NewVFX/texCloudLightning1.png
 - Assets/StubbedShaders/postprocess/hgscopeshader.shader
-- Assets/DancerAssets/OldVFX/Materials/matEmbers.mat
 - Assets/StubbedShaders/environment/hgdistantwater.shader
-- Assets/DancerAssets/VFX/Materials/crm/texCloudOrganic2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBirdHeart.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLunarWispFire.png
-- Assets/DancerAssets/Animations/DancerArmature_Sprint.anim
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse.png
 - Assets/StubbedShaders/fx/hgsolidparallax.shader
 - Assets/DancerAssets/NewVFX/matOmniHitspark3Generic 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHealing.png
-- Assets/DancerAssets/OldVFX/Materials/texEnergyMuzzleFlash.dds
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGhost.png
-- Assets/DancerAssets/OldVFX/Materials/texNemrySlash.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampInfusion.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCompositeLight.png
-- Assets/DancerAssets/OldVFX/Materials/texNemrySwing.png
 - Assets/StubbedShaders/deferred/hgtriplanarterrainblend.shader
-- Assets/DancerAssets/OldVFX/NemrySpearSwingEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBandit.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampVultureWindblade.png
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldBody.mesh
 - Assets/DancerAssets/texDancerIcon.png
-- Assets/DancerAssets/OldVFX/Materials/matDust.mat
-- Assets/DancerAssets/VFX/Mesh/donut4Mesh.asset
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMageFire.png
-- Assets/DancerAssets/VFX/Materials/textures/texEmbers.png
 - Assets/DancerAssets/Crosshair/texCrosshairNibSawRight.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampStealthRevealed.png
-- Assets/DancerAssets/OldVFX/Materials/New Project (30).png
 - Assets/DancerAssets/Crosshair/texCrosshairArrow.png
-- Assets/DancerAssets/VFX/Materials/textures/texLightning.tif
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampSkillCooldown.png
-- Assets/DancerAssets/VFX/Shit.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudSkulls.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTwotoneBlack.png
-- Assets/DancerAssets/OldVFX/Materials/matRipple.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudIce.png
+- Assets/DancerAssets/NewVFX/Shit.mat
+- Assets/DancerAssets/NewVFX/texCloudSkulls.png
+- Assets/DancerAssets/NewVFX/texCloudIce.png
 - Assets/DancerAssets/NewVFX/matDancerSwing 1.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMercDust.png
-- Assets/DancerAssets/OldVFX/Materials/texFire.mat
 - Assets/DancerAssets/Crosshair/DancerCrosshair.prefab
-- Assets/DancerAssets/FBX/fbxHornet.fbx
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampDroneFire.png
-- Assets/DancerAssets/Materials/texDancerDiffuse.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBombOrb.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampImp2.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudColor1.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampElitePoison2.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampLunarInfection.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampImp.png
-- Assets/DancerAssets/OldVFX/Materials/texNemryLightning.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texUIAnimateRampShine.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampNullifierSmooth.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampNullifierOffset.png
+- Assets/DancerAssets/mesh/meshDancerRibbons.mesh
 - Assets/StubbedShaders/deferred/hgwavycloth.shader
-- Assets/DancerAssets/VFX/DancerDragonLungePullEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTeleporterSoft.png
-- Assets/DancerAssets/OldVFX/Materials/texDistortionNormal.jpg
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTwotoneWhite.png
-- Assets/DancerAssets/OldVFX/Materials/matFire.mat
 - Assets/DancerAssets/NewVFX/matOmniShockwave.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampGolem.png
-- Assets/DancerAssets/OldVFX/Materials/matNemrySwordSwingShadow.mat
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texUIAnimateRampPulse.png
 - Assets/DancerAssets/Crosshair/texDancerCrosshair (1).png
-- Assets/DancerAssets/OldVFX/Materials/texMuzzleFlashEnergy.dds
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrosshairWide.png
-- Assets/DancerAssets/OldVFX/Materials/matSpearSwing.mat
-- Assets/DancerAssets/OldVFX/ImpactHenryPunch 1.prefab
-- Assets/DancerAssets/mesh/meshDancerLance.mesh
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeamSphere.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampFogDebug.png
-- Assets/DancerAssets/OldVFX/HenrySwordSwingEffect.prefab
 - Assets/DancerAssets/Materials/matDancer.mat
-- Assets/DancerAssets/Animations/DancerArmature_JabDown.anim
-- Assets/DancerAssets/OldVFX/NemryHeavySwordSwingEffect.prefab
 - Assets/DancerAssets/NewVFX/matDancerStab.mat
-- Assets/DancerAssets/VFX/Materials/crm/texCloudCrackedIceInverted.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRandoRamp.png
 - Assets/DancerAssets/Crosshair/texDancerCrosshair.png
 - Assets/DancerAssets/texSpecialIcon.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampHuntress.png
-- Assets/DancerAssets/OldVFX/Materials/texLightning.mat
-- Assets/DancerAssets/VFX/meshRibbonCluster.mesh
-- Assets/DancerAssets/OldVFX/RidleyBiteEffect.prefab
+- Assets/DancerAssets/NewVFX/meshRibbonCluster.mesh
 - Assets/StubbedShaders/ui/hguibarremap.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTwotoneEnvironment.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampShield.png
 - Assets/DancerAssets/NewVFX/texRampTritoneSmoothed (1).png
 - Assets/DancerAssets/mdlDancer.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCaptainBodyArmor.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMoonArenaWall.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampIridescent.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampTwotone.png
-- Assets/DancerAssets/OldVFX/Materials/texChargeCircle.dds
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMenuPlanetAtmosphere.png
-- Assets/DancerAssets/VFX/Mesh/donut2Mesh.asset
-- Assets/DancerAssets/mesh/meshDancerBody.mesh
 - Assets/DancerAssets/NewVFX/DancerBigHitEffect.prefab
 - Assets/DancerAssets/Animations/maskAim.mask
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampCrippleWard.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texClayGooRamp.png
-- Assets/DancerAssets/OldVFX/ImpactHenrySlash 1.prefab
-- Assets/DancerAssets/OldVFX/NemryMuzzleFlashEnergy.prefab
 - Assets/StubbedShaders/ui/hguiignorez.shader
 - Assets/StubbedShaders/CalmWaterCalm Water [DX11].shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampParent.png
-- Assets/DancerAssets/VFX/Materials/crm/texCloudBone1.png
-- Assets/DancerAssets/OldVFX/Materials/texChargeHalo.png
 - Assets/DancerAssets/NewVFX/texOmniRadialSlash1Mask.png
 - Assets/DancerAssets/texSecondaryIcon.png
 - Assets/StubbedShaders/postprocess/hgsobelbuffer.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampBeetleQueen2.png
-- Assets/DancerAssets/OldVFX/ImpactHenryPunch.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampParentFire.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampMoonAtmosphere.png
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampPlanetAtmosphere.png
 - Assets/StubbedShaders/environment/hgwaterfall.shader
 - Assets/StubbedShaders/ui/hguiblur.shader
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texUIIconRamp.png
 - Assets/StubbedShaders/fx/hgdistortion.shader
-- Assets/DancerAssets/OldVFX/HenryBazookaExplosionEffect.prefab
-- Assets/DancerAssets/VFX/Materials/crm/ramp/texRampRoboBallSmoothed.png
-- Assets/DancerAssets/VFX/Mesh/donut5Mesh.asset
 Dependencies: []

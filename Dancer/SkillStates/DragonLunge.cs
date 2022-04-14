@@ -22,10 +22,6 @@ namespace Dancer.SkillStates
         public static float force = 0f;
         public static float recoil = 1f;
         public static float range = Modules.StaticValues.dragonLungeRange;
-        public static GameObject tracerEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/Tracers/TracerCaptainShotgun");
-        public static GameObject muzzleEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/MuzzleFlashes/MuzzleflashHuntress");
-        public static GameObject hitEffectPrefab = Resources.Load<GameObject>("Prefabs/Effects/HitEffect/HitsparkCaptainShotgun");
-
         private DancerComponent weaponAnimator;
 
         private float earlyExitTime = 0.35f;
@@ -35,8 +31,6 @@ namespace Dancer.SkillStates
         private float duration;
         private float fireTime;
         private bool hasFired;
-        private bool hasHit;
-        private float hitTime;
         private Animator animator;
         private string muzzleString;
         private static float antigravityStrength;
@@ -95,13 +89,13 @@ namespace Dancer.SkillStates
                 }
 
                 base.characterBody.AddSpreadBloom(1.5f);
-                EffectManager.SimpleEffect(Modules.Assets.dragonLungeEffect, transform.position, transform.rotation, true);
+                
                 Util.PlaySound("LungeFire", base.gameObject);
 
                 if (base.isAuthority)
                 {
 
-
+                    EffectManager.SimpleEffect(Modules.Assets.dragonLungeEffect, transform.position, transform.rotation, true);
                     Ray aimRay = base.GetAimRay();
                     base.AddRecoil(-1f * DragonLunge.recoil, -2f * DragonLunge.recoil, -0.5f * DragonLunge.recoil, 0.5f * DragonLunge.recoil);
                     bool hitEnemy = false;
@@ -147,9 +141,9 @@ namespace Dancer.SkillStates
 
 
                     
-                    bulletAttack.hitCallback = (ref BulletAttack.BulletHit hitInfo) =>
+                    bulletAttack.hitCallback = (BulletAttack bullet, ref BulletAttack.BulletHit hitInfo) =>
                     {
-                        var result = bulletAttack.DefaultHitCallback(ref hitInfo);
+                        bool result = BulletAttack.defaultHitCallback(bullet, ref hitInfo);
 
                         if (!hitWorld)
                             this.hitPoint = hitInfo.point;
@@ -240,8 +234,6 @@ namespace Dancer.SkillStates
         {
 
             Util.PlaySound("LungeHit", base.gameObject);
-
-            this.hasHit = true;
 
         }
 

@@ -7,16 +7,18 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using Dancer.Modules.Components;
+using UnityEngine.AddressableAssets;
 
 namespace Dancer.Modules
 {
     internal static class Projectiles
     {
         internal static GameObject dancerRibbonProjectile;
+
         
         internal static void RegisterProjectiles()
         {
-            dancerRibbonProjectile = CloneProjectilePrefab("Fireball", "RibbonProjectile");
+            dancerRibbonProjectile = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Lemurian/Fireball.prefab").WaitForCompletion(), "RibbonProjectile");
 
             SphereCollider zs = dancerRibbonProjectile.GetComponent<SphereCollider>();
             zs.radius = 1.25f;
@@ -42,9 +44,6 @@ namespace Dancer.Modules
             Modules.Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
         }
 
-
-
-       
 
         private static void InitializeProjectileSimple(ProjectileSimple projectileSimple)
         {
