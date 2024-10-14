@@ -1,35 +1,53 @@
-﻿using EntityStates;
+using Dancer.SkillStates.InterruptStates;
+using EntityStates;
+using KinematicCharacterController;
 using RoR2;
-using UnityEngine;
-using Dancer.Modules.Components;
-using UnityEngine.Networking;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Networking;
+
 namespace Dancer.SkillStates
 {
     public class Pull2 : BaseSkillState
     {
         public List<GameObject> hitBodies;
+
         public float waitTime;
+
         public Vector3 point;
+
         private Vector3 direction;
+
         private bool pullStarted;
+
         private float distance;
+
         private float duration;
+
         private float speed;
+
         private float startSpeed;
+
         private float endSpeed;
 
         public bool hitWorld;
+
         private float exitHopVelocity = 15f;
 
         public static float minDuration = 0.2f;
+
         public static float maxDuration = 0.8f;
+
         public static float maxDistance = 80f;
+
         public static float minVelocity = 0.7f;
+
         public static float velocityMultiplier = 1.3f;
 
         private float maxAngle = 60f;
+
         private Animator animator;
+
         private float stopwatch;
 
         private DancerComponent weaponAnimator;
@@ -37,134 +55,108 @@ namespace Dancer.SkillStates
         public override void OnEnter()
         {
             base.OnEnter();
-
-            if (base.characterBody && NetworkServer.active) base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
-
-            this.animator = base.GetModelAnimator();
-            this.weaponAnimator = base.GetComponent<DancerComponent>();
-
-            float distance = Mathf.Max((this.point - base.transform.position).magnitude - 3f, 0);
-            Vector3 direction = (this.point - base.transform.position).normalized;
-            Vector3 point = distance * direction + base.transform.position;
-            this.distance = (base.transform.position - point).magnitude;
-            this.direction = (point - base.transform.position).normalized;
-            this.duration = Mathf.Lerp(minDuration, maxDuration, this.distance / maxDistance);
-            this.speed = this.distance / this.duration;
-            this.startSpeed = this.speed * 1.5f;
-            this.endSpeed = this.speed * 0.5f;
-
-
-            foreach(GameObject body in this.hitBodies)
+            if ((bool)base.characterBody && NetworkServer.active)
             {
-                if(body && body.GetComponent<NetworkIdentity>())
+                base.characterBody.bodyFlags |= CharacterBody.BodyFlags.IgnoreFallDamage;
+            }
+            animator = GetModelAnimator();
+            weaponAnimator = GetComponent<DancerComponent>();
+            float num = Mathf.Max((point - base.transform.position).magnitude - 3f, 0f);
+            Vector3 normalized = (point - base.transform.position).normalized;
+            Vector3 vector = num * normalized + base.transform.position;
+            distance = (base.transform.position - vector).magnitude;
+            direction = (vector - base.transform.position).normalized;
+            duration = Mathf.Lerp(minDuration, maxDuration, distance / maxDistance);
+            speed = distance / duration;
+            startSpeed = speed * 1.5f;
+            endSpeed = speed * 0.5f;
+            foreach (GameObject hitBody in hitBodies)
+            {
+                if ((bool)hitBody && (bool)hitBody.GetComponent<NetworkIdentity>())
                 {
-                    EntityStateMachine component = body.GetComponent<EntityStateMachine>();
-                    if (component && body.GetComponent<SetStateOnHurt>() && body.GetComponent<SetStateOnHurt>().canBeFrozen)
-                {
-                        if (false)//!hitWorld)
+                    EntityStateMachine component = hitBody.GetComponent<EntityStateMachine>();
+                    if ((bool)component && (bool)hitBody.GetComponent<SetStateOnHurt>() && hitBody.GetComponent<SetStateOnHurt>().canBeFrozen)
+                    {
+                        bool flag = false;
+                        SkeweredState newNextState = new SkeweredState
                         {
-                            SuspendedState newNextState = new SuspendedState
-                            {
-                                duration = this.duration,
-                            };
-                            component.SetInterruptState(newNextState, InterruptPriority.Vehicle);
-                        }
-                        else
-                        {
-                            SkeweredState newNextState = new SkeweredState
-                            {
-                                skewerDuration = (this.waitTime),
-                                pullDuration = this.duration,
-                                destination = this.point,
-                            };
-                            component.SetInterruptState(newNextState, InterruptPriority.Vehicle);
-                        }
-
+                            skewerDuration = waitTime,
+                            pullDuration = duration,
+                            destination = point
+                        };
+                        component.SetInterruptState(newNextState, InterruptPriority.Vehicle);
                     }
                 }
-                
             }
-
-            if (base.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
+            if ((bool)GetComponent<KinematicCharacterMotor>())
             {
-                base.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
+                GetComponent<KinematicCharacterMotor>().ForceUnground();
             }
-
-            this.weaponAnimator.WeaponRotationOverride(direction.normalized * 500f + base.transform.position);
-
-            base.PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", this.duration * 0.8f);
-            this.animator.SetFloat("DragonLunge.playbackRate", 1f);
+            weaponAnimator.WeaponRotationOverride(normalized.normalized * 500f + base.transform.position);
+            PlayAnimation("FullBody, Override", "DragonLungePull", "Slash.playbackRate", duration * 0.8f);
+            animator.SetFloat("DragonLunge.playbackRate", 1f);
         }
 
         public override void OnExit()
         {
             base.PlayAnimation("Body", "Jump");
-            this.animator.SetFloat("DragonLunge.playbackRate", 1f);
+            animator.SetFloat("DragonLunge.playbackRate", 1f);
             if (NetworkServer.active)
             {
                 base.characterBody.bodyFlags &= ~CharacterBody.BodyFlags.IgnoreFallDamage;
             }
-            this.weaponAnimator.StopWeaponOverride();
+            weaponAnimator.StopWeaponOverride();
             base.OnExit();
         }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-            
-
-            if (base.fixedAge >= this.waitTime)
+            if (base.fixedAge >= waitTime)
             {
-                
-
-                if (!this.pullStarted)
+                if (!pullStarted)
                 {
-                    this.animator.SetFloat("DragonLunge.playbackRate", 1f);
-                    this.pullStarted = true;
-                    //EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungePullEffect, base.gameObject, "LanceBase", false);
-                    
+                    animator.SetFloat("DragonLunge.playbackRate", 1f);
+                    pullStarted = true;
                     Util.PlaySound("LungeDash", base.gameObject);
                 }
-
-                
-
-                this.stopwatch += Time.fixedDeltaTime;
-                if(this.stopwatch < duration)
+                stopwatch += Time.fixedDeltaTime;
+                if (stopwatch < duration)
                 {
-                    this.speed = Mathf.Lerp(this.startSpeed, this.endSpeed, this.stopwatch / this.duration);
-                    base.characterDirection.forward = this.direction;
-                    base.characterMotor.velocity = this.direction * this.speed;
-                }      
-                if (this.stopwatch >= duration)
+                    speed = Mathf.Lerp(startSpeed, endSpeed, stopwatch / duration);
+                    base.characterDirection.forward = direction;
+                    base.characterMotor.velocity = direction * speed;
+                }
+                if (!(stopwatch >= duration))
                 {
-                    this.animator.SetFloat("DragonLunge.playbackRate", 0f);
-                    if (base.inputBank.skill3.down)
-                    {
-                        base.characterMotor.velocity = Vector3.zero;
-                        if (base.inputBank.jump.justPressed)
-                        {
-                            base.PlayAnimation("FullBody, Override", "BufferEmpty");                          
-                            base.SmallHop(base.characterMotor, base.characterBody.jumpPower);
-                            this.outer.SetNextStateToMain();
-                            return;
-                        }
-                    }                                      
-                    if (!this.hitWorld)
-                        this.outer.SetNextStateToMain();
-                    else if (!base.inputBank.skill3.down)
-                        this.outer.SetNextStateToMain();
-
                     return;
+                }
+                animator.SetFloat("DragonLunge.playbackRate", 0f);
+                if (base.inputBank.skill3.down)
+                {
+                    base.characterMotor.velocity = Vector3.zero;
+                    if (base.inputBank.jump.justPressed)
+                    {
+                        base.PlayAnimation("FullBody, Override", "BufferEmpty");
+                        SmallHop(base.characterMotor, base.characterBody.jumpPower);
+                        outer.SetNextStateToMain();
+                        return;
+                    }
+                }
+                if (!hitWorld)
+                {
+                    outer.SetNextStateToMain();
+                }
+                else if (!base.inputBank.skill3.down)
+                {
+                    outer.SetNextStateToMain();
                 }
             }
             else
             {
                 base.characterMotor.velocity = Vector3.zero;
-                this.animator.SetFloat("DragonLunge.playbackRate", 0f);
+                animator.SetFloat("DragonLunge.playbackRate", 0f);
             }
-                
-            
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()
@@ -175,35 +167,38 @@ namespace Dancer.SkillStates
         public override void OnSerialize(NetworkWriter writer)
         {
             base.OnSerialize(writer);
-            int count = 0;
-            foreach (GameObject body in this.hitBodies)
+            int num = 0;
+            foreach (GameObject hitBody in hitBodies)
             {
-                if (body && body.GetComponent<NetworkIdentity>())
-                    count++;
+                if ((bool)hitBody && (bool)hitBody.GetComponent<NetworkIdentity>())
+                {
+                    num++;
+                }
             }
-            writer.Write(count);
-            writer.Write((double)this.waitTime);
-            writer.Write(this.hitWorld);
-            writer.Write(this.point);           
-            foreach(GameObject body in this.hitBodies)
+            writer.Write(num);
+            writer.Write((double)waitTime);
+            writer.Write(hitWorld);
+            writer.Write(point);
+            foreach (GameObject hitBody2 in hitBodies)
             {
-                if (body && body.GetComponent<NetworkIdentity>()) 
-                    writer.Write(body.GetComponent<NetworkIdentity>().netId);
+                if ((bool)hitBody2 && (bool)hitBody2.GetComponent<NetworkIdentity>())
+                {
+                    writer.Write(hitBody2.GetComponent<NetworkIdentity>().netId);
+                }
             }
-            
         }
 
         public override void OnDeserialize(NetworkReader reader)
         {
-            this.hitBodies = new List<GameObject>();
+            hitBodies = new List<GameObject>();
             base.OnDeserialize(reader);
-            this.waitTime = (float)reader.ReadDouble();
-            this.hitWorld = reader.ReadBoolean();
-            this.point = reader.ReadVector3();
-            int count = reader.ReadInt32();
-            for(int i = 0; i < count; i++)
+            waitTime = (float)reader.ReadDouble();
+            hitWorld = reader.ReadBoolean();
+            point = reader.ReadVector3();
+            int num = reader.ReadInt32();
+            for (int i = 0; i < num; i++)
             {
-                this.hitBodies.Add(NetworkServer.FindLocalObject(reader.ReadNetworkId()));
+                hitBodies.Add(NetworkServer.FindLocalObject(reader.ReadNetworkId()));
             }
         }
     }

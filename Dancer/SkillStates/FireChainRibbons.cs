@@ -1,82 +1,70 @@
-﻿using EntityStates;
+using Dancer.Modules;
+using EntityStates;
 using RoR2;
-using UnityEngine;
-using Dancer.Modules.Components;
-using Dancer.SkillStates;
-using System.Collections.Generic;
 using RoR2.Projectile;
+using UnityEngine;
 
 namespace Dancer.SkillStates
 {
+
     public class FireChainRibbons : BaseSkillState
     {
-        public static float damageCoefficient = Modules.StaticValues.ribbonDamageCoefficient;
+        public static float damageCoefficient = 0.75f;
+
         public static float procCoefficient = 0.5f;
+
         public static float baseDuration = 0.35f;
+
         public static float force = 0f;
+
         public static float recoil = 1f;
+
         public static float range = 62f;
 
         private float duration;
+
         private float fireTime;
+
         private bool hasFired;
+
         private Animator animator;
+
         private string muzzleString;
 
         public override void OnEnter()
         {
             base.OnEnter();
-
-
-            base.StartAimMode(2f);
-            this.duration = DragonLunge.baseDuration / this.attackSpeedStat;
-            this.fireTime = 0.25f * this.duration;
+            StartAimMode();
+            duration = DragonLunge.baseDuration / attackSpeedStat;
+            fireTime = 0.25f * duration;
             base.characterBody.SetAimTimer(2f);
-            this.animator = base.GetModelAnimator();
-            this.muzzleString = "LanceBase";
-            //base.PlayAnimation("FullBody, Override", "DragonLunge", "DragonLunge.playbackRate", this.duration * 0.975f);
+            animator = GetModelAnimator();
+            muzzleString = "LanceBase";
             Util.PlaySound("Play_item_proc_whip", base.gameObject);
-            
-
         }
 
         public override void OnExit()
         {
-            if (!this.hasFired)
-                this.Fire();
+            if (!hasFired)
+            {
+                Fire();
+            }
             base.OnExit();
         }
 
-
-
         private void Fire()
         {
-            if (!this.hasFired)
+            if (!hasFired)
             {
-
-                this.hasFired = true;
-
+                hasFired = true;
                 base.characterBody.AddSpreadBloom(1.5f);
-                //EffectManager.SimpleMuzzleFlash(Modules.Assets.dragonLungeEffect, base.gameObject, this.muzzleString, false);
-
-
                 if (base.isAuthority)
                 {
-                    GameObject projectilePrefab = Modules.Projectiles.dancerRibbonProjectile;
-
-                    Ray aimRay = base.GetAimRay();
-                    Vector3 position = aimRay.origin;
+                    GameObject dancerRibbonProjectile = Projectiles.dancerRibbonProjectile;
+                    Ray aimRay = GetAimRay();
+                    Vector3 origin = aimRay.origin;
                     Vector3 direction = aimRay.direction;
-
-                    ProjectileManager.instance.FireProjectile(projectilePrefab,
-                    position,
-                    Util.QuaternionSafeLookRotation(direction),
-                    base.gameObject,
-                    FireChainRibbons.damageCoefficient * this.damageStat,
-                    0f,
-                    base.RollCrit(),
-                    DamageColorIndex.Default,
-                    null);
+                    ProjectileManager.instance.FireProjectile(dancerRibbonProjectile, origin, Util.QuaternionSafeLookRotation(direction), base.gameObject, damageCoefficient * damageStat, 0f, RollCrit());
                 }
             }
         }
@@ -84,16 +72,13 @@ namespace Dancer.SkillStates
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-            if (base.fixedAge >= this.fireTime)
+            if (base.fixedAge >= fireTime)
             {
-                this.Fire();              
+                Fire();
             }
-
-            if (base.fixedAge >= this.duration && base.isAuthority)
+            if (base.fixedAge >= duration && base.isAuthority)
             {
-                this.outer.SetNextStateToMain();
-                return;
+                outer.SetNextStateToMain();
             }
         }
 

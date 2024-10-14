@@ -1,49 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RoR2;
 using EntityStates;
 
-namespace Dancer.SkillStates
+namespace Dancer.SkillStates.DirectionalM1
 {
+
     public class EnterDirectionalAttack : BaseInputEvaluation
     {
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-            this.EvaluateInput();
-
-			if (this.inputVector.y < -0.5f)
-			{
-				this.nextState = new AttackLeft();
-			}
-			else if (this.inputVector.y > 0.5f)
-			{
-				this.nextState = new AttackRight();
-			}
-			else if (this.inputVector.x < -0.5f)
-			{
-				if (!base.isGrounded)
-				{
-					this.nextState = new AttackDown();
-				}
-				else
-				{
-					this.nextState = new AttackBackwards();
-				}
-
-			}
-			else if (this.inputVector.x > 0.5f)
-			{
-				this.nextState = new AttackForward();
-			}
-			this.SetNextState();
+            if (isAuthority)
+            {
+                EvaluateInput();
+                if (inputVector.y < -0.5f)
+                {
+                    nextState = new AttackLeft();
+                }
+                else if (inputVector.y > 0.5f)
+                {
+                    nextState = new AttackRight();
+                }
+                else if (inputVector.x < -0.5f)
+                {
+                    if (!isGrounded)
+                    {
+                        nextState = new AttackDown();
+                    }
+                    else
+                    {
+                        nextState = new AttackBackwards();
+                    }
+                }
+                else if (inputVector.x > 0.5f)
+                {
+                    nextState = new AttackForward();
+                }
+                SetNextState();
+            }
         }
 
-		public override InterruptPriority GetMinimumInterruptPriority()
-		{
-			return InterruptPriority.Skill;
-		}
-	}
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
 }

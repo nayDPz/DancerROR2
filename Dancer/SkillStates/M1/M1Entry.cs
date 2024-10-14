@@ -1,60 +1,53 @@
-﻿using System;
 using EntityStates;
-using UnityEngine;
 
-namespace Dancer.SkillStates
+namespace Dancer.SkillStates.M1
 {
-	public class M1Entry : BaseSkillState
-	{
-		public override void OnEnter()
-		{
-			base.OnEnter();
-			float y = base.inputBank.aimDirection.y;
 
-			
-			if (y > Modules.StaticValues.primaryAimUpAngle)
-			{
-				this.outer.SetNextState(new UpAir());
-			}
-			else
-			{
-				if (y < Modules.StaticValues.primaryAimDownAngle)
-				{
-					if (base.characterMotor.isGrounded)
-					{
-						this.outer.SetNextState(new DownAirLand());
-					}
-					else if (y < Modules.StaticValues.primaryAimDownAirAngle)
-					{
-						this.outer.SetNextState(new DownAir());
-					}
-					else
+    public class M1Entry : BaseSkillState
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            if (isAuthority)
+            {
+                float y = inputBank.aimDirection.y;
+                if (y > 0.575f)
+                {
+                    outer.SetNextState(new UpAir());
+                }
+                else if (y < -0.425f)
+                {
+                    if (characterMotor.isGrounded)
                     {
-						this.outer.SetNextState(new FAir());
-					}
-				}
-				else
-				{
-					if (!base.characterMotor.isGrounded)
-					{
-						this.outer.SetNextState(new FAir());
-					}
-					else
-					{
-						if (base.characterBody.isSprinting)
-						{
-							this.outer.SetNextState(new DashAttack());
-						}
-						else
-							this.outer.SetNextState(new Jab1());
-					}
-				}
-			}
-		}
+                        outer.SetNextState(new DownAirLand());
+                    }
+                    else if (y < -0.74f)
+                    {
+                        outer.SetNextState(new DownAir());
+                    }
+                    else
+                    {
+                        outer.SetNextState(new FAir());
+                    }
+                }
+                else if (!characterMotor.isGrounded)
+                {
+                    outer.SetNextState(new FAir());
+                }
+                else if (characterBody.isSprinting)
+                {
+                    outer.SetNextState(new DashAttack());
+                }
+                else
+                {
+                    outer.SetNextState(new Jab1());
+                }
+            }
+        }
 
-		public override InterruptPriority GetMinimumInterruptPriority()
-		{
-			return InterruptPriority.Skill;
-		}
-	}
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+    }
 }

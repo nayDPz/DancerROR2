@@ -1,11 +1,14 @@
-﻿using RoR2.ContentManagement;
+using RoR2.ContentManagement;
+using System.Collections;
 
 namespace Dancer.Modules
 {
+
     internal class ContentPacks : IContentPackProvider
     {
         internal ContentPack contentPack = new ContentPack();
-        public string identifier => DancerPlugin.MODUID;
+
+        public string identifier => "com.ndp.DancerBeta";
 
         public void Initialize()
         {
@@ -17,34 +20,32 @@ namespace Dancer.Modules
             addContentPackProvider(this);
         }
 
-        public System.Collections.IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
+        public IEnumerator LoadStaticContentAsync(LoadStaticContentAsyncArgs args)
         {
-            this.contentPack.identifier = this.identifier;
+            contentPack.identifier = identifier;
             contentPack.bodyPrefabs.Add(Prefabs.bodyPrefabs.ToArray());
             contentPack.buffDefs.Add(Buffs.buffDefs.ToArray());
             contentPack.effectDefs.Add(Assets.effectDefs.ToArray());
             contentPack.entityStateTypes.Add(States.entityStates.ToArray());
-            contentPack.masterPrefabs.Add(Prefabs.masterPrefabs.ToArray());            
+            contentPack.masterPrefabs.Add(Prefabs.masterPrefabs.ToArray());
             contentPack.networkSoundEventDefs.Add(Assets.networkSoundEventDefs.ToArray());
             contentPack.projectilePrefabs.Add(Prefabs.projectilePrefabs.ToArray());
             contentPack.skillDefs.Add(Skills.skillDefs.ToArray());
             contentPack.skillFamilies.Add(Skills.skillFamilies.ToArray());
             contentPack.survivorDefs.Add(Prefabs.survivorDefinitions.ToArray());
             contentPack.networkedObjectPrefabs.Add(Assets.networkedObjectPrefabs.ToArray());
-            //contentPack.unlockableDefs.Add(Unlockables.unlockableDefs.ToArray());
-
             args.ReportProgress(1f);
             yield break;
         }
 
-        public System.Collections.IEnumerator GenerateContentPackAsync(GetContentPackAsyncArgs args)
+        public IEnumerator GenerateContentPackAsync(GetContentPackAsyncArgs args)
         {
-            ContentPack.Copy(this.contentPack, args.output);
+            ContentPack.Copy(contentPack, args.output);
             args.ReportProgress(1f);
             yield break;
         }
 
-        public System.Collections.IEnumerator FinalizeAsync(FinalizeAsyncArgs args)
+        public IEnumerator FinalizeAsync(FinalizeAsyncArgs args)
         {
             args.ReportProgress(1f);
             yield break;

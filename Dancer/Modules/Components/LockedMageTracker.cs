@@ -1,110 +1,106 @@
-﻿using MonoMod.RuntimeDetour;
+using EntityStates.LockedMage;
+using MonoMod.RuntimeDetour;
 using R2API.Utils;
 using RoR2;
 using RoR2.CharacterAI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace Dancer.Modules.Components
 {
-    public class LockedMageTracker // copied playercount hooks from multitudes, arti AI from fetchafriend
-    {
-        public CharacterBody mageOwnerBody;
-        public CharacterMaster mageOwnerMaster;
-        public CharacterMaster mageBuddy;
-        public static LockedMageTracker instance;
-        public static bool mageFreed;
 
+    public class LockedMageTracker
+    {
         private delegate int RunInstanceReturnInt(Run self);
 
+        public CharacterBody mageOwnerBody;
+
+        public CharacterMaster mageOwnerMaster;
+
+        public CharacterMaster mageBuddy;
+
+        public static LockedMageTracker instance;
+
+        public static bool mageFreed;
+
         private static RunInstanceReturnInt origLivingPlayerCountGetter;
+
         private static RunInstanceReturnInt origParticipatingPlayerCountGetter;
+
         public LockedMageTracker()
         {
-            LockedMageTracker.instance = this;
-            RoR2.Run.onRunStartGlobal += Run_onRunStartGlobal;
-            EntityStates.LockedMage.UnlockingMage.onOpened += SpawnArtificerBuddy;
-            RoR2.Stage.onStageStartGlobal += Stage_onStageStartGlobal;
-            //On.RoR2.GenericPickupController.GrantItem += GenericPickupController_GrantItem;
-
-            var getLivingPlayerCountHook = new Hook(typeof(Run).GetMethodCached("get_livingPlayerCount"),
-                typeof(LockedMageTracker).GetMethodCached(nameof(GetLivingPlayerCountHook)));
-            origLivingPlayerCountGetter = getLivingPlayerCountHook.GenerateTrampoline<RunInstanceReturnInt>();
-
-            var getParticipatingPlayerCount = new Hook(typeof(Run).GetMethodCached("get_participatingPlayerCount"),
-                typeof(LockedMageTracker).GetMethodCached(nameof(GetParticipatingPlayerCountHook)));
-            origParticipatingPlayerCountGetter = getParticipatingPlayerCount.GenerateTrampoline<RunInstanceReturnInt>();
+            instance = this;
+            Run.onRunStartGlobal += Run_onRunStartGlobal;
+            UnlockingMage.onOpened += SpawnArtificerBuddy;
+            Stage.onStageStartGlobal += Stage_onStageStartGlobal;
+            Hook val = new Hook((MethodBase)Reflection.GetMethodCached(typeof(Run), "get_livingPlayerCount"), Reflection.GetMethodCached(typeof(LockedMageTracker), "GetLivingPlayerCountHook"));
+            origLivingPlayerCountGetter = val.GenerateTrampoline<RunInstanceReturnInt>();
+            Hook val2 = new Hook((MethodBase)Reflection.GetMethodCached(typeof(Run), "get_participatingPlayerCount"), Reflection.GetMethodCached(typeof(LockedMageTracker), "GetParticipatingPlayerCountHook"));
+            origParticipatingPlayerCountGetter = val2.GenerateTrampoline<RunInstanceReturnInt>();
         }
 
-        private void GenericPickupController_GrantItem(On.RoR2.GenericPickupController.orig_GrantItem orig, GenericPickupController self, CharacterBody body, Inventory inventory)
+        private static int GetLivingPlayerCountHook(Run self)
         {
-            orig(self, body, inventory);
-            if (mageFreed && this.mageBuddy && this.mageOwnerBody)
-            {
-                if (this.mageOwnerBody == body)
-                {
-                    Debug.Log("giving " + ItemCatalog.GetItemDef(PickupCatalog.GetPickupDef(self.pickupIndex).itemIndex).name + " to mage buddy :D");
-                    this.mageBuddy.inventory.GiveItem(ItemCatalog.GetItemDef(PickupCatalog.GetPickupDef(self.pickupIndex).itemIndex));
-                }
-            }
+            return origLivingPlayerCountGetter(self);
         }
 
-
-        private static int GetLivingPlayerCountHook(Run self) => origLivingPlayerCountGetter(self);// + (mageFreed ? 1 : 0);
-        private static int GetParticipatingPlayerCountHook(Run self) => origParticipatingPlayerCountGetter(self) + (mageFreed ? 1 : 0);
+        private static int GetParticipatingPlayerCountHook(Run self)
+        {
+            return origParticipatingPlayerCountGetter(self) + (mageFreed ? 1 : 0);
+        }
 
         private void SpawnArtificerBuddy(Interactor interactor)
         {
             mageFreed = true;
-            this.mageOwnerBody = interactor.GetComponent<CharacterBody>();
-            this.mageOwnerMaster = this.mageOwnerBody.master;
-
-            this.mageBuddy = new MasterSummon
+            mageOwnerBody = interactor.GetComponent<CharacterBody>();
+            mageOwnerMaster = mageOwnerBody.master;
+            mageBuddy = new MasterSummon
             {
-
                 masterPrefab = MasterCatalog.FindMasterPrefab("MageMonsterMaster"),
-                summonerBodyObject = this.mageOwnerBody.gameObject,
+                summonerBodyObject = mageOwnerBody.gameObject,
                 ignoreTeamMemberLimit = true,
-                inventoryToCopy = this.mageOwnerBody.inventory,
-                useAmbientLevel = new bool?(true),
+                inventoryToCopy = mageOwnerBody.inventory,
+                useAmbientLevel = true,
                 position = interactor.transform.position + Vector3.up,
                 rotation = Quaternion.identity,
-                preSpawnSetupCallback = (master) =>
+                preSpawnSetupCallback = delegate (CharacterMaster master)
                 {
-                    List<AISkillDriver> ai = master.aiComponents[0].skillDrivers.ToList();
-                    master.gameObject.AddComponent<AIOwnership>().ownerMaster = this.mageOwnerBody.master;
-                    ai.AddRange(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiWalkerTurretMaster.prefab").WaitForCompletion().GetComponents<AISkillDriver>().Where(ai2 => ai2.moveTargetType == AISkillDriver.TargetType.CurrentLeader).ToList());
-                    master.aiComponents[0].skillDrivers = ai.ToArray();
-                    UnityEngine.Object.DontDestroyOnLoad(master);
+                    List<AISkillDriver> list = master.aiComponents[0].skillDrivers.ToList();
+                    master.gameObject.AddComponent<AIOwnership>().ownerMaster = mageOwnerBody.master;
+                    list.AddRange((from ai2 in Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Engi/EngiWalkerTurretMaster.prefab").WaitForCompletion().GetComponents<AISkillDriver>()
+                                   where ai2.moveTargetType == AISkillDriver.TargetType.CurrentLeader
+                                   select ai2).ToList());
+                    master.aiComponents[0].skillDrivers = list.ToArray();
+                    Object.DontDestroyOnLoad(master);
                     master.destroyOnBodyDeath = false;
                     master.killedByUnsafeArea = false;
                 }
             }.Perform();
         }
 
-
         private void Stage_onStageStartGlobal(Stage stage)
         {
-            RoR2.SceneDef sceneDef = stage.sceneDef;
-            if (this.mageOwnerMaster)
-                this.mageOwnerBody = this.mageOwnerMaster.GetBody();
-
-            if (mageFreed && this.mageBuddy && !stage.sceneDef.suppressPlayerEntry && stage.sceneDef.suppressNpcEntry)
+            SceneDef sceneDef = stage.sceneDef;
+            if ((bool)mageOwnerMaster)
             {
-                this.mageBuddy.Respawn(stage.GetPlayerSpawnTransform().position, Quaternion.identity);
+                mageOwnerBody = mageOwnerMaster.GetBody();
+            }
+            if (mageFreed && (bool)mageBuddy && !stage.sceneDef.suppressPlayerEntry && stage.sceneDef.suppressNpcEntry)
+            {
+                mageBuddy.Respawn(stage.GetPlayerSpawnTransform().position, Quaternion.identity);
             }
             if (sceneDef.baseSceneName == "bazaar" && !mageFreed)
             {
-                GameObject mage = GameObject.Find("HOLDER: Store/HOLDER: Store Platforms/LockedMage/");
-                GameObject.Destroy(mage.GetComponent<GameObjectUnlockableFilter>());
-                mage.SetActive(true);
-
+                GameObject gameObject = GameObject.Find("HOLDER: Store/HOLDER: Store Platforms/LockedMage/");
+                Object.Destroy(gameObject.GetComponent<GameObjectUnlockableFilter>());
+                gameObject.SetActive(value: true);
             }
         }
 
-        private void Run_onRunStartGlobal(RoR2.Run obj)
+        private void Run_onRunStartGlobal(Run obj)
         {
             mageFreed = false;
         }

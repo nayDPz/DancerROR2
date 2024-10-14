@@ -1,97 +1,81 @@
-﻿using System;
-using EntityStates.Merc;
-using Dancer.Modules;
-using UnityEngine;
+using KinematicCharacterController;
 using RoR2;
+using UnityEngine;
 
-namespace Dancer.SkillStates
+namespace Dancer.SkillStates.M1
 {
-	public class Jab2 : BaseM1
-	{
-		public override void OnEnter()
-		{
-			
-			this.anim = 1.1f;
-			this.damageCoefficient = StaticValues.jab2DamageCoefficient;
-			this.baseDuration = 0.55f;
-			this.attackStartTime = 0.1f;
-			this.attackEndTime = 0.6f;
-			this.hitStopDuration = 0.025f;
-			this.attackRecoil = 2f;
-			this.hitHopVelocity = 2f;
-			this.stackGainAmount = 7;
-			this.hitStopDuration = 0.06f;
-			this.pushForce = 1400f;
-			this.launchVectorOverride = true;
-			this.swingSoundString = "SwordSwing2";
-			this.hitSoundString = "JabHit2";
-			this.critHitSoundString = "JabHit3";
-			this.muzzleString = "eJab2";
-			this.cancelledFromSprinting = true;
-			this.earlyExitJump = true;
-			this.swingEffectPrefab = Assets.swingEffect;
-			this.hitEffectPrefab = Assets.hitEffect;
-			this.impactSound = Assets.jab2HitSoundEvent.index;
-			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
-			{
-				new Keyframe(0f, 0f),
-				new Keyframe(0.15f, 9f),
-				new Keyframe(0.75f, 0f),
-				new Keyframe(1f, 0f)
-			});
-			//this.isCombo = true;
-			this.isDash = true;
-			this.animString = "Jab2";
-			this.hitboxName = "Jab";
-			base.OnEnter();
-		}
 
-		public override void LaunchEnemy(CharacterBody body)
-		{
+    public class Jab2 : BaseM1
+    {
+        public override void OnEnter()
+        {
+            anim = 1.1f;
+            damageCoefficient = 1.8f;
+            baseDuration = 0.55f;
+            attackStartTime = 0.1f;
+            attackEndTime = 0.6f;
+            hitStopDuration = 0.025f;
+            attackRecoil = 2f;
+            hitHopVelocity = 2f;
+            stackGainAmount = 7;
+            hitStopDuration = 0.06f;
+            pushForce = 1400f;
+            launchVectorOverride = true;
+            swingSoundString = "SwordSwing2";
+            hitSoundString = "JabHit2";
+            critHitSoundString = "JabHit3";
+            muzzleString = "eJab2";
+            cancelledFromSprinting = true;
+            earlyExitJump = true;
+            swingEffectPrefab = Modules.Assets.swingEffect;
+            hitEffectPrefab = Modules.Assets.hitEffect;
+            impactSound = Modules.Assets.jab2HitSoundEvent.index;
+            dashSpeedCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.15f, 9f), new Keyframe(0.75f, 0f), new Keyframe(1f, 0f));
+            isDash = true;
+            animString = "Jab2";
+            hitboxName = "Jab";
+            base.OnEnter();
+        }
 
-			Vector3 direction = base.characterDirection.forward * 10f;
-			Vector3 launchVector = (direction + base.transform.position) - body.transform.position;
-			launchVector = launchVector.normalized;
-			launchVector *= this.pushForce;
-
-			if (body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
-			{
-				body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
-			}
-
-			CharacterMotor m = body.characterMotor;
-
-			float force = 0.25f;
-			if (m)
-			{
-				float f = Mathf.Max(100f, m.mass);
-				force = f / 100f;
-				launchVector *= force;
-				m.ApplyForce(launchVector);
-			}
-			else if (body.rigidbody)
-			{
-				float f = Mathf.Max(50f, body.rigidbody.mass);
-				force = f / 200f;
-				launchVector *= force;
-				body.rigidbody.AddForce(launchVector, ForceMode.Impulse);
-			}
-
-			DamageInfo info = new DamageInfo
-			{
-				attacker = base.gameObject,
-				inflictor = base.gameObject,
-				damage = 0,
-				damageColorIndex = DamageColorIndex.Default,
-				damageType = DamageType.Generic,
-				crit = false,
-				dotIndex = DotController.DotIndex.None,
-				force = launchVector,
-				position = base.transform.position,
-				procChainMask = default(ProcChainMask),
-				procCoefficient = 0
-			};
-			//body.healthComponent.TakeDamageForce(info, true, true);
-		}
-	}
+        public override void LaunchEnemy(CharacterBody body)
+        {
+            Vector3 vector = characterDirection.forward * 10f;
+            Vector3 normalized = (vector + transform.position - body.transform.position).normalized;
+            normalized *= pushForce;
+            if ((bool)body.GetComponent<KinematicCharacterMotor>())
+            {
+                body.GetComponent<KinematicCharacterMotor>().ForceUnground();
+            }
+            CharacterMotor characterMotor = body.characterMotor;
+            float num = 0.25f;
+            if ((bool)characterMotor)
+            {
+                float num2 = Mathf.Max(100f, characterMotor.mass);
+                num = num2 / 100f;
+                normalized *= num;
+                characterMotor.ApplyForce(normalized);
+            }
+            else if ((bool)body.rigidbody)
+            {
+                float num3 = Mathf.Max(50f, body.rigidbody.mass);
+                num = num3 / 200f;
+                normalized *= num;
+                body.rigidbody.AddForce(normalized, ForceMode.Impulse);
+            }
+            DamageInfo damageInfo = new DamageInfo
+            {
+                attacker = gameObject,
+                inflictor = gameObject,
+                damage = 0f,
+                damageColorIndex = DamageColorIndex.Default,
+                damageType = DamageType.Generic,
+                crit = false,
+                dotIndex = DotController.DotIndex.None,
+                force = normalized,
+                position = transform.position,
+                procChainMask = default,
+                procCoefficient = 0f
+            };
+        }
+    }
 }

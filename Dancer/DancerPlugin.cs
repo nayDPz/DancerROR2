@@ -1,215 +1,178 @@
-﻿using BepInEx;
-using R2API.Utils;
-using RoR2;
-using System.Security;
-using System.Security.Permissions;
-using UnityEngine;
-using UnityEngine.Networking;
-using RoR2.Orbs;
+using BepInEx;
+using Dancer.Modules;
 using Dancer.Modules.Components;
-using R2API;
-[module: UnverifiableCode]
-[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
+using Dancer.SoftDependencies;
+using HG;
+using RoR2;
+using RoR2.ContentManagement;
+using RoR2.Orbs;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace Dancer
 {
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
-    [R2APISubmoduleDependency(nameof(DotAPI))]
-    [R2APISubmoduleDependency(nameof(LanguageAPI))]
-    [R2APISubmoduleDependency(nameof(SoundAPI))]
-    [R2APISubmoduleDependency(nameof(PrefabAPI))]
-    [R2APISubmoduleDependency(nameof(LoadoutAPI))]
-
+    [BepInDependency(R2API.DotAPI.PluginGUID)]
+    [BepInDependency(R2API.LanguageAPI.PluginGUID)]
+    [BepInDependency(R2API.SoundAPI.PluginGUID)]
+    [BepInDependency(R2API.PrefabAPI.PluginGUID)]
     public class DancerPlugin : BaseUnityPlugin
     {
         public const string MODUID = "com.ndp.DancerBeta";
+
         public const string MODNAME = "DancerBeta";
-        public const string MODVERSION = "0.0.1";
+
+        public const string MODVERSION = "0.10.1";
 
         public const string developerPrefix = "NDP";
 
-        public static bool scepterInstalled = false;
-
-        
+        public static bool emotesInstalled;
 
         public static DancerPlugin instance;
 
         private void Awake()
         {
             instance = this;
-
-            
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
-            Modules.States.RegisterStates();
-            Modules.Buffs.RegisterBuffs();
-            Modules.Projectiles.RegisterProjectiles();
-            Modules.Tokens.AddTokens(); 
-            Modules.ItemDisplays.PopulateDisplays();
-            Modules.CameraParams.InitializeParams();
-
-            Modules.Survivors.Dancer.CreateCharacter();
-
-            Modules.Unlockables.RegisterUnlockables();
-
-            new LockedMageTracker();
-            new Modules.ContentPacks().Initialize();
-
-            RoR2.ContentManagement.ContentManager.onContentPacksAssigned += LateSetup;
-
+            States.RegisterStates();
+            Buffs.RegisterBuffs();
+            Projectiles.RegisterProjectiles();
+            Tokens.AddTokens();
+            ItemDisplays.PopulateDisplays();
+            CameraParams.InitializeParams();
+            Dancer.Modules.Survivors.Dancer.CreateCharacter();
+            //Unlockables.RegisterUnlockables(); From what I understand it does nothing, none of the unlockabledefs are actually assigned to anything
+            if (Modules.Config.artiBuddy.Value)
+            {
+                new LockedMageTracker();
+            }
+            new ContentPacks().Initialize();
+            if (CustomEmotesAPICompat.enabled)
+            {
+                CustomEmotesAPICompat.SetupSkeleton();
+            }
+            ContentManager.onContentPacksAssigned += LateSetup;
             Hook();
         }
 
-
-
-
-
-        private void LateSetup(HG.ReadOnlyArray<RoR2.ContentManagement.ReadOnlyContentPack> obj)
+        private void LateSetup(ReadOnlyArray<ReadOnlyContentPack> obj)
         {
-            Modules.Survivors.Dancer.SetItemDisplays();
-            UnityEngine.AddressableAssets.Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/LockedMage.prefab").WaitForCompletion().GetComponent<GameObjectUnlockableFilter>().enabled = false;
+            Dancer.Modules.Survivors.Dancer.SetItemDisplays();
+            if (Modules.Config.artiBuddy.Value)
+            {
+                Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Mage/LockedMage.prefab").WaitForCompletion().GetComponent<GameObjectUnlockableFilter>()
+                    .enabled = false;
+            }
         }
 
         private void Hook()
         {
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             On.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-
         }
 
         private void CharacterBody_RecalculateStats(On.RoR2.CharacterBody.orig_RecalculateStats orig, CharacterBody self)
         {
-            
-            orig(self);
-
-            if (self.HasBuff(Modules.Buffs.ribbonDebuff))
+            orig.Invoke(self);
+            if (self.HasBuff(Buffs.ribbonDebuff))
             {
-                self.moveSpeed *= Modules.StaticValues.ribbonMovespeedCoefficient;
+                self.moveSpeed *= 0.75f;
             }
         }
 
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, RoR2.HealthComponent self, RoR2.DamageInfo damageInfo)
         {
-            RibbonController ribbon = RibbonController.FindRibbonController(self.gameObject);
-
-            if (damageInfo != null && damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>())
+            RibbonController ribbonController = RibbonController.FindRibbonController(self.gameObject);
+            if (damageInfo != null && (bool)damageInfo.attacker && (bool)damageInfo.attacker.GetComponent<CharacterBody>())
             {
                 if (damageInfo.attacker.GetComponent<CharacterBody>().baseNameToken == "NDP_DANCER_BODY_NAME")
                 {
-
-                    
-                    if (ribbon)
+                    if ((bool)ribbonController && damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
                     {
-                        if(damageInfo.procChainMask.mask == 0 && damageInfo.damageType != DamageType.AOE && damageInfo.damageType != DamageType.DoT && damageInfo.damageType != DamageType.ApplyMercExpose)
+                        HealthComponent component = damageInfo.attacker.GetComponent<HealthComponent>();
+                        if ((bool)component && damageInfo.damage > 0f)
                         {
-                            HealthComponent h = damageInfo.attacker.GetComponent<HealthComponent>();
-                            if (h && damageInfo.damage > 0f)
-                            {
-                                float b = h.fullHealth * Modules.StaticValues.ribbonBarrierFraction * damageInfo.procCoefficient;
-                                h.AddBarrier(b);
-                            }
-                            
-
-                            bool isCrit = damageInfo.crit;
-                            float damageValue = Modules.StaticValues.ribbonChainDamageCoefficient * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage;
-                            TeamIndex teamIndex = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
-                            if (ribbon.NetworknextRoot)
-                            {
-                                CharacterBody body = ribbon.nextRoot.GetComponent<CharacterBody>();
-                                if (body)
-                                {
-                                    DancerOrb dancerOrb = new DancerOrb();
-                                    dancerOrb.attacker = damageInfo.attacker;
-                                    dancerOrb.bouncedObjects = null;
-                                    dancerOrb.bouncesRemaining = 0;
-                                    dancerOrb.damageCoefficientPerBounce = 1f;
-                                    dancerOrb.damageColorIndex = DamageColorIndex.Item;
-                                    dancerOrb.damageValue = damageValue;
-                                    dancerOrb.isCrit = isCrit;
-                                    dancerOrb.origin = damageInfo.position;
-                                    dancerOrb.procChainMask = default(ProcChainMask);
-                                    dancerOrb.procCoefficient = 0f;
-                                    dancerOrb.range = 0f;
-                                    dancerOrb.teamIndex = teamIndex;
-                                    dancerOrb.target = body.mainHurtBox;
-                                    dancerOrb.duration = Modules.StaticValues.ribbonChainTime;
-                                    OrbManager.instance.AddOrb(dancerOrb);
-                                }
-
-                            }
-                            else
-                            {
-                                if (RibbonController.naturalSpread)
-                                    ribbon.SpeedUpRibbon(Modules.StaticValues.ribbonChainTime);
-                                else
-                                    ribbon.SearchNewTarget();
-
-                                ribbon.inflictorRoot = damageInfo.attacker;
-                                
-                            }
-                        }                     
-
-                    }
-                 
-                    if (damageInfo.damageType == DamageType.FruitOnHit) // figure out custom dmg types eventually
-                    {
-                        damageInfo.damageType = DamageType.Generic;               
-                        float duration = Modules.Buffs.ribbonDebuffDuration;
-                        
-                        if (ribbon)
+                            float value = component.fullHealth * 0.045f * damageInfo.procCoefficient;
+                            component.AddBarrier(value);
+                        }
+                        bool crit = damageInfo.crit;
+                        float damageValue = 0f * damageInfo.attacker.GetComponent<CharacterBody>().baseDamage;
+                        TeamIndex teamIndex = damageInfo.attacker.GetComponent<CharacterBody>().teamComponent.teamIndex;
+                        if ((bool)ribbonController.NetworknextRoot)
                         {
-                            ribbon.SyncRibbonTimersToNewTime(duration);
+                            CharacterBody component2 = ribbonController.nextRoot.GetComponent<CharacterBody>();
+                            if ((bool)component2)
+                            {
+                                DancerOrb dancerOrb = new DancerOrb();
+                                dancerOrb.attacker = damageInfo.attacker;
+                                dancerOrb.bouncedObjects = null;
+                                dancerOrb.bouncesRemaining = 0;
+                                dancerOrb.damageCoefficientPerBounce = 1f;
+                                dancerOrb.damageColorIndex = DamageColorIndex.Item;
+                                dancerOrb.damageValue = damageValue;
+                                dancerOrb.isCrit = crit;
+                                dancerOrb.origin = damageInfo.position;
+                                dancerOrb.procChainMask = default(ProcChainMask);
+                                dancerOrb.procCoefficient = 0f;
+                                dancerOrb.range = 0f;
+                                dancerOrb.teamIndex = teamIndex;
+                                dancerOrb.target = component2.mainHurtBox;
+                                dancerOrb.duration = 0.25f;
+                                OrbManager.instance.AddOrb(dancerOrb);
+                            }
                         }
                         else
                         {
-                            GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonController, self.gameObject.transform);
-                            RibbonController newRibbon = gameObject.GetComponent<RibbonController>();
-                            newRibbon.timer = duration;
-                            newRibbon.NetworkownerRoot = self.gameObject;
-                            newRibbon.inflictorRoot = damageInfo.attacker;
-                            newRibbon.spreadsRemaining = Modules.StaticValues.ribbonInitialTargets;
-                            NetworkServer.Spawn(gameObject);
-                            newRibbon.StartRibbon();
+                            if (RibbonController.naturalSpread)
+                            {
+                                ribbonController.SpeedUpRibbon(0.25f);
+                            }
+                            else
+                            {
+                                ribbonController.SearchNewTarget();
+                            }
+                            ribbonController.inflictorRoot = damageInfo.attacker;
                         }
                     }
-
-                    if(damageInfo.damageType == DamageType.ApplyMercExpose)
+                    if (damageInfo.damageType == DamageType.FruitOnHit)
+                    {
+                        damageInfo.damageType = DamageType.Generic;
+                        float ribbonDebuffDuration = Buffs.ribbonDebuffDuration;
+                        if ((bool)ribbonController)
+                        {
+                            ribbonController.SyncRibbonTimersToNewTime(ribbonDebuffDuration);
+                        }
+                        else
+                        {
+                            GameObject gameObject = Object.Instantiate(Modules.Assets.ribbonController, self.gameObject.transform);
+                            RibbonController component3 = gameObject.GetComponent<RibbonController>();
+                            component3.timer = ribbonDebuffDuration;
+                            component3.NetworkownerRoot = self.gameObject;
+                            component3.inflictorRoot = damageInfo.attacker;
+                            component3.spreadsRemaining = 2;
+                            NetworkServer.Spawn(gameObject);
+                            component3.StartRibbon();
+                        }
+                    }
+                    if (damageInfo.damageType == DamageType.ApplyMercExpose)
                     {
                         damageInfo.damageType = DamageType.Stun1s;
                     }
-
                 }
-
-                if(self.body.baseNameToken == "NDP_DANCER_BODY_NAME")
+                if (self.body.baseNameToken == "NDP_DANCER_BODY_NAME" && self.body.HasBuff(Buffs.parryBuff))
                 {
-                    if(self.body.HasBuff(Modules.Buffs.parryBuff))
-                    {
-                        damageInfo.rejected = true;
-                        self.body.RemoveBuff(Modules.Buffs.parryBuff);
-                        self.body.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, Modules.StaticValues.parryInvincibilityDuration);
-                    }
+                    damageInfo.rejected = true;
+                    self.body.RemoveBuff(Buffs.parryBuff);
+                    self.body.AddTimedBuff(RoR2Content.Buffs.HiddenInvincibility, 1.5f);
                 }
             }
-
-            
-
-
-
-
-            orig(self, damageInfo);
-
-            if(ribbon)
+            orig.Invoke(self, damageInfo);
+            if ((bool)ribbonController && !self.alive && !ribbonController.ribbonAttached)
             {
-                if(!self.alive)
-                {
-                    if(!ribbon.ribbonAttached)
-                        ribbon.DetachFromOwner();
-                }
+                ribbonController.DetachFromOwner();
             }
-
         }
     }
- 
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
-using UnityEngine.Networking;
 using RoR2;
 using RoR2.Projectile;
+using UnityEngine;
+using UnityEngine.Networking;
+
 namespace Dancer.Modules.Components
 {
+
     public class ProjectileSpawnRibbonController : MonoBehaviour, IProjectileImpactBehavior
     {
         private ProjectileController controller;
@@ -15,33 +14,25 @@ namespace Dancer.Modules.Components
         {
             Collider collider = impactInfo.collider;
             HurtBox component = collider.GetComponent<HurtBox>();
-            if (component)
+            if (!component && NetworkServer.active)
             {
-                return;         
-            }
-
-            if (NetworkServer.active)
-            {
-                GameObject gameObject = UnityEngine.Object.Instantiate<GameObject>(Modules.Assets.ribbonController, base.gameObject.transform.position, Quaternion.identity);
-                RibbonController newRibbon = gameObject.GetComponent<RibbonController>();
-                newRibbon.timer = Modules.Buffs.ribbonDebuffDuration;
-                newRibbon.inflictorRoot = this.controller.owner;
-                newRibbon.spreadsRemaining = Modules.StaticValues.ribbonInitialTargets + 1;
+                GameObject gameObject = Object.Instantiate(Assets.ribbonController, base.gameObject.transform.position, Quaternion.identity);
+                RibbonController component2 = gameObject.GetComponent<RibbonController>();
+                component2.timer = Buffs.ribbonDebuffDuration;
+                component2.inflictorRoot = controller.owner;
+                component2.spreadsRemaining = 3;
                 NetworkServer.Spawn(gameObject);
-                newRibbon.StartRibbon();
+                component2.StartRibbon();
             }
-
         }
 
         private void Awake()
         {
-            this.controller = base.GetComponent<ProjectileController>();
-        }
-        private void OnDestroy()
-        {
-            
-            
+            controller = GetComponent<ProjectileController>();
         }
 
+        private void OnDestroy()
+        {
+        }
     }
 }

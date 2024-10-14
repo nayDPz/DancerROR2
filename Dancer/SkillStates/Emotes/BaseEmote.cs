@@ -1,121 +1,138 @@
-﻿using EntityStates;
+using EntityStates;
 using RoR2;
 using UnityEngine;
 
 namespace Dancer.SkillStates.Emotes
 {
-    public class BaseEmote : BaseState // from PaladinMod
-    {
-        public string soundString;
-        public string animString;
-        public float duration;
-        public float animDuration;
-        public bool normalizeModel;
+	public class BaseEmote : BaseState
+	{
+		public string soundString;
 
-        private uint activePlayID;
-        private Animator animator;
-        protected ChildLocator childLocator;
-        private CharacterCameraParams originalCameraParams;
-        public LocalUser localUser;
+		public string animString;
 
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            this.animator = base.GetModelAnimator();
-            this.childLocator = base.GetModelChildLocator();
-            this.localUser = LocalUserManager.readOnlyLocalUsersList[0];
+		public float duration;
 
-            base.characterBody.hideCrosshair = true;
+		public float animDuration;
 
-            if (base.GetAimAnimator()) base.GetAimAnimator().enabled = false;
-            this.animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 0);
-            this.animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 0);
+		public bool normalizeModel;
 
-            if (this.animDuration == 0 && this.duration != 0) this.animDuration = this.duration;
-            
-            base.PlayAnimation("FullBody, Override", this.animString, "Emote.playbackRate", this.animDuration);
+		private uint activePlayID;
 
-            this.activePlayID = Util.PlaySound(soundString, base.gameObject);
+		private Animator animator;
 
-            if (this.normalizeModel)
-            {
-                if (base.modelLocator)
-                {
-                    base.modelLocator.normalizeToFloor = true;
-                }
-            }
+		protected ChildLocator childLocator;
 
-            //this.originalCameraParams = base.cameraTargetParams.cameraParams;
-            //base.cameraTargetParams.cameraParams = Modules.CameraParams.emoteCameraParams;
-        }
+		private CharacterCameraParams originalCameraParams;
 
-        public override void OnExit()
-        {
-            base.OnExit();
+		public LocalUser localUser;
 
-            base.characterBody.hideCrosshair = false;
-            //base.cameraTargetParams.cameraParams = this.originalCameraParams;
+		public override void OnEnter()
+		{
+			base.OnEnter();
+			animator = GetModelAnimator();
+			childLocator = GetModelChildLocator();
+			localUser = LocalUserManager.readOnlyLocalUsersList[0];
+			base.characterBody.hideCrosshair = true;
+			if ((bool)GetAimAnimator())
+			{
+				GetAimAnimator().enabled = false;
+			}
+			animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 0f);
+			animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 0f);
+			if (animDuration == 0f && duration != 0f)
+			{
+				animDuration = duration;
+			}
+			PlayAnimation("FullBody, Override", animString, "Emote.playbackRate", animDuration);
+			activePlayID = Util.PlaySound(soundString, base.gameObject);
+			if (normalizeModel && (bool)base.modelLocator)
+			{
+				base.modelLocator.normalizeToFloor = true;
+			}
+		}
 
-            if (base.GetAimAnimator()) base.GetAimAnimator().enabled = true;
-            if (this.animator)
-            {
-                this.animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 1);
-                this.animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 1);
-            }
+		public override void OnExit()
+		{
+			base.OnExit();
+			base.characterBody.hideCrosshair = false;
+			if ((bool)GetAimAnimator())
+			{
+				GetAimAnimator().enabled = true;
+			}
+			if ((bool)animator)
+			{
+				animator.SetLayerWeight(animator.GetLayerIndex("AimPitch"), 1f);
+				animator.SetLayerWeight(animator.GetLayerIndex("AimYaw"), 1f);
+			}
+			if (normalizeModel && (bool)base.modelLocator)
+			{
+				base.modelLocator.normalizeToFloor = false;
+			}
+			base.PlayAnimation("FullBody, Override", "BufferEmpty");
+			if (activePlayID != 0)
+			{
+				AkSoundEngine.StopPlayingID(activePlayID);
+			}
+		}
 
-            if (this.normalizeModel)
-            {
-                if (base.modelLocator)
-                {
-                    base.modelLocator.normalizeToFloor = false;
-                }
-            }
+		public override void FixedUpdate()
+		{
+			base.FixedUpdate();
+			bool flag = false;
+			if ((bool)base.characterMotor)
+			{
+				if (!base.characterMotor.isGrounded)
+				{
+					flag = true;
+				}
+				if (base.characterMotor.velocity != Vector3.zero)
+				{
+					flag = true;
+				}
+			}
+			if ((bool)base.inputBank)
+			{
+				if (base.inputBank.skill1.down)
+				{
+					flag = true;
+				}
+				if (base.inputBank.skill2.down)
+				{
+					flag = true;
+				}
+				if (base.inputBank.skill3.down)
+				{
+					flag = true;
+				}
+				if (base.inputBank.skill4.down)
+				{
+					flag = true;
+				}
+				if (base.inputBank.jump.down)
+				{
+					flag = true;
+				}
+				if (base.inputBank.moveVector != Vector3.zero)
+				{
+					flag = true;
+				}
+			}
+			if (!Util.HasEffectiveAuthority(base.gameObject) || !base.characterMotor.isGrounded || !localUser.isUIFocused)
+			{
+			}
+			if (duration > 0f && base.fixedAge >= duration)
+			{
+				flag = true;
+			}
+			if (flag)
+			{
+				outer.SetNextStateToMain();
+			}
+		}
 
-            base.PlayAnimation("FullBody, Override", "BufferEmpty");
-            if (this.activePlayID != 0) AkSoundEngine.StopPlayingID(this.activePlayID);
-        }
-
-        public override void FixedUpdate()
-        {
-            base.FixedUpdate();
-
-            bool flag = false;
-
-            if (base.characterMotor)
-            {
-                if (!base.characterMotor.isGrounded) flag = true;
-                if (base.characterMotor.velocity != Vector3.zero) flag = true;
-            }
-
-            if (base.inputBank)
-            {
-                if (base.inputBank.skill1.down) flag = true;
-                if (base.inputBank.skill2.down) flag = true;
-                if (base.inputBank.skill3.down) flag = true;
-                if (base.inputBank.skill4.down) flag = true;
-                if (base.inputBank.jump.down) flag = true;
-
-                if (base.inputBank.moveVector != Vector3.zero) flag = true;
-            }
-
-            //emote cancels
-            if (Util.HasEffectiveAuthority(base.gameObject) && base.characterMotor.isGrounded && !this.localUser.isUIFocused)
-            {
-
-            }
-
-            if (this.duration > 0 && base.fixedAge >= this.duration) flag = true;
-
-            if (flag)
-            {
-                this.outer.SetNextStateToMain();
-            }
-        }
-
-        public override InterruptPriority GetMinimumInterruptPriority()
-        {
-            return InterruptPriority.Any;
-        }
-    }
-
+		public override InterruptPriority GetMinimumInterruptPriority()
+		{
+			return InterruptPriority.Any;
+		}
+	}
 }
