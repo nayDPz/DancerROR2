@@ -1,33 +1,29 @@
-﻿using RoR2;
-using System;
+using RoR2;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace Dancer.Modules
 {
+
     internal static class ItemDisplays
     {
         private static Dictionary<string, GameObject> itemDisplayPrefabs = new Dictionary<string, GameObject>();
 
         internal static void PopulateDisplays()
         {
-            ItemDisplayRuleSet itemDisplayRuleSet = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponent<ModelLocator>().modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet;
-
-            ItemDisplayRuleSet.KeyAssetRuleGroup[] item = itemDisplayRuleSet.keyAssetRuleGroups;
-
-            for (int i = 0; i < item.Length; i++)
+            ItemDisplayRuleSet itemDisplayRuleSet = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponent<ModelLocator>()
+                .modelTransform.GetComponent<CharacterModel>().itemDisplayRuleSet;
+            ItemDisplayRuleSet.KeyAssetRuleGroup[] keyAssetRuleGroups = itemDisplayRuleSet.keyAssetRuleGroups;
+            for (int i = 0; i < keyAssetRuleGroups.Length; i++)
             {
-                ItemDisplayRule[] rules = item[i].displayRuleGroup.rules;
-
+                ItemDisplayRule[] rules = keyAssetRuleGroups[i].displayRuleGroup.rules;
                 for (int j = 0; j < rules.Length; j++)
                 {
                     GameObject followerPrefab = rules[j].followerPrefab;
-                    if (followerPrefab)
+                    if ((bool)followerPrefab)
                     {
-                        string name = followerPrefab.name;
-                        string key = (name != null) ? name.ToLower() : null;
+                        string key = followerPrefab.name?.ToLower();
                         if (!itemDisplayPrefabs.ContainsKey(key))
                         {
                             itemDisplayPrefabs[key] = followerPrefab;
@@ -39,11 +35,10 @@ namespace Dancer.Modules
 
         internal static GameObject LoadDisplay(string name)
         {
-            if (itemDisplayPrefabs.ContainsKey(name.ToLower()))
+            if (itemDisplayPrefabs.ContainsKey(name.ToLower()) && (bool)itemDisplayPrefabs[name.ToLower()])
             {
-                if (itemDisplayPrefabs[name.ToLower()]) return itemDisplayPrefabs[name.ToLower()];
+                return itemDisplayPrefabs[name.ToLower()];
             }
-
             return null;
         }
     }

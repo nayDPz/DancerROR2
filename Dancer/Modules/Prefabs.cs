@@ -1,291 +1,236 @@
-﻿using R2API;
+using R2API;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Rendering;
+
 namespace Dancer.Modules
 {
+
     internal static class Prefabs
     {
         private static PhysicMaterial ragdollMaterial;
 
         internal static List<SurvivorDef> survivorDefinitions = new List<SurvivorDef>();
+
         internal static List<GameObject> bodyPrefabs = new List<GameObject>();
+
         internal static List<GameObject> masterPrefabs = new List<GameObject>();
+
         internal static List<GameObject> projectilePrefabs = new List<GameObject>();
 
         internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix, UnlockableDef unlockableDef)
         {
-            string fullNameString = DancerPlugin.developerPrefix + "_" + namePrefix + "_BODY_NAME";
-            string fullDescString = DancerPlugin.developerPrefix + "_" + namePrefix + "_BODY_DESCRIPTION";
-            string fullOutroString = DancerPlugin.developerPrefix + "_" + namePrefix + "_BODY_OUTRO_FLAVOR";
-            string fullFailureString = DancerPlugin.developerPrefix + "_" + namePrefix + "_BODY_OUTRO_FAILURE";
-
+            string displayNameToken = "NDP_" + namePrefix + "_BODY_NAME";
+            string descriptionToken = "NDP_" + namePrefix + "_BODY_DESCRIPTION";
+            string outroFlavorToken = "NDP_" + namePrefix + "_BODY_OUTRO_FLAVOR";
+            string mainEndingEscapeFailureFlavorToken = "NDP_" + namePrefix + "_BODY_OUTRO_FAILURE";
             SurvivorDef survivorDef = ScriptableObject.CreateInstance<SurvivorDef>();
             survivorDef.bodyPrefab = bodyPrefab;
             survivorDef.displayPrefab = displayPrefab;
             survivorDef.primaryColor = charColor;
-            survivorDef.displayNameToken = fullNameString;
-            survivorDef.descriptionToken = fullDescString;
-            survivorDef.outroFlavorToken = fullOutroString;
-            survivorDef.mainEndingEscapeFailureFlavorToken = fullFailureString;
+            survivorDef.displayNameToken = displayNameToken;
+            survivorDef.descriptionToken = descriptionToken;
+            survivorDef.outroFlavorToken = outroFlavorToken;
+            survivorDef.mainEndingEscapeFailureFlavorToken = mainEndingEscapeFailureFlavorToken;
             survivorDef.desiredSortPosition = 100f;
             survivorDef.unlockableDef = unlockableDef;
-
             survivorDefinitions.Add(survivorDef);
         }
 
-        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix) { RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null); }
+        internal static void RegisterNewSurvivor(GameObject bodyPrefab, GameObject displayPrefab, Color charColor, string namePrefix)
+        {
+            RegisterNewSurvivor(bodyPrefab, displayPrefab, charColor, namePrefix, null);
+        }
 
         internal static GameObject CreateDisplayPrefab(string modelName, GameObject prefab)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), modelName + "Prefab");
-
-            GameObject model = CreateModel(newPrefab, modelName);
-            Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
-
-            model.AddComponent<CharacterModel>().baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
-
-            Modules.Assets.ConvertAllRenderersToHopooShader(model);
-
-            return model.gameObject;
+            GameObject gameObject = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), modelName + "Prefab");
+            GameObject gameObject2 = CreateModel(gameObject, modelName);
+            Transform transform = SetupModel(gameObject, gameObject2.transform);
+            gameObject2.AddComponent<CharacterModel>().baseRendererInfos = prefab.GetComponentInChildren<CharacterModel>().baseRendererInfos;
+            Assets.ConvertAllRenderersToHopooShader(gameObject2);
+            return gameObject2.gameObject;
         }
 
         internal static GameObject CreatePrefab(string bodyName, string modelName, BodyInfo bodyInfo)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), bodyName);
-
-            GameObject model = CreateModel(newPrefab, modelName);
-            Transform modelBaseTransform = SetupModel(newPrefab, model.transform);
-
-            #region CharacterBody
-            CharacterBody bodyComponent = newPrefab.GetComponent<CharacterBody>();
-
-            bodyComponent.name = bodyInfo.bodyName;
-            bodyComponent.baseNameToken = bodyInfo.bodyNameToken;
-            bodyComponent.subtitleNameToken = bodyInfo.subtitleNameToken;
-            bodyComponent.portraitIcon = bodyInfo.characterPortrait;
-
-            bodyComponent._defaultCrosshairPrefab = bodyInfo.crosshair;
-
-            bodyComponent.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
-            bodyComponent.rootMotionInMainState = false;
-
-            bodyComponent.baseMaxHealth = bodyInfo.maxHealth;
-            bodyComponent.levelMaxHealth = bodyInfo.healthGrowth;
-
-            bodyComponent.baseRegen = bodyInfo.healthRegen;
-            bodyComponent.levelRegen = bodyComponent.baseRegen * 0.2f;
-
-            bodyComponent.baseMaxShield = bodyInfo.shield;
-            bodyComponent.levelMaxShield = bodyInfo.shieldGrowth;
-
-            bodyComponent.baseMoveSpeed = bodyInfo.moveSpeed;
-            bodyComponent.levelMoveSpeed = bodyInfo.moveSpeedGrowth;
-
-            bodyComponent.baseAcceleration = bodyInfo.acceleration;
-
-            bodyComponent.baseJumpPower = bodyInfo.jumpPower;
-            bodyComponent.levelJumpPower = bodyInfo.jumpPowerGrowth;
-
-            bodyComponent.baseDamage = bodyInfo.damage;
-            bodyComponent.levelDamage = bodyComponent.baseDamage * 0.2f;
-
-            bodyComponent.baseAttackSpeed = bodyInfo.attackSpeed;
-            bodyComponent.levelAttackSpeed = bodyInfo.attackSpeedGrowth;
-
-            bodyComponent.baseArmor = bodyInfo.armor;
-            bodyComponent.levelArmor = bodyInfo.armorGrowth;
-
-            bodyComponent.baseCrit = bodyInfo.crit;
-            bodyComponent.levelCrit = bodyInfo.critGrowth;
-
-            bodyComponent.baseJumpCount = bodyInfo.jumpCount;
-
-            bodyComponent.sprintingSpeedMultiplier = 1.45f;
-
-            bodyComponent.hideCrosshair = false;
-            bodyComponent.aimOriginTransform = modelBaseTransform.Find("AimOrigin");
-            bodyComponent.hullClassification = HullClassification.Human;
-
-            bodyComponent.preferredPodPrefab = bodyInfo.podPrefab;
-
-            bodyComponent.isChampion = false;
-
-            bodyComponent.bodyColor = bodyInfo.bodyColor;
-            #endregion
-
-            SetupCharacterDirection(newPrefab, modelBaseTransform, model.transform);
-            SetupCameraTargetParams(newPrefab);
-            SetupModelLocator(newPrefab, modelBaseTransform, model.transform);
-            SetupRigidbody(newPrefab);
-            SetupCapsuleCollider(newPrefab);
-            SetupMainHurtbox(newPrefab, model);
-            SetupFootstepController(model);
-            SetupRagdoll(model);
-            SetupAimAnimator(newPrefab, model);
-
-            bodyPrefabs.Add(newPrefab);
-
-            return newPrefab;
+            GameObject gameObject = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion(), bodyName);
+            GameObject gameObject2 = CreateModel(gameObject, modelName);
+            Transform transform = SetupModel(gameObject, gameObject2.transform);
+            CharacterBody component = gameObject.GetComponent<CharacterBody>();
+            component.name = bodyInfo.bodyName;
+            component.baseNameToken = bodyInfo.bodyNameToken;
+            component.subtitleNameToken = bodyInfo.subtitleNameToken;
+            component.portraitIcon = bodyInfo.characterPortrait;
+            component._defaultCrosshairPrefab = bodyInfo.crosshair;
+            component.bodyFlags = CharacterBody.BodyFlags.ImmuneToExecutes;
+            component.rootMotionInMainState = false;
+            component.baseMaxHealth = bodyInfo.maxHealth;
+            component.levelMaxHealth = bodyInfo.healthGrowth;
+            component.baseRegen = bodyInfo.healthRegen;
+            component.levelRegen = component.baseRegen * 0.2f;
+            component.baseMaxShield = bodyInfo.shield;
+            component.levelMaxShield = bodyInfo.shieldGrowth;
+            component.baseMoveSpeed = bodyInfo.moveSpeed;
+            component.levelMoveSpeed = bodyInfo.moveSpeedGrowth;
+            component.baseAcceleration = bodyInfo.acceleration;
+            component.baseJumpPower = bodyInfo.jumpPower;
+            component.levelJumpPower = bodyInfo.jumpPowerGrowth;
+            component.baseDamage = bodyInfo.damage;
+            component.levelDamage = component.baseDamage * 0.2f;
+            component.baseAttackSpeed = bodyInfo.attackSpeed;
+            component.levelAttackSpeed = bodyInfo.attackSpeedGrowth;
+            component.baseArmor = bodyInfo.armor;
+            component.levelArmor = bodyInfo.armorGrowth;
+            component.baseCrit = bodyInfo.crit;
+            component.levelCrit = bodyInfo.critGrowth;
+            component.baseJumpCount = bodyInfo.jumpCount;
+            component.sprintingSpeedMultiplier = 1.45f;
+            component.hideCrosshair = false;
+            component.aimOriginTransform = transform.Find("AimOrigin");
+            component.hullClassification = HullClassification.Human;
+            component.preferredPodPrefab = bodyInfo.podPrefab;
+            component.isChampion = false;
+            component.bodyColor = bodyInfo.bodyColor;
+            SetupCharacterDirection(gameObject, transform, gameObject2.transform);
+            SetupCameraTargetParams(gameObject);
+            SetupModelLocator(gameObject, transform, gameObject2.transform);
+            SetupRigidbody(gameObject);
+            SetupCapsuleCollider(gameObject);
+            SetupMainHurtbox(gameObject, gameObject2);
+            SetupFootstepController(gameObject2);
+            SetupRagdoll(gameObject2);
+            SetupAimAnimator(gameObject, gameObject2);
+            bodyPrefabs.Add(gameObject);
+            return gameObject;
         }
 
         internal static void CreateGenericDoppelganger(GameObject bodyPrefab, string masterName, string masterToCopy)
         {
-            GameObject newMaster = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/" + masterToCopy + "/" + masterToCopy + "MonsterMaster.prefab").WaitForCompletion(), masterName, true);
-            newMaster.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
-
-            masterPrefabs.Add(newMaster);
+            GameObject gameObject = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/" + masterToCopy + "/" + masterToCopy + "MonsterMaster.prefab").WaitForCompletion(), masterName, true);
+            gameObject.GetComponent<CharacterMaster>().bodyPrefab = bodyPrefab;
+            masterPrefabs.Add(gameObject);
         }
 
-        #region ModelSetup
         private static Transform SetupModel(GameObject prefab, Transform modelTransform)
         {
-            GameObject modelBase = new GameObject("ModelBase");
-            modelBase.transform.parent = prefab.transform;
-            modelBase.transform.localPosition = new Vector3(0f, -0.92f, 0f);
-            modelBase.transform.localRotation = Quaternion.identity;
-            modelBase.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            GameObject cameraPivot = new GameObject("CameraPivot");
-            cameraPivot.transform.parent = modelBase.transform;
-            cameraPivot.transform.localPosition = new Vector3(0f, 1.95f, 0f);
-            cameraPivot.transform.localRotation = Quaternion.identity;
-            cameraPivot.transform.localScale = Vector3.one;
-
-            GameObject aimOrigin = new GameObject("AimOrigin");
-            aimOrigin.transform.parent = modelBase.transform;
-            aimOrigin.transform.localPosition = new Vector3(0f, 2.2f, 0f);
-            aimOrigin.transform.localRotation = Quaternion.identity;
-            aimOrigin.transform.localScale = Vector3.one;
-            prefab.GetComponent<CharacterBody>().aimOriginTransform = aimOrigin.transform;
-
-            modelTransform.parent = modelBase.transform;
+            GameObject gameObject = new GameObject("ModelBase");
+            gameObject.transform.parent = prefab.transform;
+            gameObject.transform.localPosition = new Vector3(0f, -0.92f, 0f);
+            gameObject.transform.localRotation = Quaternion.identity;
+            gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
+            GameObject gameObject2 = new GameObject("CameraPivot");
+            gameObject2.transform.parent = gameObject.transform;
+            gameObject2.transform.localPosition = new Vector3(0f, 1.95f, 0f);
+            gameObject2.transform.localRotation = Quaternion.identity;
+            gameObject2.transform.localScale = Vector3.one;
+            GameObject gameObject3 = new GameObject("AimOrigin");
+            gameObject3.transform.parent = gameObject.transform;
+            gameObject3.transform.localPosition = new Vector3(0f, 2.2f, 0f);
+            gameObject3.transform.localRotation = Quaternion.identity;
+            gameObject3.transform.localScale = Vector3.one;
+            prefab.GetComponent<CharacterBody>().aimOriginTransform = gameObject3.transform;
+            modelTransform.parent = gameObject.transform;
             modelTransform.localPosition = Vector3.zero;
             modelTransform.localRotation = Quaternion.identity;
-
-            return modelBase.transform;
+            return gameObject.transform;
         }
 
         private static GameObject CreateModel(GameObject main, string modelName)
         {
-            DancerPlugin.DestroyImmediate(main.transform.Find("ModelBase").gameObject);
-            DancerPlugin.DestroyImmediate(main.transform.Find("CameraPivot").gameObject);
-            DancerPlugin.DestroyImmediate(main.transform.Find("AimOrigin").gameObject);
-
-            if (Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName) == null)
+            Object.DestroyImmediate(main.transform.Find("ModelBase").gameObject);
+            Object.DestroyImmediate(main.transform.Find("CameraPivot").gameObject);
+            Object.DestroyImmediate(main.transform.Find("AimOrigin").gameObject);
+            if (Assets.mainAssetBundle.LoadAsset<GameObject>(modelName) == null)
             {
                 Debug.LogError("Trying to load a null model- check to see if the name in your code matches the name of the object in Unity");
                 return null;
             }
-
-            return GameObject.Instantiate(Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(modelName));
+            return Object.Instantiate(Assets.mainAssetBundle.LoadAsset<GameObject>(modelName));
         }
 
         internal static void SetupCharacterModel(GameObject prefab, CustomRendererInfo[] rendererInfo, int mainRendererIndex)
         {
-
             CharacterModel characterModel = prefab.GetComponent<ModelLocator>().modelTransform.gameObject.AddComponent<CharacterModel>();
-
-            ChildLocator childLocator = characterModel.GetComponent<ChildLocator>();
-
+            ChildLocator component = characterModel.GetComponent<ChildLocator>();
             characterModel.body = prefab.GetComponent<CharacterBody>();
-
-            List<CharacterModel.RendererInfo> rendererInfos = new List<CharacterModel.RendererInfo>();
-
+            List<CharacterModel.RendererInfo> list = new List<CharacterModel.RendererInfo>();
             for (int i = 0; i < rendererInfo.Length; i++)
             {
-
-                rendererInfos.Add(new CharacterModel.RendererInfo
+                list.Add(new CharacterModel.RendererInfo
                 {
-                    renderer = childLocator.FindChild(rendererInfo[i].childName).GetComponent<Renderer>(),
+                    renderer = component.FindChild(rendererInfo[i].childName).GetComponent<Renderer>(),
                     defaultMaterial = rendererInfo[i].material,
                     ignoreOverlays = rendererInfo[i].ignoreOverlays,
-                    defaultShadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On
+                    defaultShadowCastingMode = ShadowCastingMode.On
                 });
             }
-            characterModel.baseRendererInfos = rendererInfos.ToArray();
-
+            characterModel.baseRendererInfos = list.ToArray();
             characterModel.autoPopulateLightInfos = true;
             characterModel.invisibilityCount = 0;
-            characterModel.temporaryOverlays = new List<TemporaryOverlay>();
-
+            characterModel.temporaryOverlays = new List<TemporaryOverlayInstance>();
             characterModel.mainSkinnedMeshRenderer = characterModel.baseRendererInfos[mainRendererIndex].renderer.GetComponent<SkinnedMeshRenderer>();
-
-
-            var foundRenderers = characterModel.GetComponentsInChildren<Renderer>();
-
-            /*
-            foreach (Renderer renderer in foundRenderers)
-            {
-                var controller = renderer.gameObject.AddComponent<Components.MaterialControllerComponents.HGControllerFinder>();
-            }
-            */
+            Renderer[] componentsInChildren = characterModel.GetComponentsInChildren<Renderer>();
         }
-        #endregion
 
-        #region ComponentSetup
         private static void SetupCharacterDirection(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
         {
-            CharacterDirection characterDirection = prefab.GetComponent<CharacterDirection>();
-            characterDirection.targetTransform = modelBaseTransform;
-            characterDirection.overrideAnimatorForwardTransform = null;
-            characterDirection.rootMotionAccumulator = null;
-            characterDirection.modelAnimator = modelTransform.GetComponent<Animator>();
-            characterDirection.driveFromRootRotation = false;
-            characterDirection.turnSpeed = 720f;
+            CharacterDirection component = prefab.GetComponent<CharacterDirection>();
+            component.targetTransform = modelBaseTransform;
+            component.overrideAnimatorForwardTransform = null;
+            component.rootMotionAccumulator = null;
+            component.modelAnimator = modelTransform.GetComponent<Animator>();
+            component.driveFromRootRotation = false;
+            component.turnSpeed = 720f;
         }
 
         private static void SetupCameraTargetParams(GameObject prefab)
         {
-            CameraTargetParams cameraTargetParams = prefab.GetComponent<CameraTargetParams>();
-            cameraTargetParams.cameraParams = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercBody.prefab").WaitForCompletion().GetComponent<CameraTargetParams>().cameraParams;
-            cameraTargetParams.cameraPivotTransform = prefab.transform.Find("ModelBase").Find("CameraPivot");
-            cameraTargetParams.recoil = Vector2.zero;
-            cameraTargetParams.dontRaycastToPivot = false;
+            CameraTargetParams component = prefab.GetComponent<CameraTargetParams>();
+            component.cameraParams = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Merc/MercBody.prefab").WaitForCompletion().GetComponent<CameraTargetParams>()
+                .cameraParams;
+            component.cameraPivotTransform = prefab.transform.Find("ModelBase").Find("CameraPivot");
+            component.recoil = Vector2.zero;
+            component.dontRaycastToPivot = false;
         }
 
         private static void SetupModelLocator(GameObject prefab, Transform modelBaseTransform, Transform modelTransform)
         {
-            ModelLocator modelLocator = prefab.GetComponent<ModelLocator>();
-            modelLocator.modelTransform = modelTransform;
-            modelLocator.modelBaseTransform = modelBaseTransform;
+            ModelLocator component = prefab.GetComponent<ModelLocator>();
+            component.modelTransform = modelTransform;
+            component.modelBaseTransform = modelBaseTransform;
         }
 
         private static void SetupRigidbody(GameObject prefab)
         {
-            Rigidbody rigidbody = prefab.GetComponent<Rigidbody>();
-            rigidbody.mass = 100f;
+            Rigidbody component = prefab.GetComponent<Rigidbody>();
+            component.mass = 100f;
         }
 
         private static void SetupCapsuleCollider(GameObject prefab)
         {
-            CapsuleCollider capsuleCollider = prefab.GetComponent<CapsuleCollider>();
-            capsuleCollider.center = new Vector3(0f, 0f, 0f);
-            capsuleCollider.radius = 0.5f;
-            capsuleCollider.height = 1.82f;
-            capsuleCollider.direction = 1;
+            CapsuleCollider component = prefab.GetComponent<CapsuleCollider>();
+            component.center = new Vector3(0f, 0f, 0f);
+            component.radius = 0.5f;
+            component.height = 1.82f;
+            component.direction = 1;
         }
 
         private static void SetupMainHurtbox(GameObject prefab, GameObject model)
         {
             HurtBoxGroup hurtBoxGroup = model.AddComponent<HurtBoxGroup>();
-            ChildLocator childLocator = model.GetComponent<ChildLocator>();
-
-            HurtBox mainHurtbox = childLocator.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
-            mainHurtbox.gameObject.layer = LayerIndex.entityPrecise.intVal;
-            mainHurtbox.healthComponent = prefab.GetComponent<HealthComponent>();
-            mainHurtbox.isBullseye = true;
-            mainHurtbox.damageModifier = HurtBox.DamageModifier.Normal;
-            mainHurtbox.hurtBoxGroup = hurtBoxGroup;
-            mainHurtbox.indexInGroup = 0;
-
-            hurtBoxGroup.hurtBoxes = new HurtBox[]
-            {
-                mainHurtbox
-            };
-
-            hurtBoxGroup.mainHurtBox = mainHurtbox;
+            ChildLocator component = model.GetComponent<ChildLocator>();
+            HurtBox hurtBox = component.FindChild("MainHurtbox").gameObject.AddComponent<HurtBox>();
+            hurtBox.gameObject.layer = LayerIndex.entityPrecise.intVal;
+            hurtBox.healthComponent = prefab.GetComponent<HealthComponent>();
+            hurtBox.isBullseye = true;
+            hurtBox.damageModifier = HurtBox.DamageModifier.Normal;
+            hurtBox.hurtBoxGroup = hurtBoxGroup;
+            hurtBox.indexInGroup = 0;
+            hurtBoxGroup.hurtBoxes = new HurtBox[1] { hurtBox };
+            hurtBoxGroup.mainHurtBox = hurtBox;
             hurtBoxGroup.bullseyeCount = 1;
         }
 
@@ -300,22 +245,27 @@ namespace Dancer.Modules
 
         private static void SetupRagdoll(GameObject model)
         {
-            RagdollController ragdollController = model.GetComponent<RagdollController>();
-
-            if (!ragdollController) return;
-
-            if (ragdollMaterial == null) ragdollMaterial = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<RagdollController>().bones[1].GetComponent<Collider>().material;
-
-            foreach (Transform i in ragdollController.bones)
+            RagdollController component = model.GetComponent<RagdollController>();
+            if (!component)
             {
-                if (i)
+                return;
+            }
+            if (ragdollMaterial == null)
+            {
+                ragdollMaterial = Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Commando/CommandoBody.prefab").WaitForCompletion().GetComponentInChildren<RagdollController>()
+                    .bones[1].GetComponent<Collider>().material;
+            }
+            Transform[] bones = component.bones;
+            foreach (Transform transform in bones)
+            {
+                if ((bool)transform)
                 {
-                    i.gameObject.layer = LayerIndex.ragdoll.intVal;
-                    Collider j = i.GetComponent<Collider>();
-                    if (j)
+                    transform.gameObject.layer = LayerIndex.ragdoll.intVal;
+                    Collider component2 = transform.GetComponent<Collider>();
+                    if ((bool)component2)
                     {
-                        j.material = ragdollMaterial;
-                        j.sharedMaterial = ragdollMaterial;
+                        component2.material = ragdollMaterial;
+                        component2.sharedMaterial = ragdollMaterial;
                     }
                 }
             }
@@ -338,84 +288,24 @@ namespace Dancer.Modules
         internal static void SetupHitbox(GameObject prefab, Transform hitboxTransform, string hitboxName)
         {
             HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
-
             HitBox hitBox = hitboxTransform.gameObject.AddComponent<HitBox>();
             hitboxTransform.gameObject.layer = LayerIndex.projectile.intVal;
-
-            hitBoxGroup.hitBoxes = new HitBox[]
-            {
-                hitBox
-            };
-
+            hitBoxGroup.hitBoxes = new HitBox[1] { hitBox };
             hitBoxGroup.groupName = hitboxName;
         }
 
         internal static void SetupHitbox(GameObject prefab, string hitboxName, params Transform[] hitboxTransforms)
         {
             HitBoxGroup hitBoxGroup = prefab.AddComponent<HitBoxGroup>();
-            List<HitBox> hitBoxes = new List<HitBox>();
-
-            foreach (Transform i in hitboxTransforms)
+            List<HitBox> list = new List<HitBox>();
+            foreach (Transform transform in hitboxTransforms)
             {
-                HitBox hitBox = i.gameObject.AddComponent<HitBox>();
-                i.gameObject.layer = LayerIndex.projectile.intVal;
-                hitBoxes.Add(hitBox);
+                HitBox item = transform.gameObject.AddComponent<HitBox>();
+                transform.gameObject.layer = LayerIndex.projectile.intVal;
+                list.Add(item);
             }
-
-            hitBoxGroup.hitBoxes = hitBoxes.ToArray();
-
+            hitBoxGroup.hitBoxes = list.ToArray();
             hitBoxGroup.groupName = hitboxName;
         }
-        #endregion
     }
-}
-
-internal class BodyInfo
-{
-    internal string bodyName = "";
-    internal string bodyNameToken = "";
-    internal string subtitleNameToken = "";
-
-    internal Texture characterPortrait = null;
-
-    internal GameObject crosshair = null;
-    internal GameObject podPrefab = null;
-
-    internal float maxHealth = 100f;
-    internal float healthGrowth = 2f;
-
-    internal float healthRegen = 0f;
-
-    internal float shield = 0f;
-    internal float shieldGrowth = 0f;
-
-    internal float moveSpeed = 7f;
-    internal float moveSpeedGrowth = 0f;
-
-    internal float acceleration = 80f;
-
-    internal float jumpPower = 15f;
-    internal float jumpPowerGrowth = 0f;
-
-    internal float damage = 12f;
-
-    internal float attackSpeed = 1f;
-    internal float attackSpeedGrowth = 0f;
-
-    internal float armor = 0f;
-    internal float armorGrowth = 0f;
-
-    internal float crit = 1f;
-    internal float critGrowth = 0f;
-
-    internal int jumpCount = 1;
-
-    internal Color bodyColor = Color.grey;
-}
-
-internal class CustomRendererInfo
-{
-    internal string childName;
-    internal Material material;
-    internal bool ignoreOverlays;
 }

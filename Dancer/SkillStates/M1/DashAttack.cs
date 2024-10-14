@@ -1,84 +1,74 @@
-﻿using System;
-using EntityStates.Merc;
-using Dancer.Modules;
-using UnityEngine;
+using KinematicCharacterController;
 using RoR2;
-using System.Collections.Generic;
-namespace Dancer.SkillStates
+using UnityEngine;
+
+namespace Dancer.SkillStates.M1
 {
-	public class DashAttack : BaseM1
-	{
-		public override void OnEnter()
-		{
-			this.anim = 1f;
-			this.baseDuration = 0.625f;
-			this.attackStartTime = 0.21f;
-			this.attackEndTime = 0.6f;
-			this.hitStopDuration = 0.025f;
-			this.attackRecoil = 2f;
-			this.hitHopVelocity = 2f;
-			this.damageCoefficient = StaticValues.dashAttackDamageCoefficient;
-			this.damageType = RoR2.DamageType.Generic;
-			this.hitStopDuration = 0.0f;
-			this.pushForce = 1800f;
-			this.launchVectorOverride = true;
-			this.earlyExitJump = true;
-			this.stackGainAmount = 12;
-			this.swingSoundString = "SwordSwing3";
-			this.hitSoundString = "WhipHit2";
-			this.critHitSoundString = "SwordHit3";
-			this.muzzleString = "eDashAttack";
-			this.swingEffectPrefab = Assets.dashAttackEffect;
-			this.hitEffectPrefab = Assets.stabHitEffect;
-			this.impactSound = Assets.jab3HitSoundEvent.index;
-			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
-			{
-				new Keyframe(0f, 10f),
-				new Keyframe(0.5f, 0f),
-				new Keyframe(1f, 0f)
-			});
-			this.isDash = true;
-			this.isFlinch = true;
-			this.animString = "DashAttack";
-			this.hitboxName = "Jab";
-			base.OnEnter();
-		}
+
+    public class DashAttack : BaseM1
+    {
+        public override void OnEnter()
+        {
+            anim = 1f;
+            baseDuration = 0.625f;
+            attackStartTime = 0.21f;
+            attackEndTime = 0.6f;
+            hitStopDuration = 0.025f;
+            attackRecoil = 2f;
+            hitHopVelocity = 2f;
+            damageCoefficient = 2.5f;
+            damageType = DamageType.Generic;
+            hitStopDuration = 0f;
+            pushForce = 1800f;
+            launchVectorOverride = true;
+            earlyExitJump = true;
+            stackGainAmount = 12;
+            swingSoundString = "SwordSwing3";
+            hitSoundString = "WhipHit2";
+            critHitSoundString = "SwordHit3";
+            muzzleString = "eDashAttack";
+            swingEffectPrefab = Modules.Assets.dashAttackEffect;
+            hitEffectPrefab = Modules.Assets.stabHitEffect;
+            impactSound = Modules.Assets.jab3HitSoundEvent.index;
+            dashSpeedCurve = new AnimationCurve(new Keyframe(0f, 10f), new Keyframe(0.5f, 0f), new Keyframe(1f, 0f));
+            isDash = true;
+            isFlinch = true;
+            animString = "DashAttack";
+            hitboxName = "Jab";
+            base.OnEnter();
+        }
 
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-			base.characterDirection.forward = this.slideVector;
+            characterDirection.forward = slideVector;
         }
 
-		public override void LaunchEnemy(CharacterBody body)
-		{
-			
-			Vector3 direction = base.characterDirection.forward * 8f + Vector3.up * 10f;
-			Vector3 launchVector = (direction + base.transform.position) - body.transform.position;
-			launchVector = launchVector.normalized;
-			
-			if (body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
-			{
-				body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
-			}
-			launchVector *= this.pushForce;
-			CharacterMotor m = body.characterMotor;
-			float force = 0.3f;
-			if (m)
-			{
-				float f = Mathf.Max(150f, m.mass);
-				force = f / 150f;
-				launchVector *= force;
-				m.ApplyForce(launchVector);
-			}
-			else if (body.rigidbody)
-			{
-				float f = Mathf.Max(50f, body.rigidbody.mass);
-				force = f / 200f;
-				launchVector *= force;
-				body.rigidbody.AddForce(launchVector, ForceMode.Impulse);
-			}
-		}
-	}
+        public override void LaunchEnemy(CharacterBody body)
+        {
+            Vector3 vector = characterDirection.forward * 8f + Vector3.up * 10f;
+            Vector3 normalized = (vector + transform.position - body.transform.position).normalized;
+            if ((bool)body.GetComponent<KinematicCharacterMotor>())
+            {
+                body.GetComponent<KinematicCharacterMotor>().ForceUnground();
+            }
+            normalized *= pushForce;
+            CharacterMotor characterMotor = body.characterMotor;
+            float num = 0.3f;
+            if ((bool)characterMotor)
+            {
+                float num2 = Mathf.Max(150f, characterMotor.mass);
+                num = num2 / 150f;
+                normalized *= num;
+                characterMotor.ApplyForce(normalized);
+            }
+            else if ((bool)body.rigidbody)
+            {
+                float num3 = Mathf.Max(50f, body.rigidbody.mass);
+                num = num3 / 200f;
+                normalized *= num;
+                body.rigidbody.AddForce(normalized, ForceMode.Impulse);
+            }
+        }
+    }
 }

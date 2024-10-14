@@ -1,77 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using RoR2;
-using UnityEngine;
 using EntityStates;
-namespace Dancer.SkillStates
+using UnityEngine;
+
+namespace Dancer.SkillStates.DirectionalM1
 {
+
     public class BaseInputEvaluation : BaseSkillState
     {
-		protected Vector2 inputVector;
-		private bool inAir;
-		protected EntityState nextState;
-		protected bool canCombo = true;
+        protected Vector2 inputVector;
 
-		public override void FixedUpdate()
+        private bool inAir;
+
+        protected EntityState nextState;
+
+        protected bool canCombo = true;
+
+        public override void FixedUpdate()
         {
             base.FixedUpdate();
-
-			this.EvaluateInput();
+            EvaluateInput();
         }
 
-		protected virtual void SetNextState()
-		{
-			this.outer.SetNextState(this.nextState);
-		}
+        protected virtual void SetNextState()
+        {
+            outer.SetNextState(nextState);
+        }
 
-		protected virtual void EvaluateInput()
-		{
-			Vector3 moveVector = base.inputBank.moveVector;
-			Vector3 aimDirection = base.inputBank.aimDirection;
-			Vector3 normalized = new Vector3(aimDirection.x, 0f, aimDirection.z).normalized;
-			Vector3 up = base.transform.up;
-			Vector3 normalized2 = Vector3.Cross(up, normalized).normalized;
-			this.inputVector = new Vector2(Vector3.Dot(moveVector, normalized), Vector3.Dot(moveVector, normalized2));
-
-			if (base.inputBank.skill1.down)
-			{
-				if (base.inputBank.sprint.down && !(this is AttackSprint))
-				{
-					this.nextState = (new AttackSprint());
-				}
-				else if (this.inputVector.x < -0.5f)
-				{
-					if(!base.isGrounded && this.canCombo)
+        protected virtual void EvaluateInput()
+        {
+            Vector3 moveVector = inputBank.moveVector;
+            Vector3 aimDirection = inputBank.aimDirection;
+            Vector3 normalized = new Vector3(aimDirection.x, 0f, aimDirection.z).normalized;
+            Vector3 up = transform.up;
+            Vector3 normalized2 = Vector3.Cross(up, normalized).normalized;
+            inputVector = new Vector2(Vector3.Dot(moveVector, normalized), Vector3.Dot(moveVector, normalized2));
+            if (!inputBank.skill1.down)
+            {
+                return;
+            }
+            if (inputBank.sprint.down && !(this is AttackSprint))
+            {
+                nextState = new AttackSprint();
+            }
+            else if (inputVector.x < -0.5f)
+            {
+                if (!isGrounded && canCombo)
+                {
+                    if (this is AttackDown)
                     {
-						if (this is AttackDown)
-							this.nextState = new AttackDown2();
-						else
-							this.nextState = new AttackDown();
-					}
-					else if (base.inputBank.jump.down)
-					{
-						if (!(this is AttackJump) && !(this is AttackJump2))
-						{
-							this.nextState = new AttackJump();
-						}
-						else if (base.inputBank.jump.justPressed)
-							this.nextState = new AttackJump2();
-					}
-				}
-				else if (base.inputBank.jump.down)
-				{
-					if (!(this is AttackJump) && !(this is AttackJump2))
+                        nextState = new AttackDown2();
+                    }
+                    else
                     {
-						this.nextState = new AttackJump();
-					}						
-					else if (base.inputBank.jump.justPressed)
-						this.nextState = new AttackJump2();
-				}
-				
-				
-			}
-
-		}
-	}
+                        nextState = new AttackDown();
+                    }
+                }
+                else if (inputBank.jump.down)
+                {
+                    if (!(this is AttackJump) && !(this is AttackJump2))
+                    {
+                        nextState = new AttackJump();
+                    }
+                    else if (inputBank.jump.justPressed)
+                    {
+                        nextState = new AttackJump2();
+                    }
+                }
+            }
+            else if (inputBank.jump.down)
+            {
+                if (!(this is AttackJump) && !(this is AttackJump2))
+                {
+                    nextState = new AttackJump();
+                }
+                else if (inputBank.jump.justPressed)
+                {
+                    nextState = new AttackJump2();
+                }
+            }
+        }
+    }
 }

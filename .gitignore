@@ -7,9 +7,6 @@
 *.userosscache
 *.sln.docstates
 
-#libs
-libs
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -262,3 +259,4 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Dancer/libs/CustomEmotesAPI.dll

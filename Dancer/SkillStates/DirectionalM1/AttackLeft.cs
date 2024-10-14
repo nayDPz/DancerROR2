@@ -1,57 +1,42 @@
-﻿using System;
-using EntityStates.Merc;
-using Dancer.Modules;
 using UnityEngine;
-using RoR2;
-using UnityEngine.Networking;
-namespace Dancer.SkillStates
+
+namespace Dancer.SkillStates.DirectionalM1
 {
-	public class AttackLeft : BaseDirectionalM1
-	{
-		public override void OnEnter()
-		{
-			this.anim = 1.1f;
-			this.damageCoefficient = StaticValues.directionalLeftDamageCoefficient;
-			this.baseDuration = 0.55f;
-			this.attackStartTime = 0.17f;
-			this.attackEndTime = 0.26f;
-			this.earlyExitTime = 0.8f;
-			this.attackRecoil = 2f;
-			this.hitHopVelocity = 2f;
-			this.hitStopDuration = 0.06f;
-			this.swingSoundString = "SwordSwing2";
-			this.hitSoundString = "JabHit1";
-			this.muzzleString = "eJab1";
-			this.swingEffectPrefab = Assets.swingEffect;
-			this.hitEffectPrefab = Assets.hitEffect;
-			this.impactSound = Assets.jab1HitSoundEvent.index;
 
-			this.isSus = true;
-			this.isDash = true;
-			this.dashSpeedCurve = new AnimationCurve(new Keyframe[]
-			{
-				new Keyframe(0f, 0f),
-				new Keyframe(0.15f, 6f),
-				new Keyframe(0.75f, 0f),
-				new Keyframe(1f, 0f)
-			});
-			this.animString = "AttackLeft";
-			this.hitboxName = "Jab";
-			base.OnEnter();
-		}
-
-		public override void SetSlideVector()
+    public class AttackLeft : BaseDirectionalM1
+    {
+        public override void OnEnter()
         {
-			Vector3 forward = base.inputBank.moveVector;
-			this.slideVector = forward;
-			if(forward == Vector3.zero)
+            anim = 1.1f;
+            damageCoefficient = 2f;
+            baseDuration = 0.55f;
+            attackStartTime = 0.17f;
+            attackEndTime = 0.26f;
+            earlyExitTime = 0.8f;
+            attackRecoil = 2f;
+            hitHopVelocity = 2f;
+            hitStopDuration = 0.06f;
+            swingSoundString = "SwordSwing2";
+            hitSoundString = "JabHit1";
+            muzzleString = "eJab1";
+            swingEffectPrefab = Modules.Assets.swingEffect;
+            hitEffectPrefab = Modules.Assets.hitEffect;
+            impactSound = Modules.Assets.jab1HitSoundEvent.index;
+            isSus = true;
+            isDash = true;
+            dashSpeedCurve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.15f, 6f), new Keyframe(0.75f, 0f), new Keyframe(1f, 0f));
+            animString = "AttackLeft";
+            hitboxName = "Jab";
+            base.OnEnter();
+        }
+
+        public override void SetSlideVector()
+        {
+            if ((slideVector = inputBank.moveVector) == Vector3.zero)
             {
-				forward = base.inputBank.aimDirection;
-				this.slideVector = -(new Vector3(forward.z, 0, -forward.x));
+                Vector3 aimDirection = inputBank.aimDirection;
+                slideVector = -new Vector3(aimDirection.z, 0f, 0f - aimDirection.x);
             }
-		}
-
-
+        }
     }
 }
-

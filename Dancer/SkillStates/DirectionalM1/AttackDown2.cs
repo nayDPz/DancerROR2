@@ -1,271 +1,278 @@
-﻿using EntityStates;
+using EntityStates;
 using RoR2;
 using RoR2.Audio;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
-using Dancer.Modules;
-namespace Dancer.SkillStates
+
+namespace Dancer.SkillStates.DirectionalM1
 {
-	public class AttackDown2 : BaseInputEvaluation
-	{
-		public Vector3 launchTarget;
-		public bool launchVectorOverride;
-		public bool cancelledFromSprinting;
-		public bool earlyExitJump;
-		public string critHitSoundString;
-		private bool crit;
-		private List<HealthComponent> hits;
-		protected float attackResetInterval = 0.115f;
-		private float attackResetStopwatch;
-		public int swingIndex;
-		protected string animString = "DownAir";
-		protected string hitboxName = "DownAir";
-		protected DamageType damageType = DamageType.Generic;
-		protected float damageCoefficient = StaticValues.downAirDamageCoefficient;
-		protected float procCoefficient = 0.5f;
-		protected float pushForce = 500f;
-		protected float baseDuration = 1.3f;
-		protected float attackStartTime = 0.0f;
-		protected float attackEndTime = .9f;
-		protected float hitStopDuration = 0.12f;
-		protected float attackRecoil = 2f;
-		protected float hitHopVelocity = 0f;
-		protected bool cancelled = false;
-		protected string swingSoundString = "";
-		protected string hitSoundString = "";
-		private float fallSpeed = 3.75f;
-		private bool hitGround;
 
-		protected string muzzleString = "eDAir";
-		private Transform muzzleTransform;
+    public class AttackDown2 : BaseInputEvaluation
+    {
+        public Vector3 launchTarget;
 
-		protected GameObject swingEffectPrefab;
-		private GameObject swingEffect;
+        public bool launchVectorOverride;
 
-		protected GameObject hitEffectPrefab;
+        public bool cancelledFromSprinting;
 
-		protected NetworkSoundEventIndex impactSound;
+        public bool earlyExitJump;
 
-		public float duration;
+        public string critHitSoundString;
 
-		private bool hasFired;
+        private bool crit;
 
-		private float hitPauseTimer;
+        private List<HealthComponent> hits;
 
-		protected OverlapAttack attack;
+        protected float attackResetInterval = 0.115f;
 
-		protected bool inHitPause;
+        private float attackResetStopwatch;
 
-		private bool hasHopped;
+        public int swingIndex;
 
-		protected float stopwatch;
+        protected string animString = "DownAir";
 
-		protected Animator animator;
+        protected string hitboxName = "DownAir";
 
-		private BaseState.HitStopCachedState hitStopCachedState;
-		private Vector3 storedVelocity;
-		public override void OnEnter()
-		{
-			base.OnEnter();
+        protected DamageType damageType = DamageType.Generic;
 
-			this.animator = base.GetModelAnimator();
+        protected float damageCoefficient = 1.25f;
 
-			if (base.modelLocator)
-			{
-				ChildLocator component = base.modelLocator.modelTransform.GetComponent<ChildLocator>();
-				if (component)
-				{
-					this.muzzleTransform = component.FindChild("eDAir");
-				}
-			}
+        protected float procCoefficient = 0.5f;
 
-			base.characterMotor.velocity.y = 0f;
+        protected float pushForce = 500f;
 
-			this.AttackSetup();
-			this.StartAttack(); //this.StartAttackServer();
-		}
+        protected float baseDuration = 1.3f;
 
-		protected float anim = 1f;
+        protected float attackStartTime = 0f;
 
-		private void AttackSetup()
-		{
-			this.hits = new List<HealthComponent>();
-			this.duration = this.baseDuration / this.attackSpeedStat;
-			this.attackResetInterval /= this.attackSpeedStat;
+        protected float attackEndTime = 0.9f;
 
-			HitBoxGroup hitBoxGroup = null;
-			Transform modelTransform = base.GetModelTransform();
-			if (modelTransform)
-			{
-				hitBoxGroup = Array.Find<HitBoxGroup>(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == this.hitboxName);
-			}
-			this.attack = new OverlapAttack();
-			this.attack.damageType = this.damageType;
-			this.attack.attacker = base.gameObject;
-			this.attack.inflictor = base.gameObject;
-			this.attack.teamIndex = base.GetTeam();
-			this.attack.damage = this.damageCoefficient * this.damageStat;
-			this.attack.procCoefficient = this.procCoefficient;
-			this.attack.hitEffectPrefab = Assets.stabHitEffect;
-			this.attack.forceVector = Vector3.down * this.pushForce;
-			this.attack.pushAwayForce = 0f;
-			this.attack.hitBoxGroup = hitBoxGroup;
-			this.attack.isCrit = base.RollCrit();
-			this.attack.impactSound = Modules.Assets.sword1HitSoundEvent.index;
+        protected float hitStopDuration = 0.12f;
 
-			this.swingEffectPrefab = Modules.Assets.downAirEffect;
-			this.muzzleString = "eDAir";
-		}
-		private void StartAttack()
-		{
-			base.characterBody.SetAimTimer(this.duration);
-			Util.PlayAttackSpeedSound("DancerSwing1", base.gameObject, this.attackSpeedStat);
-			this.animator.SetBool("attacking", true);
-			base.characterDirection.forward = base.inputBank.aimDirection;
-			base.PlayAnimation("FullBody, Override", "DAir", "Slash.playbackRate", 0.75f);
-		}
+        protected float attackRecoil = 2f;
 
-		public virtual void PlayHitSound()
-		{
-			Util.PlaySound("SwordHit", base.gameObject);
-		}
+        protected float hitHopVelocity = 0f;
 
-		public virtual void OnHitEnemyAuthority(List<HurtBox> list)
-		{
-			this.PlayHitSound();
-			if (!this.hasHopped)
-			{
-				if (base.characterMotor && !base.characterMotor.isGrounded && this.hitHopVelocity > 0f)
-				{
-					base.SmallHop(base.characterMotor, this.hitHopVelocity);
-				}
-				this.hasHopped = true;
-			}
-			if (!this.inHitPause && this.hitStopDuration > 0f)
-			{
-				this.storedVelocity = base.characterMotor.velocity;
-				this.hitStopCachedState = base.CreateHitStopCachedState(base.characterMotor, this.animator, "Slash.playbackRate");
-				this.hitPauseTimer = this.hitStopDuration / this.attackSpeedStat;
-				this.inHitPause = true;
-			}
-		}
+        protected bool cancelled = false;
 
-		private void PlaySwingEffect()
-		{
-			this.swingEffect = UnityEngine.Object.Instantiate<GameObject>(this.swingEffectPrefab, this.muzzleTransform);
-		}
+        protected string swingSoundString = "";
 
+        protected string hitSoundString = "";
 
-		private void FireAttack()
-		{
-			if (!this.hasFired)
-			{
-				this.hasFired = true;
+        private float fallSpeed = 3.75f;
 
-				if (Util.HasEffectiveAuthority(base.gameObject))
-				{
-					this.PlaySwingEffect();
-					Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
-					base.AddRecoil(-1f * this.attackRecoil, -2f * this.attackRecoil, -0.5f * this.attackRecoil, 0.5f * this.attackRecoil);
-				}
-			}
-			List<HurtBox> list = new List<HurtBox>();
-			if (Util.HasEffectiveAuthority(base.gameObject))
-			{
-				if (this.attack.Fire(list))
-				{
-					this.OnHitEnemyAuthority(list);
-				}
-			}
-		}
+        private bool hitGround;
 
-		public override void FixedUpdate()
-		{
-			base.FixedUpdate();
+        protected string muzzleString = "eDAir";
 
-			if (true)//NetworkServer.active)
-			{
-				this.hitPauseTimer -= Time.fixedDeltaTime;
-				if (this.hitPauseTimer <= 0f && this.inHitPause)
-				{
-					this.animator.SetFloat("Slash.playbackRate", 2f);
-					base.ConsumeHitStopCachedState(this.hitStopCachedState, base.characterMotor, this.animator);
-					this.inHitPause = false;
-					base.characterMotor.velocity = this.storedVelocity;
-				}
-				if (!this.inHitPause)
-				{
-					this.attackResetStopwatch += Time.fixedDeltaTime;
-					this.stopwatch += Time.fixedDeltaTime;
-				}
-				else
-				{
-					if (base.characterMotor)
-					{
-						base.characterMotor.velocity = Vector3.zero;
-					}
-					if (this.animator)
-					{
-						this.animator.SetFloat("Slash.playbackRate", 0f);
-					}
-				}
+        private Transform muzzleTransform;
 
-				base.inputBank.moveVector /= 2f;
+        protected GameObject swingEffectPrefab;
 
+        private GameObject swingEffect;
 
-				if (base.characterMotor && !this.inHitPause)
-				{
-					base.characterMotor.rootMotion += (this.fallSpeed * this.moveSpeedStat * Vector3.down * Time.fixedDeltaTime);
-				}
+        protected GameObject hitEffectPrefab;
 
-				if (this.stopwatch >= this.duration * this.attackStartTime && this.stopwatch <= this.duration * this.attackEndTime)
-				{
-					if (this.attackResetStopwatch >= this.attackResetInterval)
-					{
-						//Util.PlayAttackSpeedSound(this.swingSoundString, base.gameObject, this.attackSpeedStat);
-						this.attack.ResetIgnoredHealthComponents();
-						this.attackResetStopwatch = 0f;
-					}
-					this.FireAttack(); //this.FireAttack()
-				}
-				if (base.characterMotor.isGrounded)
-				{
-					this.hitGround = true;
-					this.outer.SetNextState(new AttackDown2End());
-				}
-				else
-				{
-					if (this.stopwatch >= this.duration)
-					{
-						base.PlayCrossfade("FullBody, Override", "BufferEmpty", "Slash.playbackRate", this.duration * this.anim, 0.01f);
-						this.outer.SetNextStateToMain();
-					}
-				}
-			}
+        protected NetworkSoundEventIndex impactSound;
 
-		}
+        public float duration;
 
+        private bool hasFired;
 
-		public override InterruptPriority GetMinimumInterruptPriority()
-		{
-			return InterruptPriority.Skill;
-		}
+        private float hitPauseTimer;
 
-		public override void OnExit()
-		{
-			if (this.swingEffect) GameObject.Destroy(this.swingEffect);
-			//if(!this.hitGround)
-			//	PlayAnimation("FullBody, Override", "BufferEmpty");
-			base.GetAimAnimator().enabled = true;
-			this.animator.SetFloat("Slash.playbackRate", 1f);
-			base.OnExit();
-		}
+        protected OverlapAttack attack;
 
-		protected Vector3 slideVector;
-		protected Quaternion slideRotation;
+        protected bool inHitPause;
 
+        private bool hasHopped;
 
-	}
+        protected float stopwatch;
+
+        protected Animator animator;
+
+        private HitStopCachedState hitStopCachedState;
+
+        private Vector3 storedVelocity;
+
+        protected float anim = 1f;
+
+        protected Vector3 slideVector;
+
+        protected Quaternion slideRotation;
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            animator = GetModelAnimator();
+            if ((bool)modelLocator)
+            {
+                ChildLocator component = modelLocator.modelTransform.GetComponent<ChildLocator>();
+                if ((bool)component)
+                {
+                    muzzleTransform = component.FindChild("eDAir");
+                }
+            }
+            characterMotor.velocity.y = 0f;
+            AttackSetup();
+            StartAttack();
+        }
+
+        private void AttackSetup()
+        {
+            hits = new List<HealthComponent>();
+            duration = baseDuration / attackSpeedStat;
+            attackResetInterval /= attackSpeedStat;
+            HitBoxGroup hitBoxGroup = null;
+            Transform modelTransform = GetModelTransform();
+            if ((bool)modelTransform)
+            {
+                hitBoxGroup = Array.Find(modelTransform.GetComponents<HitBoxGroup>(), (element) => element.groupName == hitboxName);
+            }
+            attack = new OverlapAttack();
+            attack.damageType = damageType;
+            attack.attacker = gameObject;
+            attack.inflictor = gameObject;
+            attack.teamIndex = GetTeam();
+            attack.damage = damageCoefficient * damageStat;
+            attack.procCoefficient = procCoefficient;
+            attack.hitEffectPrefab = Modules.Assets.stabHitEffect;
+            attack.forceVector = Vector3.down * pushForce;
+            attack.pushAwayForce = 0f;
+            attack.hitBoxGroup = hitBoxGroup;
+            attack.isCrit = RollCrit();
+            attack.impactSound = Modules.Assets.sword1HitSoundEvent.index;
+            swingEffectPrefab = Modules.Assets.downAirEffect;
+            muzzleString = "eDAir";
+        }
+
+        private void StartAttack()
+        {
+            characterBody.SetAimTimer(duration);
+            Util.PlayAttackSpeedSound("DancerSwing1", gameObject, attackSpeedStat);
+            animator.SetBool("attacking", value: true);
+            characterDirection.forward = inputBank.aimDirection;
+            PlayAnimation("FullBody, Override", "DAir", "Slash.playbackRate", 0.75f);
+        }
+
+        public virtual void PlayHitSound()
+        {
+            Util.PlaySound("SwordHit", gameObject);
+        }
+
+        public virtual void OnHitEnemyAuthority(List<HurtBox> list)
+        {
+            PlayHitSound();
+            if (!hasHopped)
+            {
+                if ((bool)characterMotor && !characterMotor.isGrounded && hitHopVelocity > 0f)
+                {
+                    SmallHop(characterMotor, hitHopVelocity);
+                }
+                hasHopped = true;
+            }
+            if (!inHitPause && hitStopDuration > 0f)
+            {
+                storedVelocity = characterMotor.velocity;
+                hitStopCachedState = CreateHitStopCachedState(characterMotor, animator, "Slash.playbackRate");
+                hitPauseTimer = hitStopDuration / attackSpeedStat;
+                inHitPause = true;
+            }
+        }
+
+        private void PlaySwingEffect()
+        {
+            swingEffect = UnityEngine.Object.Instantiate(swingEffectPrefab, muzzleTransform);
+        }
+
+        private void FireAttack()
+        {
+            if (!hasFired)
+            {
+                hasFired = true;
+                if (Util.HasEffectiveAuthority(gameObject))
+                {
+                    PlaySwingEffect();
+                    Util.PlayAttackSpeedSound(swingSoundString, gameObject, attackSpeedStat);
+                    AddRecoil(-1f * attackRecoil, -2f * attackRecoil, -0.5f * attackRecoil, 0.5f * attackRecoil);
+                }
+            }
+            List<HurtBox> list = new List<HurtBox>();
+            if (Util.HasEffectiveAuthority(gameObject) && attack.Fire(list))
+            {
+                OnHitEnemyAuthority(list);
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            bool flag = true;
+            hitPauseTimer -= Time.fixedDeltaTime;
+            if (hitPauseTimer <= 0f && inHitPause)
+            {
+                animator.SetFloat("Slash.playbackRate", 2f);
+                ConsumeHitStopCachedState(hitStopCachedState, characterMotor, animator);
+                inHitPause = false;
+                characterMotor.velocity = storedVelocity;
+            }
+            if (!inHitPause)
+            {
+                attackResetStopwatch += Time.fixedDeltaTime;
+                stopwatch += Time.fixedDeltaTime;
+            }
+            else
+            {
+                if ((bool)characterMotor)
+                {
+                    characterMotor.velocity = Vector3.zero;
+                }
+                if ((bool)animator)
+                {
+                    animator.SetFloat("Slash.playbackRate", 0f);
+                }
+            }
+            inputBank.moveVector /= 2f;
+            if ((bool)characterMotor && !inHitPause)
+            {
+                characterMotor.rootMotion += fallSpeed * moveSpeedStat * Vector3.down * Time.fixedDeltaTime;
+            }
+            if (stopwatch >= duration * attackStartTime && stopwatch <= duration * attackEndTime)
+            {
+                if (attackResetStopwatch >= attackResetInterval)
+                {
+                    attack.ResetIgnoredHealthComponents();
+                    attackResetStopwatch = 0f;
+                }
+                FireAttack();
+            }
+            if (characterMotor.isGrounded)
+            {
+                hitGround = true;
+                outer.SetNextState(new AttackDown2End());
+            }
+            else if (stopwatch >= duration)
+            {
+                PlayCrossfade("FullBody, Override", "BufferEmpty", "Slash.playbackRate", duration * anim, 0.01f);
+                outer.SetNextStateToMain();
+            }
+        }
+
+        public override InterruptPriority GetMinimumInterruptPriority()
+        {
+            return InterruptPriority.Skill;
+        }
+
+        public override void OnExit()
+        {
+            if ((bool)swingEffect)
+            {
+                UnityEngine.Object.Destroy(swingEffect);
+            }
+            GetAimAnimator().enabled = true;
+            animator.SetFloat("Slash.playbackRate", 1f);
+            base.OnExit();
+        }
+    }
 }

@@ -1,86 +1,76 @@
-﻿using System;
-using EntityStates.Merc;
-using Dancer.Modules;
-using UnityEngine;
+using KinematicCharacterController;
 using RoR2;
-using UnityEngine.Networking;
-namespace Dancer.SkillStates
+using UnityEngine;
+
+namespace Dancer.SkillStates.DirectionalM1
 {
-	public class AttackJump : BaseDirectionalM1
-	{
-		public override void OnEnter()
-		{
-			this.hitHopVelocity = 0f;
-			if (base.characterMotor.jumpCount <= base.characterBody.maxJumpCount)
+
+    public class AttackJump : BaseDirectionalM1
+    {
+        public override void OnEnter()
+        {
+            hitHopVelocity = 0f;
+            if (characterMotor.jumpCount <= characterBody.maxJumpCount)
             {
-				base.characterMotor.Jump(1f, 1f, false);
-				base.characterMotor.jumpCount++;
-			}
-			else
+                characterMotor.Jump(1f, 1f);
+                characterMotor.jumpCount++;
+            }
+            else
             {
-				this.hitHopVelocity = base.characterBody.jumpPower;
-			}
-				
+                hitHopVelocity = characterBody.jumpPower;
+            }
+            anim = 1.1f;
+            damageCoefficient = 2f;
+            baseDuration = 0.65f;
+            attackStartTime = 0.07f;
+            attackEndTime = 0.2f;
+            earlyExitTime = 0.67f;
+            attackRecoil = 2f;
+            canRecieveInput = false;
+            hitStopDuration = 0.06f;
+            pushForce = 2200f;
+            swingSoundString = "SwordSwing2";
+            hitSoundString = "JabHit1";
+            muzzleString = "JumpAttack";
+            launchVectorOverride = true;
+            swingEffectPrefab = Modules.Assets.swingEffect;
+            hitEffectPrefab = Modules.Assets.hitEffect;
+            impactSound = Modules.Assets.jab1HitSoundEvent.index;
+            animString = "AttackJump";
+            hitboxName = "FAir";
+            base.OnEnter();
+        }
 
-			this.anim = 1.1f;
-			this.damageCoefficient = StaticValues.directionalJumpDamageCoefficient;
-			this.baseDuration = 0.65f;
-			this.attackStartTime = 0.07f;
-			this.attackEndTime = 0.2f;
-			this.earlyExitTime = 0.67f;
-			this.attackRecoil = 2f;
+        public override void FixedUpdate()
+        {
+            base.FixedUpdate();
+        }
 
-			this.canRecieveInput = false;
-			this.hitStopDuration = 0.06f;
-			this.pushForce = 2200f;
-			this.swingSoundString = "SwordSwing2";
-			this.hitSoundString = "JabHit1";
-			this.muzzleString = "JumpAttack";
-			this.launchVectorOverride = true;
-			this.swingEffectPrefab = Assets.swingEffect;
-			this.hitEffectPrefab = Assets.hitEffect;
-			this.impactSound = Assets.jab1HitSoundEvent.index;
-			this.animString = "AttackJump";
-			this.hitboxName = "FAir";
-			base.OnEnter();
-		}
-
-		public override void FixedUpdate()
-		{
-			base.FixedUpdate();
-		}
-
-		public override void LaunchEnemy(CharacterBody body)
-		{
-			Vector3 direction = Vector3.up * 10f;
-			Vector3 launchVector = (direction + base.transform.position) - body.transform.position;
-			launchVector = launchVector.normalized;
-			launchVector *= this.pushForce;
-
-			if (body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>())
-			{
-				body.GetComponent<KinematicCharacterController.KinematicCharacterMotor>().ForceUnground();
-			}
-
-			CharacterMotor m = body.characterMotor;
-
-			float force = 0.25f;
-			if (m)
-			{
-				float f = Mathf.Max(150f, m.mass);
-				force = f / 150f;
-				launchVector *= force;
-				m.ApplyForce(launchVector);
-			}
-			else if (body.rigidbody)
-			{
-				float f = Mathf.Max(50f, body.rigidbody.mass);
-				force = f / 200f;
-				launchVector *= force;
-				body.rigidbody.AddForce(launchVector, ForceMode.Impulse);
-			}
-		}
-
-	}
+        public override void LaunchEnemy(CharacterBody body)
+        {
+            Vector3 vector = Vector3.up * 10f;
+            Vector3 normalized = (vector + transform.position - body.transform.position).normalized;
+            normalized *= pushForce;
+            if ((bool)body.GetComponent<KinematicCharacterMotor>())
+            {
+                body.GetComponent<KinematicCharacterMotor>().ForceUnground();
+            }
+            CharacterMotor characterMotor = body.characterMotor;
+            float num = 0.25f;
+            if ((bool)characterMotor)
+            {
+                float num2 = Mathf.Max(150f, characterMotor.mass);
+                num = num2 / 150f;
+                normalized *= num;
+                characterMotor.ApplyForce(normalized);
+            }
+            else if ((bool)body.rigidbody)
+            {
+                float num3 = Mathf.Max(50f, body.rigidbody.mass);
+                num = num3 / 200f;
+                normalized *= num;
+                body.rigidbody.AddForce(normalized, ForceMode.Impulse);
+            }
+        }
+    }
 }
-

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Dancer.Modules.Components;
 using RoR2;
-using RoR2.Achievements;
-using R2API;
+using System;
 using UnityEngine;
 
 namespace Dancer.Modules.Achievements
 {
-    class DancerRescueMageAchievement : ModdedUnlockable
+
+    internal class DancerRescueMageAchievement : ModdedUnlockable
     {
         public override string AchievementIdentifier => "DANCER_RESCUEMAGE_ACHIEVEMENT_ID";
 
@@ -22,19 +20,13 @@ namespace Dancer.Modules.Achievements
 
         public override string AchievementDescToken => "DANCER_RESCUEMAGE_ACHIEVEMENT_DESC";
 
-        public override Sprite Sprite => Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon");
+        public override Sprite Sprite => Assets.mainAssetBundle.LoadAsset<Sprite>("texUtilityIcon");
 
-        public override Func<string> GetHowToUnlock { get; } = (() => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", new object[]
-                            {
-                                Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_NAME"),
-                                Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_DESC")
-                            }));
+        public override Func<string> GetHowToUnlock { get; } = () => Language.GetStringFormatted("UNLOCK_VIA_ACHIEVEMENT_FORMAT", Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_NAME"), Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_DESC"));
 
-        public override Func<string> GetUnlocked { get; } = (() => Language.GetStringFormatted("UNLOCKED_FORMAT", new object[]
-                            {
-                                Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_NAME"),
-                                Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_DESC")
-                            }));
+
+        public override Func<string> GetUnlocked { get; } = () => Language.GetStringFormatted("UNLOCKED_FORMAT", Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_NAME"), Language.GetString("DANCER_RESCUEMAGE_ACHIEVEMENT_DESC"));
+
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
@@ -49,23 +41,16 @@ namespace Dancer.Modules.Achievements
 
         public override void OnUninstall()
         {
-
-            base.OnGranted();
-            Run.onClientGameOverGlobal -= this.OnClientGameOverGlobal;
+            OnGranted();
+            Run.onClientGameOverGlobal -= OnClientGameOverGlobal;
         }
 
         private void OnClientGameOverGlobal(Run run, RunReport runReport)
         {
-            if (!runReport.gameEnding)
+            if ((bool)runReport.gameEnding && runReport.gameEnding == GameEndingCatalog.FindGameEndingDef("MainEnding") && LockedMageTracker.mageFreed)
             {
-                return;
-            }
-            if (runReport.gameEnding == GameEndingCatalog.FindGameEndingDef("MainEnding"))
-            {
-                if (Modules.Components.LockedMageTracker.mageFreed)
-                    base.Grant();
+                Grant();
             }
         }
-    
     }
 }

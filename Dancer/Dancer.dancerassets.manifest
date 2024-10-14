@@ -1,0 +1,197 @@
+ManifestFileVersion: 0
+CRC: 169345920
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: d08534313699d5b02ea9d7f5ca0620a8
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 81a61f7cb8ce6e11b4e3bebbb7935dd5
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9a68da65c907acb4eb4dbcd042f172e7, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fc41cd48bee14034db80323ab44fbd3e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 261c50d8a80898e4ebf2e8e415ea6766, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 751bd37d2e55f5f448dbb0d97812d9ba, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 120
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+- Class: 319
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/DancerAssets/NewVFX/DancerSwingEffect.prefab
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse (1).png
+- Assets/DancerAssets/NewVFX/texRampTritone 1 (1).png
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse (2).png
+- Assets/DancerAssets/texMainSkin.png
+- Assets/DancerAssets/RibbonController.prefab
+- Assets/StubbedShaders/fx/hgforwardplanet.shader
+- Assets/DancerAssets/NewVFX/texOmniRadialSlash2Mask.png
+- Assets/StubbedShaders/CalmWaterCalm Water [Single Sided].shader
+- Assets/StubbedShaders/deferred/hgstandard.shader
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldBody.mesh
+- Assets/DancerAssets/NewVFX/rib.mesh
+- Assets/StubbedShaders/deferred/hgsnowtopped.shader
+- Assets/StubbedShaders/fx/hgcloudremap.shader
+- Assets/StubbedShaders/DecaliciousDeferred Decal.shader
+- Assets/DancerAssets/NewVFX/DancerStabHitEffect.prefab
+- Assets/StubbedShaders/ui/hguioverbrighten.shader
+- Assets/DancerAssets/Crosshair/texCrosshairTriangle.png
+- Assets/DancerAssets/Animations/DancerArmature_IdleIn.anim
+- Assets/DancerAssets/NewVFX/matDancerStab2.mat
+- Assets/DancerAssets/NewVFX/meshSwing.asset
+- Assets/DancerAssets/Crosshair/texCrosshairDotCropped.png
+- Assets/DancerAssets/NewVFX/rib2.mesh
+- Assets/DancerAssets/texUtilityIcon.png
+- Assets/DancerAssets/NewVFX/texRampTritone.png
+- Assets/DancerAssets/Animations/DancerArmature_Sprint.anim
+- Assets/DancerAssets/Animations/animDancer.controller
+- Assets/DancerAssets/Crosshair/texDancerCrosshairSquare.png
+- Assets/DancerAssets/Materials/matHornet.mat
+- Assets/DancerAssets/Materials/texDancerDiffuse.png
+- Assets/DancerAssets/mesh/meshDancerWeapon.mesh
+- Assets/DancerAssets/Animations/DancerArmature_RunBack.anim
+- Assets/DancerAssets/NewVFX/texOmniShockwave2Mask.png
+- Assets/DancerAssets/NewVFX/texRampIce.png
+- Assets/DancerAssets/NewVFX/texCloudDifferenceBW1.png
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldWeapon.mesh
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse (2).png
+- Assets/DancerAssets/NewVFX/matDancerSwingHeavy.mat
+- Assets/DancerAssets/NewVFX/RibbonBall.prefab
+- Assets/DancerAssets/NewVFX/texRampTritone 1.png
+- Assets/DancerAssets/NewVFX/RibbonLine.prefab
+- Assets/StubbedShaders/fx/hgvertexonly.shader
+- Assets/StubbedShaders/fx/hgintersectioncloudremap.shader
+- Assets/DancerAssets/NewVFX/texCloudOrganic3.png
+- Assets/DancerAssets/NewVFX/matRibbon.mat
+- Assets/DancerAssets/Animations/DancerArmature_RunRight.anim
+- Assets/DancerAssets/NewVFX/texRampMoonPreBoss.png
+- Assets/DancerAssets/Materials/texDancerEmission.png
+- Assets/DancerAssets/NewVFX/texRampTritoneSmoothed.png
+- Assets/DancerAssets/NewVFX/matOmniHitspark2Generic.mat
+- Assets/DancerAssets/Materials/texHornet.png
+- Assets/StubbedShaders/CalmWaterCalm Water [DX11] [Double Sided].shader
+- Assets/DancerAssets/NewVFX/DancerHitEffect.prefab
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse (1).png
+- Assets/DancerAssets/texGoldSkin.png
+- Assets/DancerAssets/mesh/meshDancerBody.mesh
+- Assets/DancerAssets/Animations/DancerArmature_DragonLungePull.anim
+- Assets/DancerAssets/NewVFX/matDancerSwingBlur.mat
+- Assets/DancerAssets/Crosshair/texCrosshairTridant.png
+- Assets/DancerAssets/Materials/matHornetCape.mat
+- Assets/DancerAssets/NewVFX/matDancerSwing.mat
+- Assets/DancerAssets/NewVFX/texOmniMeleeBluntMask.png
+- Assets/DancerAssets/NewVFX/DancerDragonLungeEffect.prefab
+- Assets/DancerAssets/NewVFX/PunchMesh.mesh
+- Assets/DancerAssets/NewVFX/DancerDownAirEndEffect.prefab
+- Assets/StubbedShaders/postprocess/hgscreendamage.shader
+- Assets/StubbedShaders/ui/hguicustomblend.shader
+- Assets/StubbedShaders/ui/hguianimatealpha.shader
+- Assets/StubbedShaders/fx/hgdamagenumber.shader
+- Assets/DancerAssets/DancerHumanoid.prefab
+- Assets/StubbedShaders/hgintersectioncloudremap.shader
+- Assets/StubbedShaders/fx/hgopaquecloudremap.shader
+- Assets/DancerAssets/mesh/meshDancerHead.mesh
+- Assets/DancerAssets/NewVFX/DancerBigSwingEffect.prefab
+- Assets/DancerAssets/Animations/DancerArmature_RunF.anim
+- Assets/DancerAssets/NewVFX/texOmniHitspark3Mask.png
+- Assets/DancerAssets/Materials/matDancerGold.mat
+- Assets/DancerAssets/NewVFX/texOmniHitspark2Mask.png
+- Assets/DancerAssets/NewVFX/texRampTritone2.png
+- Assets/StubbedShaders/postprocess/hgoutlinehighlight.shader
+- Assets/DancerAssets/Animations/DancerArmature_RunLeft.anim
+- Assets/DancerAssets/NewVFX/texPunchImpact.png
+- Assets/DancerAssets/Materials/texDancerGold2Diffuse.png
+- Assets/DancerAssets/old.png
+- Assets/DancerAssets/Animations/maskAimPitch.mask
+- Assets/DancerAssets/NewVFX/DancerDAirEffect.prefab
+- Assets/DancerAssets/texPrimaryIcon.png
+- Assets/StubbedShaders/environment/hggrass.shader
+- Assets/DancerAssets/Crosshair/texDancerUtilCrosshair.png
+- Assets/DancerAssets/mesh/GoldSkin/meshGoldHead.mesh
+- Assets/DancerAssets/texDancerIcon.png
+- Assets/DancerAssets/NewVFX/matOmniHitspark3Generic.mat
+- Assets/DancerAssets/NewVFX/DancerDashAttackEffect.prefab
+- Assets/DancerAssets/Crosshair/texArrow.png
+- Assets/DancerAssets/NewVFX/texCloudLightning1.png
+- Assets/StubbedShaders/postprocess/hgscopeshader.shader
+- Assets/StubbedShaders/environment/hgdistantwater.shader
+- Assets/DancerAssets/Materials/texDancerGoldDiffuse.png
+- Assets/StubbedShaders/fx/hgsolidparallax.shader
+- Assets/DancerAssets/NewVFX/matOmniHitspark3Generic 1.mat
+- Assets/DancerAssets/mesh/meshDancerRibbons.mesh
+- Assets/StubbedShaders/deferred/hgtriplanarterrainblend.shader
+- Assets/DancerAssets/old2.png
+- Assets/DancerAssets/Crosshair/texCrosshairNibSawRight.png
+- Assets/DancerAssets/Crosshair/texCrosshairArrow.png
+- Assets/DancerAssets/NewVFX/Shit.mat
+- Assets/DancerAssets/NewVFX/texCloudSkulls.png
+- Assets/DancerAssets/NewVFX/texCloudIce.png
+- Assets/DancerAssets/NewVFX/matDancerSwing 1.mat
+- Assets/DancerAssets/Crosshair/DancerCrosshair.prefab
+- Assets/DancerAssets/Animations/DancerArmature_DragonLunge.anim
+- Assets/StubbedShaders/deferred/hgwavycloth.shader
+- Assets/DancerAssets/NewVFX/matOmniShockwave.mat
+- Assets/DancerAssets/Crosshair/texDancerCrosshair (1).png
+- Assets/DancerAssets/Materials/matDancer.mat
+- Assets/DancerAssets/NewVFX/matDancerStab.mat
+- Assets/DancerAssets/Crosshair/texDancerCrosshair.png
+- Assets/DancerAssets/texSpecialIcon.png
+- Assets/DancerAssets/texRibbonDebuffIcon.png
+- Assets/DancerAssets/NewVFX/meshRibbonCluster.mesh
+- Assets/StubbedShaders/ui/hguibarremap.shader
+- Assets/DancerAssets/NewVFX/texRampTritoneSmoothed (1).png
+- Assets/DancerAssets/mdlDancer.prefab
+- Assets/DancerAssets/NewVFX/DancerBigHitEffect.prefab
+- Assets/DancerAssets/Animations/maskAim.mask
+- Assets/StubbedShaders/ui/hguiignorez.shader
+- Assets/StubbedShaders/CalmWaterCalm Water [DX11].shader
+- Assets/DancerAssets/NewVFX/texOmniRadialSlash1Mask.png
+- Assets/DancerAssets/texSecondaryIcon.png
+- Assets/StubbedShaders/postprocess/hgsobelbuffer.shader
+- Assets/StubbedShaders/environment/hgwaterfall.shader
+- Assets/StubbedShaders/ui/hguiblur.shader
+- Assets/StubbedShaders/fx/hgdistortion.shader
+Dependencies: []

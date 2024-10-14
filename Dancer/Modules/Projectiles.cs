@@ -1,49 +1,44 @@
-﻿using R2API;
+using Dancer.Modules.Components;
+using R2API;
 using RoR2;
 using RoR2.Projectile;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Networking;
-using Dancer.Modules.Components;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Networking;
 
 namespace Dancer.Modules
 {
+
     internal static class Projectiles
     {
         internal static GameObject dancerRibbonProjectile;
 
-        
         internal static void RegisterProjectiles()
         {
             dancerRibbonProjectile = PrefabAPI.InstantiateClone(Addressables.LoadAssetAsync<GameObject>("RoR2/Base/Lemurian/Fireball.prefab").WaitForCompletion(), "RibbonProjectile");
-
-            SphereCollider zs = dancerRibbonProjectile.GetComponent<SphereCollider>();
-            zs.radius = 1.25f;
-
-            ProjectileController c = dancerRibbonProjectile.GetComponent<ProjectileController>();
-            GameObject ghostPrefab = PrefabAPI.InstantiateClone(Assets.mainAssetBundle.LoadAsset<GameObject>("RibbonBall"), "RibbonProjectileGhost");
-            if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
-            c.ghostPrefab = ghostPrefab;
-
-            ProjectileSimple s = dancerRibbonProjectile.GetComponent<ProjectileSimple>();
-            s.desiredForwardSpeed = 150f;
-
-            ProjectileDamage d = dancerRibbonProjectile.GetComponent<ProjectileDamage>();
-            d.damageType = DamageType.FruitOnHit;
-
-            ProjectileSingleTargetImpact i = dancerRibbonProjectile.GetComponent<ProjectileSingleTargetImpact>();
-            i.enemyHitSoundString = "WhipHit1";
-            i.hitSoundString = "LungeHit";
-
+            SphereCollider component = dancerRibbonProjectile.GetComponent<SphereCollider>();
+            component.radius = 1.25f;
+            ProjectileController component2 = dancerRibbonProjectile.GetComponent<ProjectileController>();
+            GameObject gameObject = PrefabAPI.InstantiateClone(Assets.mainAssetBundle.LoadAsset<GameObject>("RibbonBall"), "RibbonProjectileGhost");
+            if (!gameObject.GetComponent<NetworkIdentity>())
+            {
+                gameObject.AddComponent<NetworkIdentity>();
+            }
+            if (!gameObject.GetComponent<ProjectileGhostController>())
+            {
+                gameObject.AddComponent<ProjectileGhostController>();
+            }
+            component2.ghostPrefab = gameObject;
+            ProjectileSimple component3 = dancerRibbonProjectile.GetComponent<ProjectileSimple>();
+            component3.desiredForwardSpeed = 150f;
+            ProjectileDamage component4 = dancerRibbonProjectile.GetComponent<ProjectileDamage>();
+            component4.damageType = DamageType.FruitOnHit;
+            ProjectileSingleTargetImpact component5 = dancerRibbonProjectile.GetComponent<ProjectileSingleTargetImpact>();
+            component5.enemyHitSoundString = "WhipHit1";
+            component5.hitSoundString = "LungeHit";
             dancerRibbonProjectile.AddComponent<ProjectileSpawnRibbonController>();
-
-            Modules.Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
+            Prefabs.projectilePrefabs.Add(dancerRibbonProjectile);
         }
-
 
         private static void InitializeProjectileSimple(ProjectileSimple projectileSimple)
         {
@@ -58,25 +53,27 @@ namespace Dancer.Modules
             projectileSimple.enableVelocityOverLifetime = false;
             projectileSimple.updateAfterFiring = true;
             projectileSimple.lifetime = 1f;
-
             projectileSimple.GetComponent<ProjectileDamage>().damageType = DamageType.Generic;
         }
 
         private static GameObject CreateGhostPrefab(string ghostName)
         {
-            GameObject ghostPrefab = Modules.Assets.mainAssetBundle.LoadAsset<GameObject>(ghostName);
-            if (!ghostPrefab.GetComponent<NetworkIdentity>()) ghostPrefab.AddComponent<NetworkIdentity>();
-            if (!ghostPrefab.GetComponent<ProjectileGhostController>()) ghostPrefab.AddComponent<ProjectileGhostController>();
-
-            Modules.Assets.ConvertAllRenderersToHopooShader(ghostPrefab);
-
-            return ghostPrefab;
+            GameObject gameObject = Assets.mainAssetBundle.LoadAsset<GameObject>(ghostName);
+            if (!gameObject.GetComponent<NetworkIdentity>())
+            {
+                gameObject.AddComponent<NetworkIdentity>();
+            }
+            if (!gameObject.GetComponent<ProjectileGhostController>())
+            {
+                gameObject.AddComponent<ProjectileGhostController>();
+            }
+            Assets.ConvertAllRenderersToHopooShader(gameObject);
+            return gameObject;
         }
 
         private static GameObject CloneProjectilePrefab(string prefabName, string newPrefabName)
         {
-            GameObject newPrefab = PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
-            return newPrefab;
+            return PrefabAPI.InstantiateClone(Resources.Load<GameObject>("Prefabs/Projectiles/" + prefabName), newPrefabName);
         }
     }
 }
