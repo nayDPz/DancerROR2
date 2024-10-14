@@ -8,31 +8,34 @@ namespace Dancer.SkillStates.DirectionalM1
         public override void FixedUpdate()
         {
             base.FixedUpdate();
-            EvaluateInput();
-            if (inputVector.y < -0.5f)
+            if (isAuthority)
             {
-                nextState = new AttackLeft();
-            }
-            else if (inputVector.y > 0.5f)
-            {
-                nextState = new AttackRight();
-            }
-            else if (inputVector.x < -0.5f)
-            {
-                if (!isGrounded)
+                EvaluateInput();
+                if (inputVector.y < -0.5f)
                 {
-                    nextState = new AttackDown();
+                    nextState = new AttackLeft();
                 }
-                else
+                else if (inputVector.y > 0.5f)
                 {
-                    nextState = new AttackBackwards();
+                    nextState = new AttackRight();
                 }
+                else if (inputVector.x < -0.5f)
+                {
+                    if (!isGrounded)
+                    {
+                        nextState = new AttackDown();
+                    }
+                    else
+                    {
+                        nextState = new AttackBackwards();
+                    }
+                }
+                else if (inputVector.x > 0.5f)
+                {
+                    nextState = new AttackForward();
+                }
+                SetNextState();
             }
-            else if (inputVector.x > 0.5f)
-            {
-                nextState = new AttackForward();
-            }
-            SetNextState();
         }
 
         public override InterruptPriority GetMinimumInterruptPriority()

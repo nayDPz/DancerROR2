@@ -28,10 +28,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="libs\" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Reference Include="CustomEmotesAPI">
 			<HintPath>libs\CustomEmotesAPI.dll</HintPath>
 		</Reference>

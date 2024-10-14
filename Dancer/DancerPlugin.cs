@@ -12,7 +12,6 @@ using UnityEngine.Networking;
 
 namespace Dancer
 {
-
     [BepInPlugin(MODUID, MODNAME, MODVERSION)]
     [BepInDependency(R2API.DotAPI.PluginGUID)]
     [BepInDependency(R2API.LanguageAPI.PluginGUID)]

@@ -8,37 +8,40 @@ namespace Dancer.SkillStates.M1
         public override void OnEnter()
         {
             base.OnEnter();
-            float y = inputBank.aimDirection.y;
-            if (y > 0.575f)
+            if (isAuthority)
             {
-                outer.SetNextState(new UpAir());
-            }
-            else if (y < -0.425f)
-            {
-                if (characterMotor.isGrounded)
+                float y = inputBank.aimDirection.y;
+                if (y > 0.575f)
                 {
-                    outer.SetNextState(new DownAirLand());
+                    outer.SetNextState(new UpAir());
                 }
-                else if (y < -0.74f)
+                else if (y < -0.425f)
                 {
-                    outer.SetNextState(new DownAir());
+                    if (characterMotor.isGrounded)
+                    {
+                        outer.SetNextState(new DownAirLand());
+                    }
+                    else if (y < -0.74f)
+                    {
+                        outer.SetNextState(new DownAir());
+                    }
+                    else
+                    {
+                        outer.SetNextState(new FAir());
+                    }
                 }
-                else
+                else if (!characterMotor.isGrounded)
                 {
                     outer.SetNextState(new FAir());
                 }
-            }
-            else if (!characterMotor.isGrounded)
-            {
-                outer.SetNextState(new FAir());
-            }
-            else if (characterBody.isSprinting)
-            {
-                outer.SetNextState(new DashAttack());
-            }
-            else
-            {
-                outer.SetNextState(new Jab1());
+                else if (characterBody.isSprinting)
+                {
+                    outer.SetNextState(new DashAttack());
+                }
+                else
+                {
+                    outer.SetNextState(new Jab1());
+                }
             }
         }
 
