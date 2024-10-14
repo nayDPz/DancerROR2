@@ -1,7 +1,5 @@
 using Dancer.SkillStates;
 using Dancer.SkillStates.Emotes;
-using Dancer.SkillStates.InterruptStates;
-using Dancer.SkillStates.M1;
 using EntityStates;
 using MonoMod.RuntimeDetour;
 using RoR2;
@@ -11,20 +9,9 @@ using System.Reflection;
 
 namespace Dancer.Modules
 {
-
     public static class States
     {
-        private delegate void set_stateTypeDelegate(ref SerializableEntityStateType self, Type value);
-
-        private delegate void set_typeNameDelegate(ref SerializableEntityStateType self, string value);
-
         internal static List<Type> entityStates = new List<Type>();
-
-        private static Hook set_stateTypeHook;
-
-        private static Hook set_typeNameHook;
-
-        private static readonly BindingFlags allFlags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
         internal static void AddSkill(Type t)
         {
@@ -32,55 +19,54 @@ namespace Dancer.Modules
         }
 
         internal static void RegisterStates()
-        {
-            Type typeFromHandle = typeof(SerializableEntityStateType);
-            HookConfig val = default(HookConfig);
-            val.Priority = int.MinValue;
-            set_stateTypeHook = new Hook((MethodBase)typeFromHandle.GetMethod("set_stateType", allFlags), (Delegate)new set_stateTypeDelegate(SetStateTypeHook), val);
-            set_typeNameHook = new Hook((MethodBase)typeFromHandle.GetMethod("set_typeName", allFlags), (Delegate)new set_typeNameDelegate(SetTypeName), val);
-            AddSkill(typeof(SuspendedState));
-            AddSkill(typeof(SkeweredState));
-            AddSkill(typeof(RibbonedState));
-            AddSkill(typeof(SpikedState));
+        {           
+            #region DirectionalM1
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackBackwards));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackDown));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackDown2));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackDown2End));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackForward));
+            //AddSkill(typeof(SkillStates.DirectionalM1.AttackForward2)); // unused
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackJump));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackJump2));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackLeft));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackRight));
+            AddSkill(typeof(SkillStates.DirectionalM1.AttackSprint));
+            //AddSkill(typeof(SkillStates.DirectionalM1.BaseDirectionalM1)); // base state, no need to register
+            //AddSkill(typeof(SkillStates.DirectionalM1.BaseInputEvaluation)); // base state, no need to register
+            AddSkill(typeof(SkillStates.DirectionalM1.EnterDirectionalAttack));
+            #endregion
+            #region M1
+            //AddSkill(typeof(SkillStates.M1.BaseM1)); // base state, no need to register
+            AddSkill(typeof(SkillStates.M1.DashAttack));
+            AddSkill(typeof(SkillStates.M1.DownAir));
+            AddSkill(typeof(SkillStates.M1.DownAirLand));
+            //AddSkill(typeof(SkillStates.M1.DownTilt)); // unused
+            AddSkill(typeof(SkillStates.M1.FAir));
+            AddSkill(typeof(SkillStates.M1.Jab1));
+            AddSkill(typeof(SkillStates.M1.Jab2));
+            AddSkill(typeof(SkillStates.M1.M1Entry));
+            AddSkill(typeof(SkillStates.M1.UpAir));
+            #endregion
+            #region InterruptStates
+            //AddSkill(typeof(SkillStates.InterruptStates.RibbonedState)); // unused
+            AddSkill(typeof(SkillStates.InterruptStates.SkeweredState));
+            AddSkill(typeof(SkillStates.InterruptStates.SpikedState));
+            AddSkill(typeof(SkillStates.InterruptStates.SuspendedState));
+            #endregion
+
+            //AddSkill(typeof(ChargeParry)); // doesn't work
             AddSkill(typeof(DragonLunge));
-            AddSkill(typeof(DragonLunge));
-            AddSkill(typeof(DragonLungeButEpic));
+            //AddSkill(typeof(DragonLungeButEpic)); // unused
+            AddSkill(typeof(FireChainRibbons));
             AddSkill(typeof(Pull));
             AddSkill(typeof(Pull2));
             AddSkill(typeof(PullDamage));
+            //AddSkill(typeof(Riposte)); // doesn't work
+            AddSkill(typeof(SpinDash));
+            AddSkill(typeof(SpinDashEnd));
             AddSkill(typeof(SpinnyMove));
-            AddSkill(typeof(FireChainRibbons));
-            AddSkill(typeof(BaseM1));
-            AddSkill(typeof(M1Entry));
-            AddSkill(typeof(Jab1));
-            AddSkill(typeof(Jab2));
-            AddSkill(typeof(DashAttack));
-            AddSkill(typeof(DownTilt));
-            AddSkill(typeof(DownAir));
-            AddSkill(typeof(DownAirLand));
-            AddSkill(typeof(FAir));
-            AddSkill(typeof(UpAir));
-            AddSkill(typeof(BaseEmote));
-        }
-
-        private static void SetStateTypeHook(this ref SerializableEntityStateType self, Type value)
-        {
-            self._typeName = value.AssemblyQualifiedName;
-        }
-
-        private static void SetTypeName(this ref SerializableEntityStateType self, string value)
-        {
-            Type typeFromName = GetTypeFromName(value);
-            if (typeFromName != null)
-            {
-                self.SetStateTypeHook(typeFromName);
-            }
-        }
-
-        private static Type GetTypeFromName(string name)
-        {
-            Type[] stateIndexToType = EntityStateCatalog.stateIndexToType;
-            return Type.GetType(name);
+            //AddSkill(typeof(BaseEmote)); // no emotes are added
         }
     }
 }
