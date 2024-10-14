@@ -50,7 +50,6 @@ namespace Dancer.SoftDependencies
             orig.Invoke();
             foreach (RoR2.SurvivorDef allSurvivorDef in SurvivorCatalog.allSurvivorDefs)
             {
-                DebugClass.Log((object)$"----------bodyprefab: [{allSurvivorDef.bodyPrefab}]");
                 if (allSurvivorDef.bodyPrefab.name == "DancerBody")
                 {
                     GameObject gameObject = Modules.Assets.mainAssetBundle.LoadAsset<GameObject>("DancerHumanoid");

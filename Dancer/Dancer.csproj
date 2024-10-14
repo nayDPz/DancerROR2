@@ -23,26 +23,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="Dancer.dancerassets.manifest" />
-		<EmbeddedResource Include="Dancer.dancerassets.manifest" />
+	  <Reference Include="CustomEmotesAPI">
+	    <HintPath>..\libs\CustomEmotesAPI.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Reference Include="CustomEmotesAPI">
-			<HintPath>libs\CustomEmotesAPI.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Update="Dancer.dancerassets">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Dancer.DancerBank.bnk">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="Dancer.RidleyBank.bnk">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+	  <None Update="Dancer.dancerassets">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="DancerBank.bnk">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="icon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="manifest.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="README.md">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="RidleyBank.bnk">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

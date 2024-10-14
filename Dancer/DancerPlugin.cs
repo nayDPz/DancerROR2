@@ -19,13 +19,13 @@ namespace Dancer
     [BepInDependency(R2API.PrefabAPI.PluginGUID)]
     public class DancerPlugin : BaseUnityPlugin
     {
-        public const string MODUID = "com.ndp.DancerBeta";
+        public const string MODUID = "com.nayDPz.Dancer";
 
-        public const string MODNAME = "DancerBeta";
+        public const string MODNAME = "Dancer";
 
-        public const string MODVERSION = "0.10.1";
+        public const string MODVERSION = "0.10.0";
 
-        public const string developerPrefix = "NDP";
+        public const string developerPrefix = "nayDPz";
 
         public static bool emotesInstalled;
 
@@ -36,6 +36,7 @@ namespace Dancer
             instance = this;
             Modules.Assets.PopulateAssets();
             Modules.Config.ReadConfig();
+            SoundBanks.Init();
             States.RegisterStates();
             Buffs.RegisterBuffs();
             Projectiles.RegisterProjectiles();

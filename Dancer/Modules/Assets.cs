@@ -100,9 +100,10 @@ namespace Dancer.Modules
                 mainAssetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(pathToDll, ASSET_BUNDLE_NAME));
             }
             ShaderConversion(mainAssetBundle);
-            SoundAPI.SoundBanks.Add(System.IO.Path.Combine(pathToDll, SOUNDBANK_RIDLEY_NAME));
-            SoundAPI.SoundBanks.Add(System.IO.Path.Combine(pathToDll, SOUNDBANK_DANCER_NAME));
-
+            //SoundAPI.SoundBanks.Add(System.IO.Path.Combine(pathToDll, SOUNDBANK_RIDLEY_NAME));
+            //SoundAPI.SoundBanks.Add(System.IO.Path.Combine(pathToDll, SOUNDBANK_DANCER_NAME));
+            //SoundAPI.SoundBanks.Add(SOUNDBANK_DANCER_NAME, typeof(DancerPlugin).Assembly); // files didnt work and idc to find out why
+            //SoundAPI.SoundBanks.Add(SOUNDBANK_RIDLEY_NAME, typeof(DancerPlugin).Assembly);
             crosshairPrefab = mainAssetBundle.LoadAsset<GameObject>("DancerCrosshair");
             crosshairPrefab.AddComponent<HudElement>();
             crosshairPrefab.AddComponent<CrosshairController>();
