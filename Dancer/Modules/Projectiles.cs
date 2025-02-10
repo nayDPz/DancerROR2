@@ -32,7 +32,7 @@ namespace Dancer.Modules
             ProjectileSimple component3 = dancerRibbonProjectile.GetComponent<ProjectileSimple>();
             component3.desiredForwardSpeed = 150f;
             ProjectileDamage component4 = dancerRibbonProjectile.GetComponent<ProjectileDamage>();
-            component4.damageType = DamageType.FruitOnHit;
+            component4.damageType = new DamageTypeCombo(DamageType.FruitOnHit, DamageTypeExtended.Generic, DamageSource.Special);
             ProjectileSingleTargetImpact component5 = dancerRibbonProjectile.GetComponent<ProjectileSingleTargetImpact>();
             component5.enemyHitSoundString = "WhipHit1";
             component5.hitSoundString = "LungeHit";

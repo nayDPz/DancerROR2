@@ -97,7 +97,7 @@ namespace Dancer.SkillStates
                 hitBoxGroup = Array.Find(transform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == "NAir");
             }
             attack = new OverlapAttack();
-            attack.damageType = DamageType.Generic;
+            attack.damageType = DamageType.Generic; // seems unused
             attack.attacker = base.gameObject;
             attack.inflictor = base.gameObject;
             attack.teamIndex = GetTeam();

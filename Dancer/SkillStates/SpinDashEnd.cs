@@ -26,8 +26,6 @@ namespace Dancer.SkillStates
 
         protected string hitboxName = "DownAirGround";
 
-        protected DamageType damageType = DamageType.Generic;
-
         protected float damageCoefficient = 2f;
 
         protected float procCoefficient = 1f;
@@ -104,7 +102,7 @@ namespace Dancer.SkillStates
                 hitBoxGroup = Array.Find(modelTransform.GetComponents<HitBoxGroup>(), (HitBoxGroup element) => element.groupName == hitboxName);
             }
             attack = new OverlapAttack();
-            attack.damageType = damageType;
+            attack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Utility);
             attack.attacker = base.gameObject;
             attack.inflictor = base.gameObject;
             attack.teamIndex = GetTeam();

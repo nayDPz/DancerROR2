@@ -65,7 +65,7 @@ namespace Dancer.SkillStates
                     impactEffect = EffectIndex.Invalid,
                     losType = BlastAttack.LoSType.NearestHit,
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.Generic,
+                    damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary),
                     procCoefficient = procCoefficient,
                     bonusForce = force,
                     baseForce = 0f,

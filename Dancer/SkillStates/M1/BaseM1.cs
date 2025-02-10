@@ -65,7 +65,7 @@ namespace Dancer.SkillStates.M1
 
         protected string hitboxName = "Jab";
 
-        protected DamageType damageType = DamageType.Generic;
+        protected DamageType damageType;
 
         protected float damageCoefficient = 2.5f;
 
@@ -143,7 +143,7 @@ namespace Dancer.SkillStates.M1
                 hitBoxGroup = Array.Find(modelTransform.GetComponents<HitBoxGroup>(), (element) => element.groupName == hitboxName);
             }
             attack = new OverlapAttack();
-            attack.damageType = damageType;
+            attack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Primary);
             attack.attacker = gameObject;
             attack.inflictor = gameObject;
             attack.teamIndex = GetTeam();
