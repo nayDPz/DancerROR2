@@ -484,7 +484,7 @@ namespace Dancer.Modules.Components
 
         public void GetNextObjects(ref List<GameObject> list)
         {
-            if ((bool)nextRoot)
+            if ((bool)nextRoot && !list.Contains(nextRoot))
             {
                 list.Add(nextRoot);
                 RibbonController ribbonController = FindRibbonController(nextRoot);
@@ -497,7 +497,7 @@ namespace Dancer.Modules.Components
 
         public void GetPreviousObjects(ref List<GameObject> list)
         {
-            if ((bool)previousRoot)
+            if ((bool)previousRoot && !list.Contains(previousRoot))
             {
                 list.Add(previousRoot);
                 RibbonController ribbonController = FindRibbonController(previousRoot);
