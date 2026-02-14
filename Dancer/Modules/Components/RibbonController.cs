@@ -11,8 +11,6 @@ namespace Dancer.Modules.Components
 
     public class RibbonController : NetworkBehaviour
     {
-        private const int RIBBON_RECURSION_LIMIT = 10;
-
         public static bool naturalSpread = false;
 
         private float[] cooldowns;
@@ -484,28 +482,28 @@ namespace Dancer.Modules.Components
             }
         }
 
-        public void GetNextObjects(ref List<GameObject> list, int depth)
+        public void GetNextObjects(ref List<GameObject> list)
         {
-            if (depth < RIBBON_RECURSION_LIMIT && (bool)nextRoot && !list.Contains(nextRoot))
+            if ((bool)nextRoot && !list.Contains(nextRoot))
             {
                 list.Add(nextRoot);
                 RibbonController ribbonController = FindRibbonController(nextRoot);
                 if ((bool)ribbonController)
                 {
-                    ribbonController.GetNextObjects(ref list, depth++);
+                    ribbonController.GetNextObjects(ref list);
                 }
             }
         }
 
-        public void GetPreviousObjects(ref List<GameObject> list, int depth)
+        public void GetPreviousObjects(ref List<GameObject> list)
         {
-            if (depth < RIBBON_RECURSION_LIMIT && (bool)previousRoot && !list.Contains(previousRoot))
+            if ((bool)previousRoot && !list.Contains(previousRoot))
             {
                 list.Add(previousRoot);
                 RibbonController ribbonController = FindRibbonController(previousRoot);
                 if ((bool)ribbonController)
                 {
-                    ribbonController.GetPreviousObjects(ref list, depth++);
+                    ribbonController.GetPreviousObjects(ref list);
                 }
             }
         }
@@ -542,13 +540,13 @@ namespace Dancer.Modules.Components
                 SetRibbonTimer(ownerRoot, newTime);
             }
             List<GameObject> list = new List<GameObject>();
-            GetNextObjects(ref list, 0);
+            GetNextObjects(ref list);
             foreach (GameObject item in list)
             {
                 SetRibbonTimer(item, newTime);
             }
             List<GameObject> list2 = new List<GameObject>();
-            GetPreviousObjects(ref list2, 0);
+            GetPreviousObjects(ref list2);
             foreach (GameObject item2 in list2)
             {
                 SetRibbonTimer(item2, newTime);
