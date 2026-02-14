@@ -247,11 +247,11 @@ namespace Dancer.Modules.Components
             {
                 nextHealthComponent = nextRoot.GetComponent<HealthComponent>();
             }
-            if (!inflictorBody)
+            if (!inflictorBody && inflictorRoot)
             {
                 inflictorBody = inflictorRoot.GetComponent<CharacterBody>();
             }
-            if ((bool)inflictorRoot && (bool)nextHealthComponent)
+            if (inflictorBody && (bool)inflictorRoot && (bool)nextHealthComponent)
             {
                 CharacterBody body = nextHealthComponent.body;
                 Vector3 vector = (ownerRoot ? ownerRoot.transform.position : base.transform.position);
@@ -559,6 +559,10 @@ namespace Dancer.Modules.Components
             {
                 inflictorBody = inflictorRoot.GetComponent<CharacterBody>();
             }
+            if (!inflictorBody)
+            {
+                return;
+            }
             BullseyeSearch bullseyeSearch = new BullseyeSearch();
             bullseyeSearch.searchOrigin = base.transform.position;
             bullseyeSearch.maxDistanceFilter = 50f;
@@ -609,7 +613,7 @@ namespace Dancer.Modules.Components
 
         public void SearchNewOwner()
         {
-            if (!inflictorBody)
+            if (!inflictorBody && inflictorRoot)
             {
                 inflictorBody = inflictorRoot.GetComponent<CharacterBody>();
             }
