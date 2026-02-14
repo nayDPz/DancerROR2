@@ -36,8 +36,6 @@ namespace Dancer.SkillStates
 
         protected string hitboxName = "SpinLunge";
 
-        protected DamageType damageType = DamageType.Generic;
-
         protected float damageCoefficient = 5.4f;
 
         protected float procCoefficient = 0.75f;
@@ -143,7 +141,7 @@ namespace Dancer.SkillStates
             }
             damageCoefficient = 5.4f / (float)(numResets + 1);
             attack = new OverlapAttack();
-            attack.damageType = damageType;
+            attack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Utility);
             attack.attacker = base.gameObject;
             attack.inflictor = base.gameObject;
             attack.teamIndex = GetTeam();

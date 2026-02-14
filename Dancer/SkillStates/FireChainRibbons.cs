@@ -64,7 +64,7 @@ namespace Dancer.SkillStates
                     Ray aimRay = GetAimRay();
                     Vector3 origin = aimRay.origin;
                     Vector3 direction = aimRay.direction;
-                    ProjectileManager.instance.FireProjectile(dancerRibbonProjectile, origin, Util.QuaternionSafeLookRotation(direction), base.gameObject, damageCoefficient * damageStat, 0f, RollCrit());
+                    ProjectileManager.instance.FireProjectile(dancerRibbonProjectile, origin, Util.QuaternionSafeLookRotation(direction), base.gameObject, damageCoefficient * damageStat, 0f, RollCrit(), damageType: DamageSource.Special);
                 }
             }
         }

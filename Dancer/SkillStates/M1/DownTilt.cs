@@ -69,7 +69,7 @@ namespace Dancer.SkillStates.M1
                 inflictor = gameObject,
                 damage = 0f,
                 damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageType.Generic,
+                damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Primary),
                 crit = false,
                 dotIndex = DotController.DotIndex.None,
                 force = normalized,

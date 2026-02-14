@@ -97,7 +97,7 @@ namespace Dancer.SkillStates
                     impactEffect = Modules.Assets.bigHitEffect.GetComponent<EffectComponent>().effectIndex,
                     losType = BlastAttack.LoSType.NearestHit,
                     damageColorIndex = DamageColorIndex.Default,
-                    damageType = DamageType.Generic,
+                    damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Secondary),
                     procCoefficient = procCoefficient,
                     bonusForce = Vector3.zero,
                     baseForce = 0f,

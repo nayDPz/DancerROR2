@@ -26,8 +26,6 @@ namespace Dancer.SkillStates.M1
 
         protected string hitboxName = "UpAir";
 
-        protected DamageType damageType = DamageType.Generic;
-
         protected float damageCoefficient = 1.5f;
 
         protected float procCoefficient = 1f;
@@ -109,7 +107,7 @@ namespace Dancer.SkillStates.M1
                 hitBoxGroup = Array.Find(modelTransform.GetComponents<HitBoxGroup>(), (element) => element.groupName == hitboxName);
             }
             attack = new OverlapAttack();
-            attack.damageType = damageType;
+            attack.damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Primary);
             attack.attacker = gameObject;
             attack.inflictor = gameObject;
             attack.teamIndex = GetTeam();
@@ -303,7 +301,7 @@ namespace Dancer.SkillStates.M1
                     swingSoundString = "ForwardAirStart";
                     swingEffectPrefab = Modules.Assets.dashAttackEffect;
                     attack = new OverlapAttack();
-                    attack.damageType = DamageType.BonusToLowHealth;
+                    attack.damageType = new DamageTypeCombo(DamageType.BonusToLowHealth, DamageTypeExtended.Generic, DamageSource.Primary);
                     attack.attacker = gameObject;
                     attack.inflictor = gameObject;
                     attack.teamIndex = GetTeam();

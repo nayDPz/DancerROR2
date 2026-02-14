@@ -17,7 +17,7 @@ namespace Dancer.SkillStates.M1
             attackRecoil = 2f;
             hitHopVelocity = 2f;
             damageCoefficient = 2.5f;
-            damageType = DamageType.Generic;
+            damageType = new DamageTypeCombo(DamageType.Generic, DamageTypeExtended.Generic, DamageSource.Primary);
             hitStopDuration = 0f;
             pushForce = 1800f;
             launchVectorOverride = true;

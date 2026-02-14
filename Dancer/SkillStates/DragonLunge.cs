@@ -120,7 +120,7 @@ namespace Dancer.SkillStates
                 origin = aimRay.origin,
                 damage = damageCoefficient * damageStat,
                 damageColorIndex = DamageColorIndex.Default,
-                damageType = DamageType.Stun1s,
+                damageType = new DamageTypeCombo(DamageType.Stun1s, DamageTypeExtended.Generic, DamageSource.Utility),
                 falloffModel = BulletAttack.FalloffModel.None,
                 maxDistance = range,
                 force = force,
